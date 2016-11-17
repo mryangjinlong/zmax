@@ -1,0 +1,37 @@
+package com.zmaxfilm;
+
+/**
+ * Created by Administrator on 2016/11/12.
+ */
+public class Constant {
+
+    public static final String FRAME_XML_PATH = "frame/frame.fxml";
+
+    //默认的接口实现类型
+    public static final int DEFAULT_IMPL=-1;
+
+    public static final String SOCKET_IP="127.0.0.1";
+    public static final int SOCKET_PORT=8888;
+
+    //文件根目录
+    public static final String FILE_ROOT_PATH = "C:/Users/Public/zmaxFilm";
+    //DLL文件目录
+    public static final String DLL_PATH = FILE_ROOT_PATH + "/dll";
+    //WEB文件目录
+    public static final String WEB_PATH = FILE_ROOT_PATH + "/web";
+    //HTML文件目录
+    public static final String HTML_PATH = WEB_PATH + "/html";
+    //广告文件目录
+    public static final String AD_PATH = WEB_PATH + "/ad";
+    //日志文件目录
+    public static final String LOG_PATH = FILE_ROOT_PATH + "/log";
+    //首页url
+    public static final String INDEX_URL = WEB_PATH + "/index.html";
+    //版本信息文件
+    public static final String VERSION_FILE = FILE_ROOT_PATH + "version.txt";
+    //下载html,js文件url
+    public static final String HTML_DOWNLOAD_URL = "";
+    //下载广告的url
+    public static final String AD_DOWNLOAD_URL = "";
+
+}

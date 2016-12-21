@@ -1,0 +1,28 @@
+package com.zmaxfilm.service;
+
+import com.zmaxfilm.model.http.*;
+
+import java.util.List;
+
+/**
+ * 电影相关服务
+ * Created by jimmy on 2016/11/28.
+ */
+public interface FilmService {
+
+    //操作类型，1：取影票 2：取卖品
+    public static final int MOVIE_TICKET=1;
+    public static final int GOODS=2;
+
+    List<Cinema> getCinemas();  //获取电影院信息
+
+    List<FilmPlan4Http> getPlans(String cinemaNo);    //获取影院所有排期
+
+    List<HallSite> getHallSites(String cinemaNo , String hallNo);   //获取影厅对应的所有座位信息
+
+    List<PlanSeat> getPlanSeats(String cinemaNo , String featureAppNo , String seatType);   //取排期的座位状态
+
+
+    String getMovieTicketsAndGoods(String cinemaNo,String orderNumber,String validCode,int type);//去影票或卖品
+
+}

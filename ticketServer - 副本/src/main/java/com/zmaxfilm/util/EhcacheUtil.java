@@ -1,0 +1,100 @@
+package com.zmaxfilm.util;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+
+import java.net.URL;
+
+/**
+ * Created by jimmy on 2016/11/28.
+ */
+public class EhcacheUtil {
+
+    private static final String DEFAULT_CACHE_NAME = "film";
+
+    private static final String path = "/ehcache.xml";
+
+    private URL url;
+
+    private CacheManager manager;
+
+    private static EhcacheUtil ehCache;
+
+    private EhcacheUtil(String path) {
+        url = getClass().getResource(path);
+        manager = CacheManager.create(url);
+    }
+
+    /**
+     * 单例
+     * @return
+     */
+    public static EhcacheUtil getInstance() {
+        if (ehCache== null) {
+            ehCache= new EhcacheUtil(path);
+        }
+        return ehCache;
+    }
+
+    /**
+     *
+     * @param key         键
+     * @param value       值
+     * @param liveTime   生存时间 单位秒
+     *  默认存入名为film的cache
+     */
+    public void put(String key, Object value , int liveTime) {
+        Cache cache = manager.getCache(DEFAULT_CACHE_NAME);
+        Element element = new Element(key, value);
+        element.setTimeToLive(liveTime);
+        cache.put(element);
+    }
+
+    /**
+     *
+     * @param cacheName  需要存入哪个缓存
+     * @param key         键
+     * @param value       值
+     * @param liveTime   生存时间 单位秒
+     */
+    public void put(String cacheName, String key, Object value , int liveTime) {
+        Cache cache = manager.getCache(cacheName);
+        Element element = new Element(key, value);
+        element.setTimeToLive(liveTime);
+        cache.put(element);
+    }
+
+    /**
+     *
+     * @param key
+     * @return
+     */
+    public Object get(String key) {
+        Cache cache = manager.getCache(DEFAULT_CACHE_NAME);
+        Element element = cache.get(key);
+        return element == null ? null : element.getObjectValue();
+    }
+
+    /**
+     *
+     * @param cacheName
+     * @param key
+     * @return
+     */
+    public Object get(String cacheName, String key) {
+        Cache cache = manager.getCache(cacheName);
+        Element element = cache.get(key);
+        return element == null ? null : element.getObjectValue();
+    }
+
+    public Cache getCache(String cacheName) {
+        return manager.getCache(cacheName);
+    }
+
+    public void remove(String cacheName, String key) {
+        Cache cache = manager.getCache(cacheName);
+        cache.remove(key);
+    }
+
+}

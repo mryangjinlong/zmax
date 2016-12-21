@@ -1,0 +1,8 @@
+package com.zmaxfilm.service;
+
+/**
+ * Created by jimmy on 2016/11/29.
+ */
+public interface SocketMsgHanderService {
+    void processSocketMsg(String msg);
+}

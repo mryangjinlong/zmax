@@ -1,0 +1,62 @@
+package com.zmaxfilm.frame;
+
+import com.zmaxfilm.Constant;
+import com.zmaxfilm.InterfaceForJavascript;
+import com.zmaxfilm.util.FileUtils;
+import javafx.application.Application;
+import javafx.concurrent.Worker;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
+import netscape.javascript.JSObject;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+
+/**
+ * Created by Administrator on 2016/11/11.
+ */
+public class BaseFrame extends Application{
+    private WebEngine engine;
+    private WebView webView;
+    private final static InterfaceForJavascript interfaceForJavascript = new InterfaceForJavascript();
+
+    public void start(Stage primaryStage) throws Exception {
+        init(primaryStage);
+    }
+
+    public void init(Stage primaryStage) throws Exception{
+        primaryStage.setWidth(600);
+        primaryStage.setHeight(1050);
+//        primaryStage.setFullScreen(true);  //全屏
+        primaryStage.setAlwaysOnTop(true);  //始终在其他窗口之上
+        Parent parent = FXMLLoader.load(FileUtils.getAbsolutePath(Constant.FRAME_XML_PATH));
+        this.webView = (WebView)parent.lookup("#webView");
+        webView.setCache(true);
+        this.engine = webView.getEngine();
+        initWebEngine();
+        Scene scene = new Scene(parent);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+    public void initWebEngine(){
+        this.engine.setUserDataDirectory(new File("d:/"));
+//        this.engine.load(Constant.FILE_HEAD + Constant.INDEX_URL); //加载页面
+        this.engine.load(Constant.FILE_HEAD + "F:/workspace/zmax/zmaxfilm/web/index.html"); //测试路径
+
+        this.engine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue == Worker.State.SUCCEEDED) {
+                        JSObject win = (JSObject) engine.executeScript("window"); // 获取js对象
+                         win.setMember("app" , interfaceForJavascript);         //然后把应用程序对象设置成为js对象
+                        win.call("init");
+                    }
+                }
+        );
+    }
+}

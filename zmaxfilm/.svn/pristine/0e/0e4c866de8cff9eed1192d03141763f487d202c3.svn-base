@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>中瑞影城</title>
+    <meta name="description" content="中瑞影城">
+    <meta name="author" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="css/light7.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/swiper.css">
+    <!--    <link type="text/css" href="css/jquery.jscrollpane.css" rel="stylesheet" media="all" />-->
+</head>
+
+<body>
+    <div class="wrap">
+        <header id="header">
+            <ul class="swiper-wrapper">
+                <li class="swiper-slide">
+                    <img src="./img/index/banner.png" alt="" draggable="false">
+                </li>
+                <li class="swiper-slide">
+                    <img src="./img/index/banner.png" alt="" draggable="false">
+                </li>
+                <li class="swiper-slide">
+                    <img src="./img/index/banner.png" alt="" draggable="false">
+                </li>
+                <li class="swiper-slide">
+                    <img src="./img/index/banner.png" alt="" draggable="false">
+                </li>
+            </ul>
+        </header>
+        <address id="footer">
+                Copyright © 2014-2016 福州最美影视网络科技有限公司 版权所有
+        </address>
+
+        <!--    ---------------------------------------------------------------------------------------   -->
+        <!--    选座    -->
+        <div class="page" id="page-result">
+            <div class="seatTop">
+                <h1>详情</h1>
+                <a class="toBack" href="seat.html"></a>
+                <div class="backIndex">安全退出</div>
+            </div>
+            <div class="resultBody">
+
+                <div class="resultSucces">
+                    <div class="reSultInfoTop">
+                        <p>正在为您打印第<var>1</var>张，共<var>2</var>张,请稍后...</p>
+                    </div>
+                    <div class="reSultInfoBt"></div>
+                    <div class="zzBgImg"></div>
+                    <div class="pAdminit sytemInfoImg"></div>
+                    <p>系统或者打印机故障，请联系影城工作人员重新打票</p>
+                         <!--    下面是打印失败的提示语 失败的时候显示下面这句 然后把上面的  sytemInfoImg类换成sytemError这个类  -->
+                    <p class="systemInfo">系统或者打印机故障，请联系影城工作人员重新打票</p>
+                </div>
+
+                <div class="resultSuccesBack disno">
+                    <div class="errorImg">
+                        <img src="./img/pay/success.png" alt="" draggable="false">
+                    </div>
+                    <p>打票成功,请在下面出票口取票</p>
+                    <a href="goods.html">去买点小吃</a>
+<!--                    <p>系统将在<time>10s</time>后自动退出</p>-->
+                </div>
+            </div>
+        </div>
+        <!--    选座结束    -->
+        <!--    ---------------------------------------------------------------------------------------   -->
+
+    </div>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <!--
+    <script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="js/jquery.jscrollpane.min.js"></script>
+-->
+    <script type="text/javascript" src="js/swiper.js"></script>
+    <script type="text/javascript" src="js/light7.js"></script>
+    <script type="text/javascript" src="js/jquery.Spinner.js"></script>
+    <script type="text/javascript" src="js/style.js"></script>
+</body>
+
+</html>

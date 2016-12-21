@@ -1,0 +1,69 @@
+package com.zmaxfilm;
+
+
+import com.alibaba.fastjson.JSON;
+import com.zmaxfilm.model.Print;
+import com.zmaxfilm.model.User;
+import com.zmaxfilm.service.FilmService;
+import com.zmaxfilm.service.PrintService;
+import com.zmaxfilm.service.ScanService;
+import com.zmaxfilm.service.UserService;
+import com.zmaxfilm.service.impl.FilmServiceImpl;
+import com.zmaxfilm.service.impl.ScannerServiceImpl;
+import org.apache.log4j.Logger;
+
+import java.util.List;
+
+/**
+ * Created by Administrator on 2016/11/14.
+ */
+public class InterfaceForJavascript {
+    private static Logger logger = Logger.getLogger(InterfaceForJavascript.class);
+
+    private FilmService filmService = Factory.getFilmService();
+    private UserService userService = Factory.getUserService();
+
+    private PrintService printService=Factory.getPrintService(Constant.DEFAULT_IMPL);
+
+    public FilmService getFilmService() {
+        return filmService;
+    }
+
+    public String getCinemas(){
+        String msg = JSON.toJSONString(filmService.getCinemas());
+        return msg;
+    }
+    public String getPlans(String cinemaNo){
+        String msg =JSON.toJSONString(filmService.getPlans(cinemaNo));
+        return msg;
+    }
+    public String getHallSites(String cinemaNo, String hallNo){
+        String hallSitesMsg = JSON.toJSONString(filmService.getHallSites(cinemaNo,hallNo));
+        return hallSitesMsg;
+    }
+    public String getPlanSeats(String cinemaNo, String featureAppNo, String seatType){
+        String planSeats = JSON.toJSONString(filmService.getPlanSeats(cinemaNo,featureAppNo,seatType));
+        return planSeats;
+    }
+
+    public String getUserFromCache(){
+        User user = userService.getUser();
+        if(user == null) return "";
+        return JSON.toJSONString(user);
+    }
+
+    public void console(String log){
+        logger.debug(log);
+    }
+
+
+    public String getMovieTicketsAndGoods(String cinemaNo,String orderNumber,String validCode,String requestType,int type){
+        return filmService.getMovieTicketsAndGoods( cinemaNo, orderNumber, validCode,requestType, type);
+    }
+    //根据打印机名称获取队列数量
+    public int getQueueCountByDeviceName(String name){
+        javax.print.PrintService printDevie=printService.getPrintDevice(name);
+        return printService.getPrintDeviceQueueCount(printDevie);
+    }
+
+}

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>中瑞影城</title>
+    <meta name="description" content="中瑞影城">
+    <meta name="author" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="css/light7.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/swiper.css">
+<!--    <link type="text/css" href="css/jquery.jscrollpane.css" rel="stylesheet" media="all" />-->
+</head>
+
+<body>
+    <div class="wrap">
+        <header id="header">
+                <ul class="swiper-wrapper">
+                    <li class="swiper-slide">
+                         <img src="./img/index/banner.png" alt="" draggable="false">
+                    </li>
+                    <li class="swiper-slide">
+                         <img src="./img/index/banner.png" alt="" draggable="false">
+                    </li>
+                    <li class="swiper-slide">
+                         <img src="./img/index/banner.png" alt="" draggable="false">
+                    </li>
+                    <li class="swiper-slide">
+                         <img src="./img/index/banner.png" alt="" draggable="false">
+                    </li>
+                </ul>
+        </header>
+        <address id="footer">
+                Copyright © 2014-2016 福州最美影视网络科技有限公司 版权所有
+        </address>     
+        <!--    排期    -->
+        <div class="page" id="page-plan">
+            <div class="planTop">
+                <h1>正在售票</h1>
+                <a class="toBack" href="index.html"></a>
+                <a class="ciname" href="#">红星店</a>
+                <img class="downIcon" src="./img/inshell/down.png" alt="" draggable="false">
+            </div>
+            <div class="planBody">
+                <ul class="swiper-wrapper">
+                    <li class="swiper-slide">
+                        <img src="./img/inshell/1.jpg" alt="" draggable="false">
+                        <div class="indexAll">1/10</div>
+                        <p>奇异博士</p><em>8.3</em>
+                        <div class="film3d"></div>
+                    </li>
+                    <li class="swiper-slide">
+                       <div class="indexAll">2/10</div>
+                        <img src="./img/inshell/2.png" alt="" draggable="false">
+                        <p>冲天火</p><em>8.3</em>
+                        <div class="film3d"></div>
+                        <div class="filmMax3d"></div>
+                    </li>
+                    <li class="swiper-slide">
+                       <div class="indexAll">3/10</div>
+                        <img src="./img/inshell/3.jpg" alt="" draggable="false">
+                        <p>我不是潘金莲</p><em>8.3</em>
+                        <div class="film3d"></div>
+                    </li>
+                    <li class="swiper-slide">
+                       <div class="indexAll">4/10</div>
+                        <img src="./img/inshell/4.jpg" alt="" draggable="false">
+                        <p>神器动物在哪</p><em>8.3</em>
+                    </li>
+                    <li class="swiper-slide">
+                       <div class="indexAll">5/10</div>
+                        <img src="./img/inshell/5.jpg" alt="" draggable="false">
+                        <p>蜡笔小新</p><em>8.3</em>
+                        <div class="film3d"></div>
+                        <div class="willShell"></div>
+                    </li>
+                    <li class="swiper-slide">
+                       <div class="indexAll">6/10</div>
+                        <img src="./img/inshell/1.jpg" alt="" draggable="false">
+                        <p>名侦探柯南</p><em>8.3</em>
+                    </li>
+                    <li class="swiper-slide">
+                       <div class="indexAll">7/10</div>
+                        <img src="./img/inshell/2.png" alt="" draggable="false">
+                        <p>爸爸去哪儿</p><em>8.3</em>
+                        <div class="film3d"></div>
+                        <div class="filmMax3d"></div>
+                    </li>
+                    <li class="swiper-slide">
+                       <div class="indexAll">8/10</div>
+                        <img src="./img/inshell/3.jpg" alt="" draggable="false">
+                        <p>三少爷的剑</p><em>8.3</em>
+                    </li>
+                    <li class="swiper-slide">
+                       <div class="indexAll">9/10</div>
+                        <img src="./img/inshell/4.jpg" alt="" draggable="false">
+                        <p>血轮眼</p><em>8.3</em>
+                    </li>
+                    <li class="swiper-slide">
+                       <div class="indexAll">10/10</div>
+                        <img src="./img/inshell/5.jpg" alt="" draggable="false">
+                        <p>大城小爱</p><em>8.3</em>
+                        <div class="film3d"></div>
+                        <div class="willShell"></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="planTime">
+                <ul class="swiper-wrapper">
+                    <li class="swiper-slide">
+                        <h3>今天</h3>
+                        <h2>12月1日</h2>
+                    </li>
+                    <li class="swiper-slide active">
+                        <h3>明天</h3>
+                        <h2>12月2日</h2>
+                    </li>
+                    <li class="swiper-slide">
+                        <h3>后天</h3>
+                        <h2>12月3日</h2>
+                    </li>
+                    <li class="swiper-slide">
+                        <h3>周四</h3>
+                        <h2>12月4日</h2>
+                    </li>
+                    <li class="swiper-slide">
+                        <h3>周五</h3>
+                        <h2>12月5日</h2>
+                    </li>
+                    <li class="swiper-slide">
+                        <h3>周六</h3>
+                        <h2>12月6日</h2>
+                    </li>
+                    <li class="swiper-slide">
+                        <h3>周日</h3>
+                        <h2>12月7日</h2>
+                    </li>
+                    
+                </ul>
+            </div>
+            <div class="planBt">
+                <ul class="dragFilmPlan">
+                  
+                    <li>
+                        <ul class="filmUl stopShell">
+                            <li>
+                               <h2>18:45</h2>
+                               <h3>11:30散场</h3>
+                            </li>
+                            <li>
+                                <h2>英语</h2>
+                               <h3>3D</h3>
+                            </li>
+                            <li>
+                                <h2>ZMAX激光厅</h2>
+                               <h3>座位充足：70%-100%</h3>
+                            </li>
+                            <li>
+                                <h2>¥75<em>起</em></h2>
+                               <del>¥100</del>
+                            </li>
+                            <li>
+                                <a href="#">选座购票</a>
+                            </li>
+                            <img src="img/inshell/border.png" alt="">
+                        </ul>
+                    </li>
+                      <li>
+                        <ul class="filmUl">
+                            <li>
+                               <h2>18:45</h2>
+                               <h3>11:30散场</h3>
+                            </li>
+                            <li>
+                                <h2>英语</h2>
+                               <h3>3D</h3>
+                            </li>
+                            <li>
+                                <h2>ZMAX激光厅</h2>
+                               <h3>座位充足：70%-100%</h3>
+                            </li>
+                            <li>
+                                <h2>¥75<em>起</em></h2>
+                               <del>¥100</del>
+                            </li>
+                            <li>
+                                <a href="seat.html">选座购票</a>
+                            </li>
+                            <img src="img/inshell/border.png" alt="">
+                        </ul>
+                    </li>
+                       <li>
+                        <ul class="filmUl">
+                            <li>
+                               <h2>18:45</h2>
+                               <h3>11:30散场</h3>
+                            </li>
+                            <li>
+                                <h2>英语</h2>
+                               <h3>3D</h3>
+                            </li>
+                            <li>
+                                <h2>ZMAX激光厅</h2>
+                               <h3>座位充足：70%-100%</h3>
+                            </li>
+                            <li>
+                                <h2>¥75<em>起</em></h2>
+                               <del>¥100</del>
+                            </li>
+                            <li>
+                                <a href="seat.html">选座购票</a>
+                            </li>
+                            <img src="img/inshell/border.png" alt="">
+                        </ul>
+                    </li>
+                       <li>
+                        <ul class="filmUl">
+                            <li>
+                               <h2>18:45</h2>
+                               <h3>11:30散场</h3>
+                            </li>
+                            <li>
+                                <h2>英语</h2>
+                               <h3>3D</h3>
+                            </li>
+                            <li>
+                                <h2>ZMAX激光厅</h2>
+                               <h3>座位充足：70%-100%</h3>
+                            </li>
+                            <li>
+                                <h2>¥75<em>起</em></h2>
+                               <del>¥100</del>
+                            </li>
+                            <li>
+                                <a href="seat.html">选座购票</a>
+                            </li>
+                            <img src="img/inshell/border.png" alt="">
+                        </ul>
+                    </li>
+                       <li>
+                        <ul class="filmUl prefulShell">
+                            <li>
+                               <h2>18:45</h2>
+                               <h3>11:30散场</h3>
+                            </li>
+                            <li>
+                                <h2>英语</h2>
+                               <h3>3D</h3>
+                            </li>
+                            <li>
+                                <h2>ZMAX激光厅</h2>
+                               <h3>座位充足：70%-100%</h3>
+                            </li>
+                            <li>
+                                <h2>¥75<em>起</em></h2>
+                               <del>¥100</del>
+                            </li>
+                            <li>
+                                <a href="seat.html">选座购票</a>
+                            </li>
+                            <img src="img/inshell/border.png" alt="">
+                        </ul>
+                    </li>
+                       <li>
+                        <ul class="filmUl">
+                            <li>
+                               <h2>18:45</h2>
+                               <h3>11:30散场</h3>
+                            </li>
+                            <li>
+                                <h2>英语</h2>
+                               <h3>3D</h3>
+                            </li>
+                            <li>
+                                <h2>ZMAX激光厅</h2>
+                               <h3>座位充足：70%-100%</h3>
+                            </li>
+                            <li>
+                                <h2>¥75<em>起</em></h2>
+                               <del>¥100</del>
+                            </li>
+                            <li>
+                                <a href="seat.html">选座购票</a>
+                            </li>
+                            <img src="img/inshell/border.png" alt="">
+                        </ul>
+                    </li>
+                       <li>
+                        <ul class="filmUl">
+                            <li>
+                               <h2>18:45</h2>
+                               <h3>11:30散场</h3>
+                            </li>
+                            <li>
+                                <h2>英语</h2>
+                               <h3>3D</h3>
+                            </li>
+                            <li>
+                                <h2>ZMAX激光厅</h2>
+                               <h3>座位充足：70%-100%</h3>
+                            </li>
+                            <li>
+                                <h2>¥75<em>起</em></h2>
+                               <del>¥100</del>
+                            </li>
+                            <li>
+                                <a href="seat.html">选座购票</a>
+                            </li>
+                            <img src="img/inshell/border.png" alt="">
+                        </ul>
+                    </li>
+                       <li>
+                        <ul class="filmUl">
+                            <li>
+                               <h2>18:45</h2>
+                               <h3>11:30散场</h3>
+                            </li>
+                            <li>
+                                <h2>英语</h2>
+                               <h3>3D</h3>
+                            </li>
+                            <li>
+                                <h2>ZMAX激光厅</h2>
+                               <h3>座位充足：70%-100%</h3>
+                            </li>
+                            <li>
+                                <h2>¥75<em>起</em></h2>
+                               <del>¥100</del>
+                            </li>
+                            <li>
+                                <a href="seat.html">选座购票</a>
+                            </li>
+                            <img src="img/inshell/border.png" alt="">
+                        </ul>
+                    </li>
+                    <li>
+                        <ul class="filmUl">
+                            <li>
+                               <h2>18:45</h2>
+                               <h3>11:30散场</h3>
+                            </li>
+                            <li>
+                                <h2>英语</h2>
+                               <h3>3D</h3>
+                            </li>
+                            <li>
+                                <h2>ZMAX激光厅</h2>
+                               <h3>座位充足：70%-100%</h3>
+                            </li>
+                            <li>
+                                <h2>¥75<em>起</em></h2>
+                               <del>¥100</del>
+                            </li>
+                            <li>
+                                <a href="seat.html">选座购票</a>
+                            </li>
+                        </ul>
+                    </li>
+                     
+                </ul>   
+                
+                <!--    排期空页面    -->
+                <div class="planNone">
+                    <img src="./img/inshell/calendar.png" alt="" draggable="false">
+                    <p>今天所有场次已结束放映</p>
+                </div> 
+                <!--    排期空页面结束    -->           
+            </div>
+            <!--    提示框    -->  
+            <div class="alert">
+                影片开映前<em>20分钟</em>停止售票
+            </div>
+            
+             <!--    提示框    -->  
+            <div class="alert">
+                影片开映前<em>20分钟</em>停止售票
+            </div>
+            <!--    城市 影院选择 以及空页面    --> 
+            <div class="choseCinema">
+                <div class="cinemaTop">
+                    <span>选择城市</span>
+<!--                    <img src="./img/inshell/redDown.png" alt="" draggable="false">-->
+                    <a href="javascript:;"></a>
+                </div>
+                <div class="cinemaBody">
+                    <div id="cityChose">
+                        <ul>
+                            <li>福州</li>
+                            <li>厦门</li>
+                            <li>福州</li>
+                            <li>厦门</li>
+                            <li>福州</li>
+                            <li>厦门</li>
+                            <li>福州</li>
+                            <li>厦门</li>
+                            <li>福州</li>
+                            <li>厦门</li>
+                            <li>福州</li>
+                            <li>厦门</li>
+                            <li>福州</li>
+                            <li>厦门</li>
+                            <li>福州</li>
+                            <li>厦门</li>
+                            <li>福州</li>
+                            <li>厦门</li>
+                            <li>福州</li>
+                            <li>厦门</li>
+                            <li>福州</li>
+                            <li>厦门</li>
+                            <li>福州</li>
+                            <li>厦门</li>
+                        </ul>
+                    </div>
+                    <div id="cinemaChose">
+                        <ul>
+                            <li>
+                                <a href="javascript:;">
+                                    <h2>中瑞国际影城福清裕荣汇店</h2>
+                                    <h3>福清市音西街道福和路9号4层401(裕荣汇4楼)</h3>
+                                    <img src="./img/inshell/right.png" alt="" draggable="false">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <h2>中瑞国际影城福清裕荣汇店</h2>
+                                    <h3>福清市音西街道福和路9号4层401(裕荣汇4楼)</h3>
+                                    <img src="./img/inshell/right.png" alt="" draggable="false">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <h2>中瑞国际影城福清裕荣汇店</h2>
+                                    <h3>福清市音西街道福和路9号4层401(裕荣汇4楼)</h3>
+                                    <img src="./img/inshell/right.png" alt="" draggable="false">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <h2>中瑞国际影城福清裕荣汇店</h2>
+                                    <h3>福清市音西街道福和路9号4层401(裕荣汇4楼)</h3>
+                                    <img src="./img/inshell/right.png" alt="" draggable="false">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <h2>中瑞国际影城福清裕荣汇店</h2>
+                                    <h3>福清市音西街道福和路9号4层401(裕荣汇4楼)</h3>
+                                    <img src="./img/inshell/right.png" alt="" draggable="false">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--   空页面    -->
+                    <div id="NoCinema">
+                        <img src="./img/inshell/home.png" alt="" draggable="false">
+                        <p>当前城市没有其它影城可更换</p>
+                        <a href="javascript:;">其他城市</a>
+                    </div>
+                </div>
+            </div> 
+        </div>    
+      
+    </div>
+    <script type="text/javascript" src="js/jquery.js"></script>
+<!--
+    <script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="js/jquery.jscrollpane.min.js"></script>
+-->
+    <script type="text/javascript" src="js/swiper.js"></script>
+    <script type="text/javascript" src="js/light7.js"></script>
+    <script type="text/javascript" src="js/style.js"></script>
+</body>
+
+</html>

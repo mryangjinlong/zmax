@@ -1,0 +1,37 @@
+package com.zmaxfilm.model.socket;
+
+/**
+ * Created by jimmy on 2016/12/5.
+ * 升级推送通知
+ */
+public class UpdateNotificationData {
+
+    private String action;
+    private String machineVersion;
+    private String url;
+
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public String getMachineVersion() {
+        return machineVersion;
+    }
+
+    public void setMachineVersion(String machineVersion) {
+        this.machineVersion = machineVersion;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+}

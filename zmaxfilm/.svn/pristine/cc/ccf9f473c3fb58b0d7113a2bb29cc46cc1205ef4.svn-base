@@ -1,0 +1,13 @@
+package com.zmaxfilm;
+
+import com.zmaxfilm.frame.BaseFrame;
+
+/**
+ * Created by Administrator on 2016/11/5.
+ */
+public class Main extends BaseFrame {
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}

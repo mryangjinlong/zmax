@@ -1,0 +1,107 @@
+package com.zmaxfilm.service.impl;
+
+import com.alibaba.fastjson.JSON;
+import com.google.gson.reflect.TypeToken;
+import com.zmaxfilm.Constant;
+import com.zmaxfilm.model.Film;
+import com.zmaxfilm.model.http.*;
+import com.zmaxfilm.service.FilmService;
+import com.zmaxfilm.util.DateUtils;
+import com.zmaxfilm.util.EhcacheUtil;
+import com.zmaxfilm.util.HttpUtil;
+
+import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.util.*;
+
+/**
+ * 电影相关服务
+ * Created by jimmy on 2016/11/28.
+ */
+public class FilmServiceImpl implements FilmService{
+
+    private EhcacheUtil ehcacheUtil = EhcacheUtil.getInstance();
+
+    /**
+     * 获取所有电影院信息
+     */
+    @Override
+    public List<Cinema> getCinema() {
+        List<Cinema> cinemas = (ArrayList<Cinema>)ehcacheUtil.get(Constant.CACHE_KEY_CINEMA);
+        if(cinemas == null){
+            String msg = HttpUtil.sendHttpPost(Constant.FUNSTIONNAME_CINEMA , null);
+            Type type = new TypeToken<HttpData<ArrayList<Cinema>>>(){}.getType();
+            HttpData<ArrayList<Cinema>> httpData = JSON.parseObject(msg,type);
+            cinemas = httpData.getResultData();
+            ehcacheUtil.put(Constant.CACHE_KEY_CINEMA, cinemas , Constant.CACHE_TIME_CINEMA);
+        }
+        return cinemas;
+    }
+
+
+    /**
+     * 获取影院当前所有排期
+     */
+    @Override
+    public Map<FilmData,Map<String,List<FilmPlan4Http>>> getPlan(String cinemaNo) {
+        Map<FilmData,Map<String,List<FilmPlan4Http>>> planMap = (Map<FilmData,Map<String,List<FilmPlan4Http>>>)ehcacheUtil.get(Constant.CACHE_KEY_PLAN);
+
+        if(planMap == null){
+
+            Map<String, String> map = new HashMap<>();
+            map.put("cinemaNo",cinemaNo);
+            String msg = HttpUtil.sendHttpPost(Constant.FUNSTIONNAME_PLAN , map);
+            //测试用数据
+//            msg = "{\"resultCode\":0,\"resultData\":[{\"featureAppNo\":\"5028796018\",\"filmNo\":\"035101402016\",\"filmName\":\"血战钢锯岭\",\"hallNo\":\"04\",\"hallName\":\"4号厅\",\"startTime\":\"2016-12-09 11:50:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"139\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"38.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[{\"seatPieceNo\":6,\"seatPieceName\":\"黄金座区\",\"settlementPrice\":43,\"cinemaServiceCharge\":4},{\"seatPieceNo\":15,\"seatPieceName\":\"减价座区\",\"settlementPrice\":37,\"cinemaServiceCharge\":1}],\"planStatus\":\"1\",\"saleStatus\":\"1\"}]}";
+
+            Type type = new TypeToken<HttpData<ArrayList<FilmPlan4Http>>>(){}.getType();
+            HttpData<ArrayList<FilmPlan4Http>> httpData = JSON.parseObject(msg,type);
+            List<FilmPlan4Http> filmPlan4Https = httpData.getResultData();
+            assert filmPlan4Https != null;
+            planMap = processFilmPlan4Http(filmPlan4Https);
+            ehcacheUtil.put(Constant.CACHE_KEY_PLAN, planMap ,Constant.CACHE_TIME_PLAN);
+     }
+
+        return planMap;
+    }
+
+    /**
+     * 将http接口返回的数据整理成适用于页面的数据
+     * @param filmPlan4Https http接口返回的数据的封装
+     * @return   Map<FilmData ,Map<String,List<FilmPlan4Http>>>类型的map
+     */
+    private Map<FilmData,Map<String,List<FilmPlan4Http>>> processFilmPlan4Http(List<FilmPlan4Http> filmPlan4Https){
+            Map<FilmData, Map<String, List<FilmPlan4Http>>> planMap = new HashMap<>();
+
+            for (FilmPlan4Http filmPlan4Http : filmPlan4Https) {
+                FilmData filmData = new FilmData(filmPlan4Http.getFilmNo(),filmPlan4Http.getFilmName());
+                if(planMap.containsKey(filmData)) continue;
+                Map<String, List<FilmPlan4Http>> map = new HashMap<>();
+
+                for (FilmPlan4Http plan4Http : filmPlan4Https) {
+                    if(plan4Http.getFilmNo().equals(filmData.getFilmNo())){
+                        String date = DateUtils.formatDate(plan4Http.getStartTime());
+                        map.put(date, new ArrayList<>());
+                    }
+                }
+                planMap.put(filmData,map);
+            }
+
+            for (FilmPlan4Http filmPlan4Http : filmPlan4Https) {
+                String date = DateUtils.formatDate(filmPlan4Http.getStartTime());
+                String filmNo = filmPlan4Http.getFilmNo();
+                for (FilmData filmData : planMap.keySet()) {
+                        if(filmNo.equals(filmData.getFilmNo())){
+                            planMap.get(filmData).get(date).add(filmPlan4Http);
+                        }
+                }
+            }
+        return planMap;
+    }
+
+
+
+
+}
+
+

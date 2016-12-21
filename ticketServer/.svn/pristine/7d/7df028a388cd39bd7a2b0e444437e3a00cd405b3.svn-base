@@ -1,0 +1,16 @@
+package com.zmaxfilm.service;
+
+import java.util.Map;
+
+/**
+ * Created by jimmy on 2016/11/29.
+ * 用于处理socket消息
+ */
+public interface MsgHanderService {
+    //解析服务端发来的指令并执行
+    void processSocketMsg(String msg);
+    //检查MD5
+    boolean checkMsgMD5(Map msgMap);
+    //用于生成心跳包的消息字符串， 生成打印机 扫描仪等设置信息的json串  ，  包含md5后的sign
+    String processDeviceMsg();
+}

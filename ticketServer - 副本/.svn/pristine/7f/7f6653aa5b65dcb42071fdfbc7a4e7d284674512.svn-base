@@ -1,0 +1,43 @@
+package com.zmaxfilm.service.impl;
+
+import com.alibaba.fastjson.JSON;
+import com.zmaxfilm.service.DeviceDetectionService;
+import com.zmaxfilm.service.SocketMsgHanderService;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Created by jimmy on 2016/11/29.
+ */
+public class SocketMsgHanderServiceImpl implements SocketMsgHanderService {
+
+    //  socketMap 键值
+    private static final String SOCKETMSG_KEY_ACTION = "action";
+    private static final String SOCKETMSG_KEY_IMG = "img";
+    private static final String SOCKETMSG_KEY_VIDEO = "video";
+    private static final String SOCKETMSG_KEY_SIGN = "sign";
+    private static final String SOCKETMSG_KEY_VERSION = "version";
+    private static final String SOCKETMSG_KEY_URL = "url";
+
+    //action 可能的值
+    private static final String ACTION_VAL_UPDATENOTIFICATION = "updateNotification";
+    private static final String ACTION_VAL_ADVERTISINGPUSH = "advertisingPush";
+
+    private DeviceDetectionService deviceDetectionService = new DeviceDetectionServiceImpl();
+
+    @Override
+    public void processSocketMsg(String msg) {
+            Map msgMap = JSON.parseObject(msg, HashMap.class);
+            String action = (String)msgMap.get(SOCKETMSG_KEY_ACTION);
+            //提示更新html
+            if(action.equals(ACTION_VAL_UPDATENOTIFICATION)){
+                String url = (String)msgMap.get(SOCKETMSG_KEY_URL);
+                deviceDetectionService.updateHtml(url);
+            }
+            //提示更新广告
+            if(action.equals(ACTION_VAL_ADVERTISINGPUSH)){
+                deviceDetectionService.updateAd("");
+            }
+    }
+}

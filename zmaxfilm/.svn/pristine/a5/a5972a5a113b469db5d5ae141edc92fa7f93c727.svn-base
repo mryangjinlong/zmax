@@ -1,0 +1,72 @@
+package com.zmaxfilm.service.impl;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.zmaxfilm.Constant;
+import com.zmaxfilm.model.GoodsInfo;
+import com.zmaxfilm.model.GoodsParam;
+import com.zmaxfilm.model.GoodsResultList;
+import com.zmaxfilm.model.ResultInfo;
+import com.zmaxfilm.service.GoodsService;
+import com.zmaxfilm.util.HttpUtil;
+
+import java.io.IOException;
+import java.util.*;
+
+/**
+ * Created by Faith on 2016/12/17.
+ */
+public class GoodsServiceImpl implements GoodsService{
+    @Override
+    public ResultInfo getGoodsList(String cinemaNo) {
+        LinkedHashMap<String,String> map=new LinkedHashMap<>();
+        map.put("cinemaNo",cinemaNo);
+        map.put("coverImageType","4");
+        ResultInfo resultInfo=new ResultInfo();
+        try {
+            String str = HttpUtil.sendHttpPost(Constant.FUNSTIONNAME_GOODS_LIST,map);
+            GoodsResultList resultList=JSONObject.parseObject(str, GoodsResultList.class);
+            if(resultList.getResultCode().equals("0")){
+                resultInfo.setResult(true);
+                Map<String,Object> value=new HashMap<>();
+                value.put("data",resultList.getResultData());
+                resultInfo.setValue(value);
+            }else{
+                resultInfo.setResult(false);
+                resultInfo.setMessage("系统故障，联系管理员");
+            }
+        } catch (IOException e) {
+            resultInfo.setResult(false);
+            resultInfo.setMessage("请求失败");
+        }
+        return resultInfo;
+    }
+
+    @Override
+    public ResultInfo lockGoods(String cinemaNo, List<GoodsParam> goodsList, String mobile) {
+        LinkedHashMap<String,String> map=new LinkedHashMap<>();
+        ResultInfo resultInfo=new ResultInfo();
+        map.put("cinemaNo",cinemaNo);
+        String str=UUID.randomUUID().toString();
+        String serialNum=str.replace("-","");
+        map.put("serialNum",serialNum);
+        map.put("goodsList", JSONObject.toJSONString(goodsList));
+        map.put("mobile",mobile);
+        try {
+            String reuslt=HttpUtil.sendHttpPost(Constant.FUNSTIONNAME_LOCKGOODS,map);
+            JSONObject jsonObject=JSONObject.parseObject(reuslt);
+            String resultCode= (String) jsonObject.get("resultCode");
+            if(!resultCode.equals("0")){
+                resultInfo.setResult(false);
+                resultInfo.setMessage("下订单失败");
+            }else{
+                resultInfo.setResult(true);
+            }
+        } catch (IOException e) {
+            resultInfo.setResult(false);
+            resultInfo.setMessage("请求失败");
+            e.printStackTrace();
+        }
+        return resultInfo;
+    }
+}

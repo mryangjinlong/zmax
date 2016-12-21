@@ -1,0 +1,2134 @@
+/*样式重置*/
+
+body {
+    -moz-user-select: none;
+    /*火狐*/
+    -webkit-user-select: none;
+    /*webkit浏览器*/
+    font-size: 0.24rem;
+    font-family: "Microsoft YaHei", 微软雅黑;
+}
+
+@font-face {
+    font-family: dr;
+    src: url(../font/DS-DIGIB.TTF);
+}
+
+input,
+button {
+    font-family: Arial;
+    border: medium none;
+}
+
+button {
+    background: none;
+    border: none;
+}
+
+input,
+select,
+button {
+    outline: medium none;
+}
+
+textarea {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    resize: none;
+    outline: none;
+}
+
+em,
+i {
+    font-style: normal;
+}
+
+div {
+    margin: 0 auto;
+    padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul,
+li,
+dl,
+dt,
+dd,
+form,
+img,
+p {
+    margin: 0;
+    padding: 0;
+    border: none;
+    list-style-type: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: normal;
+}
+
+a {
+    text-decoration: none;
+    color: #FFF;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+
+/*样式重置结束*/
+
+.wrap {
+    width: 10.8rem;
+    height: 19.2rem;
+    overflow: hidden;
+    position: relative;
+}
+
+
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+
+::-webkit-scrollbar {
+    width: .16rem;
+    height: .16rem;
+    background-color: #2E2F32;
+}
+
+
+/*定义滚动条轨道 内阴影+圆角*/
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 0.06rem rgba(0, 0, 0, 0.3);
+    border-radius: 0.1rem;
+    background-color: #707378;
+}
+
+
+/*定义滑块 内阴影+圆角*/
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 0.06rem rgba(0, 0, 0, .3);
+    background-color: #fff;
+}
+
+
+/*头部跟底部*/
+
+.disno {
+    display: none !important;
+}
+
+.bgNo{background: none !important;}
+
+/*头部通用样式*/
+
+.seatTop {
+    height: 1.2rem;
+    padding: 0 0.6rem;
+    background: #2c2b2c;
+    font-size: 0.4rem;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    line-height: 1.2rem;
+}
+
+.seatTop h1 {
+    width: 100%;
+    height: 1.2rem;
+    position: absolute;
+    line-height: 1.2rem;
+    left: 0rem;
+    top: 0;
+    display: block;
+    z-index: 9999;
+    color: #fff;
+    font-size: 0.4rem;
+}
+
+.seatTop a.toBack {
+    width: 0.54rem;
+    height: 0.54rem;
+    position: absolute;
+    left: 0.6rem;
+    top: 50%;
+    margin-top: -0.27rem;
+    background: url(../img/inshell/back.png) no-repeat;
+    background-size: 100% 100%;
+    display: block;
+    z-index: 9999;
+}
+
+.seatTop .backIndex {
+    width: 1.55rem;
+    height: 0.62rem;
+    line-height: 0.62rem;
+    border: 1px solid #fff;
+    text-align: center;
+    font-size: 0.32rem;
+    position: absolute;
+    top: 50%;
+    right: 0.6rem;
+    margin-top: -0.31rem;
+    border-radius: 0.03rem;
+}
+
+
+/*头部通用样式结束*/
+#header {
+    width: 100%;
+    height: 6.075rem;
+    z-index: 9999;
+}
+
+#header img {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-slide {
+    text-align: center;
+    background: #fff;
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+#footer {
+    position: fixed;
+    bottom: 0rem;
+    left: 0rem;
+    width: 100%;
+    height: 0.605rem;
+    line-height: 0.605rem;
+    text-align: center;
+    color: #fff;
+    background: #272527;
+    font-size: 0.24rem;
+    z-index: 9999;
+}
+
+
+/*头部跟底部*/
+
+
+/*首页*/
+
+#page-index {
+    position: absolute;
+    top: 6.075rem;
+    left: 0;
+    height: 12.52rem;
+    width: 100%;
+}
+
+#page-index .newcontent {
+    height: 7.72rem;
+    position: relative;
+    width: 100%;
+    background: url(../img/index/bg.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+#page-index .newcontent ul {
+    width: 100%;
+    height: 100%;
+    clear: both;
+    overflow: hidden;
+}
+
+#page-index .newcontent ul li {
+    width: 50%;
+    height: 50%;
+    float: left;
+    position: relative;
+}
+
+#page-index .newcontent ul li .liImgText {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 0.92rem;
+    margin-top: -0.46rem;
+    display: block;
+}
+
+#page-index .newcontent ul li .liImgText h2 {
+    height: 0.47rem;
+    line-height: 0.47rem;
+    font-size: 0.4rem;
+    color: #fff;
+    margin-left: 2.36rem;
+    margin-bottom: 0.12rem;
+}
+
+#page-index .newcontent ul li .liImgText h3 {
+    height: 0.3rem;
+    line-height: 0.3rem;
+    font-size: 0.26rem;
+    color: #fff;
+    margin-left: 2.36rem;
+}
+
+#page-index .newcontent ul li .liImgText img {
+    height: 0.9rem;
+    width: 0.9rem;
+    float: left;
+    margin-left: 1.16rem;
+}
+
+#page-index .newcontent ul li .liDiv {
+    width: 100%;
+    height: 50%;
+    position: relative;
+}
+
+#page-index .adImg {
+    width: 100%;
+    height: 4.8rem;
+}
+
+#page-index .adImg img {
+    width: 100%;
+    height: 100%;
+}
+
+
+/*首页结束*/
+
+
+/*排期*/
+
+#page-plan {
+    position: absolute;
+    top: 6.075rem;
+    left: 0;
+    height: 12.52rem;
+    width: 100%;
+    background: url(../img/inshell/bg.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+#page-plan .planTop {
+    height: 1.2rem;
+    padding: 0 0.6rem;
+    background: #2c2b2c;
+    font-size: 0.4rem;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    line-height: 1.2rem;
+}
+
+#page-plan .planTop h1 {
+    width: 100%;
+    height: 1.2rem;
+    position: absolute;
+    line-height: 1.2rem;
+    left: 0rem;
+    top: 0;
+    display: block;
+    z-index: 9999;
+    color: #fff;
+    font-size: 0.4rem;
+}
+
+#page-plan .planTop a.toBack {
+    width: 0.54rem;
+    height: 0.54rem;
+    position: absolute;
+    left: 0.6rem;
+    top: 50%;
+    margin-top: -0.27rem;
+    background: url(../img/inshell/back.png) no-repeat;
+    background-size: 100% 100%;
+    display: block;
+    z-index: 9999;
+}
+
+#page-plan .planTop>a.ciname {
+    float: right;
+    font-size: 0.3rem;
+    margin-right: 0.4rem;
+    z-index: 9999;
+    cursor: pointer;
+    display: block;
+    max-width: 25%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#page-plan .planTop img.downIcon {
+    width: 0.3rem;
+    height: 0.18rem;
+    position: absolute;
+    right: 0.6rem;
+    top: 50%;
+    margin-top: -0.09rem;
+    cursor: pointer;
+    z-index: 99999;
+}
+
+#page-plan .planBody {
+    width: 100%;
+    height: 4.06rem;
+    border: 0;
+}
+
+#page-plan .planBody li {
+    margin-top: 0.7rem;
+    width: 1.8rem;
+    height: 2.8rem;
+    cursor: pointer;
+    margin-right: 0.15rem;
+    margin-left: 0.15rem;
+    background: none;
+}
+
+#page-plan .planBody li p {
+    height: 0.26rem;
+    line-height: 0.26rem;
+    font-size: 0.22rem;
+    padding-left: 0.08rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #fff;
+    width: calc(100% - 0.4rem);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    text-align: left;
+}
+
+#page-plan .planBody li em {
+    display: block;
+    position: absolute;
+    right: 0rem;
+    bottom: 0;
+    height: 0.26rem;
+    line-height: 0.26rem;
+    font-size: 0.18rem;
+    color: #ffb902;
+    width: 0.4rem;
+    padding-right: 0.08rem;
+}
+
+#page-plan .planBody li>img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.8rem;
+    height: 2.4rem;
+}
+
+#page-plan .planBody li .indexAll {
+    position: absolute;
+    right: 0;
+    bottom: 0.4rem;
+    width: 0.6rem;
+    height: 0.26rem;
+    text-align: center;
+    line-height: 0.26rem;
+    font-size: 0.16rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    z-index: 9999;
+}
+
+#page-plan .planBody li.swiper-slide-active {
+    width: 2.4rem;
+    height: 3.39rem;
+    margin-top: 0.32rem;
+}
+
+#page-plan .planBody li.swiper-slide-active em {
+    right: 0.08rem;
+}
+
+#page-plan .planBody li.swiper-slide-active>img {
+    width: 2.4rem;
+    height: 2.99rem;
+}
+
+#page-plan .planBody li.swiper-slide-active~li {
+    width: 1.8rem;
+    height: 2.8rem;
+    margin-top: 0.7rem;
+}
+
+#page-plan .planBody li.swiper-slide-active~li>img {
+    width: 1.8rem;
+    height: 2.4rem;
+}
+
+#page-plan .planBody li .film3d {
+    width: 0.54rem;
+    height: 0.24rem;
+    position: absolute;
+    left: -0.02rem;
+    top: 0.1rem;
+    background: url(/img/inshell/3d.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+#page-plan .planBody li .filmMax3d {
+    width: 0.54rem;
+    height: 0.24rem;
+    position: absolute;
+    left: -0.02rem;
+    top: 0.1rem;
+    background: url(/img/inshell/imax-3d.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+#page-plan .planBody li .willShell {
+    width: 0.54rem;
+    height: 0.24rem;
+    position: absolute;
+    left: -0.02rem;
+    top: 0.4rem;
+    background: url(/img/inshell/willShell.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+#page-plan .planTime {
+    width: 100%;
+    height: 0.86rem;
+    background: #2e2f32;
+}
+
+#page-plan .planTime ul {
+    white-space: nowrap;
+    background: #2e2f32 !important;
+    height: 100%;
+}
+
+#page-plan .planTime ul li {
+    line-height: 0.86rem;
+    height: 0.86rem;
+    width: 2.06rem;
+    display: inline-block;
+    text-align: center;
+    font-size: 0.26rem;
+    color: rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.22);
+    cursor: pointer;
+}
+
+#page-plan .planTime ul li h2 {
+    line-height: 0.32rem;
+    height: 0.32rem;
+    text-align: center;
+    font-size: 0.26rem;
+}
+
+#page-plan .planTime ul li h3 {
+    margin-top: 0.14rem;
+    line-height: 0.28rem;
+    height: 0.28rem;
+    text-align: center;
+    font-size: 0.22rem;
+}
+
+#page-plan .planTime ul li.active {
+    color: #df3031;
+    background: #2e2f32;
+}
+
+#page-plan .planBt {
+    height: 6.4rem;
+    width: 100%;
+    overflow-y: scroll;
+    background: #2e2f32;
+    position: relative;
+}
+
+#page-plan .planBt .dragFilmPlan {
+    width: 100%;
+    height: auto;
+    /*
+    position: absolute;
+    top: 0;
+    left: 0px;
+*/
+    padding: 0 0.6rem;
+    background: #2e2f32;
+    border: 0;
+    clear: both;
+}
+
+#page-plan .planBt .dragFilmPlan > li {
+    width: 100%;
+    height: 1.59rem;
+    float: left;
+}
+
+#page-plan .planBt .dragFilmPlan .filmUl {
+    width: 100%;
+    height: 100%;
+    clear: both;
+    overflow: hidden;
+    position: relative;
+}
+
+#page-plan .planBt .dragFilmPlan .filmUl>img {
+    height: 0.01rem;
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    opacity: 1;
+}
+
+#page-plan .planBt .dragFilmPlan .filmUl li {
+    height: 100%;
+    text-align: center;
+    float: left;
+    color: #fff;
+    border: 0;
+    position: relative;
+}
+
+#page-plan .planBt .dragFilmPlan .filmUl li h2 {
+    margin-top: 0.27rem;
+    line-height: 0.55rem;
+    font-size: 0.28rem;
+    height: 0.55rem;
+}
+
+#page-plan .planBt .dragFilmPlan .filmUl li h3 {
+    line-height: 0.46rem;
+    height: 0.46rem;
+    font-size: 0.28rem;
+}
+
+#page-plan .filmUl>li:first-child {
+    width: 1.8rem;
+    text-align: left !important;
+}
+
+#page-plan .filmUl>li:first-child h2 {
+    font-family: dr;
+    font-size: 0.6rem !important;
+}
+
+#page-plan .filmUl>li:nth-child(2) {
+    width: 1rem;
+}
+
+#page-plan .filmUl>li:nth-child(3) {
+    width: 3.3rem;
+}
+
+#page-plan .filmUl>li:nth-child(4) {
+    width: 1.8rem;
+}
+
+#page-plan .filmUl>li:nth-child(4) h2 {
+    color: #df3031;
+    font-size: 0.4rem;
+}
+
+#page-plan .filmUl>li:nth-child(4) h2 em {
+    font-size: 0.18rem !important;
+}
+
+#page-plan .filmUl>li:nth-child(5) {
+    width: calc( 100% - 7.95rem);
+}
+
+#page-plan .filmUl>li:nth-child(5) a {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin-top: -0.3rem;
+    width: 1.6rem;
+    height: 0.6rem;
+    text-align: center;
+    line-height: 0.6rem;
+    border-radius: 0.8rem;
+    background: #df3031;
+    color: #fff;
+    font-size: 0.24rem;
+    display: inline-block;
+}
+
+#page-plan .stopShell {
+    color: #696969 !important;
+}
+
+#page-plan .stopShell h2,
+#page-plan .stopShell h3 {
+    color: #696969 !important;
+}
+
+#page-plan .stopShell del {
+    color: #696969 !important;
+}
+
+#page-plan .stopShell a {
+    background: #444444 !important;
+    color: #696969 !important;
+}
+
+#page-plan .prefulShell>li:nth-child(4) h2 {
+    color: #f46f16 !important;
+}
+
+#page-plan .prefulShell a {
+    background: #f46f16 !important;
+}
+
+#page-plan .alert {
+    width: 8.6rem;
+    height: 1.7rem;
+    line-height: 1.7rem;
+    text-align: center;
+    background: #fff;
+    font-size: 0.42rem;
+    position: absolute;
+    color: #2e2f32;
+    bottom: 2.1rem;
+    left: 50%;
+    margin-left: -4.3rem;
+    border-radius: 0.1rem;
+    display: none;
+}
+
+#page-plan .alert em {
+    color: #df3031;
+}
+
+#page-plan .planNone {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 1.94rem;
+    margin-top: -0.97rem;
+    text-align: center;
+}
+
+#page-plan .planNone img {
+    width: 1.38rem;
+    height: 1.3rem;
+}
+
+#page-plan .planNone p {
+    font-size: 0.26rem;
+    text-align: center;
+}
+
+#page-plan .choseCinema {
+    display: none;
+    width: 100%;
+    height: 6.35rem;
+    background: #fff;
+    position: absolute;
+    left: 0;
+    top: 1.2rem;
+    z-index: 9999999999;
+}
+
+#page-plan .choseCinema .cinemaTop {
+    width: calc(100% - 1.2rem);
+    height: 0.9rem;
+    line-height: 0.9rem;
+    position: relative;
+    margin-left: 0.6rem;
+    border-bottom: 1px solid #dddddd;
+}
+
+#page-plan .choseCinema .cinemaTop span {
+    font-size: 0.32rem;
+    color: #2e2f32;
+    margin-right: 0.08rem;
+}
+
+#page-plan .choseCinema .cinemaTop img {
+    width: 0.3rem;
+    height: 0.18rem;
+}
+
+#page-plan .choseCinema .cinemaTop a {
+    width: 0.34rem;
+    height: 0.34rem;
+    background: url(/img/inshell/x.png) no-repeat;
+    background-size: 100% 100%;
+    position: absolute;
+    right: 0rem;
+    top: 50%;
+    margin-top: -0.17rem;
+}
+
+#page-plan #NoCinema {
+    display: none;
+    width: 100%;
+    text-align: center;
+    height: calc(100% - 0.92rem;
+    )
+}
+
+#page-plan #NoCinema img {
+    margin-top: 0.78rem;
+    width: 1.38rem;
+    height: 1.3rem;
+}
+
+#page-plan #NoCinema p {
+    font-size: 0.26rem;
+    color: 5c5d5f;
+    margin-top: 0.2rem;
+}
+
+#page-plan #NoCinema a {
+    display: inline-block;
+    width: 5.16rem;
+    height: 0.94rem;
+    line-height: 0.94rem;
+    text-align: center;
+    color: #fff;
+    background: #df3031;
+    margin-top: .56rem;
+    border-radius: 0.47rem;
+}
+
+#page-plan #cityChose {
+    width: 100%;
+    height: calc(100% - 0.92rem);
+    overflow: auto;
+    padding: 0.2rem 0rem 0.2rem 0.6rem;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+#page-plan #cityChose ul {
+    height: auto;
+    width: 100%;
+    clear: both;
+}
+
+#page-plan #cityChose ul li {
+    height: 0.8rem;
+    width: 20%;
+    float: left;
+    border: 1px solid #f5f5f5;
+    margin: 0.3rem 0;
+    margin-right: 5%;
+    border-radius: 0.8rem;
+    line-height: 0.8rem;
+    text-align: center;
+    font-size: 0.3rem;
+    color: #666666;
+    background: #f5f5f5;
+}
+
+#page-plan #cityChose ul li.active {
+    border: 1px solid #df3031;
+    background: #fff;
+    color: #df3031;
+}
+
+#page-plan #cityChose ul li:hover {
+    border: 1px solid #df3031;
+    background: #fff;
+    color: #df3031;
+}
+
+#page-plan #cinemaChose {
+    width: 100%;
+    height: calc(100% - 0.92rem);
+    overflow: auto;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: none
+}
+
+#page-plan #cinemaChose ul {
+    height: auto;
+    width: 100%;
+    clear: both;
+    padding-bottom: 0.6rem !important;
+}
+
+#page-plan #cinemaChose ul li {
+    height: 1.6rem;
+    width: 100%;
+    float: left;
+    position: relative;
+}
+
+#page-plan #cinemaChose ul li.active {
+    background: #f5f5f5 !important;
+}
+
+#page-plan #cinemaChose ul li:hover {
+    background: #f5f5f5 !important;
+}
+
+#page-plan #cinemaChose ul li a {
+    width: calc(100% - 1.2rem);
+    height: 100%;
+    display: block;
+    border-bottom: 1px solid #dddddd;
+    position: absolute;
+    top: 0;
+    left: 0.6rem;
+}
+
+#page-plan #cinemaChose ul li a h2 {
+    width: 100%;
+    height: 0.66rem;
+    line-height: 0.66rem;
+    margin-top: 0.27rem;
+    font-size: 0.4rem;
+    color: #2e2f32;
+}
+
+#page-plan #cinemaChose ul li a h3 {
+    width: 100%;
+    height: 0.5rem;
+    line-height: 0.5rem;
+    font-size: 0.24rem;
+    color: #696969;
+}
+
+#page-plan #cinemaChose ul li a img {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin-top: -0.15rem;
+    width: 0.165rem;
+}
+
+
+/*排期结束*/
+
+
+
+/*  选座  */
+
+#page-seat {
+    position: absolute;
+    top: 6.075rem;
+    left: 0;
+    height: 12.52rem;
+    width: 100%;
+    background: url(../img/inshell/bg.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+#page-seat .seatBody .bodyTop {
+    width: 100%;
+    height: 7.32rem;
+}
+
+#page-seat .seatBody .topScrol {
+    width: 6.9rem;
+    height: 0.36rem;
+    background: url(../img/seat/scroll.png) no-repeat;
+    background-size: 100% 100%;
+    margin: 0.5rem auto 0;
+}
+
+#page-seat .seatBody .filmInfo {
+    text-align: center;
+    color: #c7c7c7;
+    font-size: 0.26rem;
+    line-height: 0.3rem;
+    margin-top: -0.1rem;
+}
+
+#page-seat .seatBody .seatImg {
+    width: 8rem;
+    height: 0.3rem;
+    line-height: 0.3rem;
+    margin-left: 1.9rem;
+    margin-top: 0.58rem;
+}
+
+#page-seat .seatBody .seatImg img {
+    width: 0.3rem;
+    height: 0.3rem;
+}
+
+#page-seat .seatBody .seatImg span {
+    display: inline-block;
+    width: 0.6rem;
+    height: 0.3rem;
+    line-height: 0.3rem;
+    vertical-align: top;
+    margin-left: 0.08rem;
+    font-size: 0.18rem;
+    color: #fff;
+}
+
+#page-seat .seatBody .choseSeat {
+    width: calc(100% - 1.2rem);
+    margin-left: 0.6rem;
+    height: 4.9rem;
+    margin-top: 0.4rem;
+    position: relative;
+}
+
+#page-seat .seatBody .choseSeat .prev {
+    width: 1rem;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 0.7rem;
+    margin-top: -0.35rem;
+    color: #fff;
+    font-size: 0.3rem;
+}
+
+#page-seat .seatBody .choseSeat .next {
+    width: 1rem;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    height: 0.7rem;
+    margin-top: -0.35rem;
+    color: #fff;
+    font-size: 0.3rem;
+    text-align: right;
+}
+
+#page-seat .seatBody .choseSeat .choseSeatCT {
+    width: 7.5rem;
+    height: 100%;
+    overflow: auto;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -3.75rem;
+}
+
+#page-seat .seatBody .choseSeatCT .choseSeatLf {
+    width: 0.32rem;
+    height: auto;
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 0.16rem;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    padding: 0.13rem 0;
+    z-index: 9999;
+}
+
+#page-seat .seatBody .choseSeatCT .choseSeatLf li {
+    height: 0.62rem;
+    line-height: 0.62rem;
+    text-align: center;
+    width: 0.32rem;
+    float: left;
+    color: #fff;
+}
+
+#page-seat .seatBody .choseSeatCT .choseSeatRt {
+    width: auto;
+    height: auto;
+    min-width: calc(100% - 0.64rem);
+    min-height: 100%;
+    margin-left: 0.54rem;
+    padding: 0.13rem 0;
+}
+
+#page-seat .seatBody .choseSeatCT .choseSeatRt ul {
+    width: auto;
+    height: 0.62rem;
+    white-space: nowrap;
+    clear: both;
+    padding: 0.11rem 0;
+}
+
+#page-seat .seatBody .choseSeatCT .choseSeatRt ul li {
+    width: 0.4rem;
+    height: 0.4rem;
+    margin-right: 0.2rem;
+    float: left;
+    line-height: 0.4rem;
+    text-align: center;
+    font-size: 0rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#page-seat .seatBody .choseSeatCT .choseSeatRt ul li.canSeat {
+    background: #fff;
+    color: #cccccc;
+    font-size: 0.3rem;
+}
+
+#page-seat .seatBody .choseSeatCT .choseSeatRt ul li.hasSell {
+    background: url(../img/seat/hasSell.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+#page-seat .seatBody .choseSeatCT .choseSeatRt ul li.hasChose {
+    background: url(../img/seat/hasChose.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+#page-seat .seatBody .choseSeatCT .choseSeatRt ul li.star {
+    background: url(../img/seat/star.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+#page-seat .seatBody .choseSeatCT .choseSeatRt ul li.starChose {
+    background: url(../img/seat/starChose.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+#page-seat .seatBody .choseSeatCT .choseSeatRt ul li.fimilySeat {
+    background: url(../img/seat/fimilySeat.png) no-repeat;
+    background-size: 100% 100%;
+    width: 1rem;
+}
+
+#page-seat .seatBody .choseSeatCT .choseSeatRt ul li.fimilySeatChose {
+    background: url(../img/seat/fimiliSeatChose.png) no-repeat;
+    background-size: 100% 100%;
+    width: 1rem;
+}
+
+#page-seat .seatBody .choseSeatCT .choseSeatRt ul li.vipSeat {
+    background: url(../img/seat/vip.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+#page-seat .seatBody .choseSeatCT .choseSeatRt ul li.vipSeatChose {
+    background: url(../img/seat/VIPChose.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+#page-seat .seatBody .bodyBt {
+    width: 100%;
+    height: 3.5rem;
+    background: #2e2f32;
+}
+
+#page-seat .seatBody .bodyBtTop {
+    line-height: 0.9rem;
+    height: 0.9rem;
+    text-align: center;
+    color: #fff;
+}
+
+#page-seat .seatBody .bodyBtTop img {
+    width: 0.27rem;
+    height: 0.27rem;
+    margin-right: 0.14rem;
+}
+
+#page-seat .seatBody .bodyBtTop span {
+    font-size: 0.3rem;
+}
+
+#page-seat .seatBody .bodyBtBt {
+    height: 2.48rem;
+    width: 100%;
+    margin-top: .12rem;
+    padding: 0 0 0 0.6rem;
+    position: relative;
+}
+
+#page-seat .seatBody .bodyBtBt .BtBtLf {
+    width: 7rem;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0.6rem;
+}
+
+#page-seat .seatBody .bodyBtBt .BtBtLf li {
+    float: left;
+    width: 2.6rem;
+    height: 0.86rem;
+    position: relative;
+    line-height: 0.86rem;
+    margin-right: 0.9rem;
+    margin-bottom: 0.3rem;
+    color: #fff;
+    font-size: 0.3rem;
+    text-align: center;
+    border-radius: 3px;
+    background: #696969;
+    cursor: pointer;
+}
+
+#page-seat .seatBody .bodyBtBt .BtBtLf li.isSeat {
+    background: none;
+    border: 1px solid #fff;
+    text-align: left;
+    padding: 0 0.3rem;
+}
+
+#page-seat .seatBody .bodyBtBt .BtBtLf li.isSeat img {
+    position: absolute;
+    right: 0.3rem;
+    top: 50%;
+    width: 0.28rem;
+    height: 0.28rem;
+    margin-top: -0.14rem;
+}
+
+#page-seat .seatBody .bodyBtBt .BtBtRt {
+    width: 3.2rem;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0rem;
+}
+
+#page-seat .seatBody .bodyBtBt .BtBtRt li {
+    float: left;
+    width: 2.6rem;
+    height: 0.86rem;
+    line-height: 0.86rem;
+    margin-bottom: 0.3rem;
+    color: #fff;
+    font-size: 0.3rem;
+}
+
+#page-seat .seatBody .bodyBtBt .BtBtRt li span {
+    font-size: 0.26rem;
+}
+
+#page-seat .seatBody .bodyBtBt .BtBtRt li em {
+    font-size: 0.4rem;
+    color: #df3031;
+}
+
+#page-seat .seatBody .bodyBtBt .BtBtRt li.pay {
+    background: #df3031;
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#page-seat .seatBody .bodyBtBt .BtBtRt li.needPayMoney {
+    width: 3.2rem;
+    line-height: 0.6rem;
+    position: relative;
+}
+
+#page-seat .seatBody .bodyBtBt .BtBtRt li.needPayMoney .payInfo {
+    font-size: 0.18rem;
+    height: 0.24rem;
+    line-height: 0.24rem;
+    width: 100%;
+    position: absolute;
+    bottom: 0.05rem;
+    left: 0;
+    color: #e2e2e4;
+}
+
+#page-seat .seatAddr {
+    position: absolute;
+    top: 2.24rem;
+    height: 1.22rem;
+    width: 2.1rem;
+    left: 0.6rem;
+    background: rgba(99, 98, 100, 0.8);
+}
+
+#page-seat .tsInfo {
+    position: absolute;
+    top: 1.2rem;
+    height: 1rem;
+    width: 100%;
+    left: 0rem;
+    background: rgba(223, 48, 49, 0.86);
+    color: #fff;
+    font-size: 0.28rem;
+    text-align: center;
+    line-height: 1rem;
+}
+
+#page-seat .seatErrorAlert {
+    background: #fff;
+    color: #2e2f32;
+    font-size: 0.42rem;
+    height: 3.5rem;
+    border-radius: 0.2rem;
+    width: 8.6rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -1.75rem;
+    margin-left: -4.3rem;
+    text-align: center;
+    display: none;
+    z-index: 99999;
+}
+
+#page-seat .seatErrorAlert p {
+    margin-top: 0.72rem;
+}
+
+#page-seat .seatErrorAlert a {
+    display: inline-block;
+    margin-top: 0.6rem;
+    width: 5.16rem;
+    height: 0.94rem;
+    background: #df3031;
+    color: #fff;
+    line-height: 0.94rem;
+    font-size: 0.3rem;
+    border-radius: 0.47rem;
+}
+
+#page-seat .SeatAlert {
+    display: none;
+    background: #fff;
+    color: #2e2f32;
+    font-size: 0.42rem;
+    height: 1.7rem;
+    line-height: 1.7rem;
+    border-radius: 0.2rem;
+    width: 8.6rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -0.85rem;
+    margin-left: -4.3rem;
+    text-align: center;
+    z-index: 99999;
+}
+
+#page-seat .SeatAlert .bgImg {
+    width: 0.9rem;
+    height: 0.9rem;
+    vertical-align: middle;
+    display: inline-block;
+    background: url(../img/seat/loading/11.png) no-repeat;
+    background-size: 100% 100%;
+    margin-right: 0.4rem;
+    animation: rotateImg 2s linear infinite;
+    -webkit-animation: rotateImg 2s linear infinite;
+}
+
+
+#page-seat .hasOrder {
+    background: #fff;
+    color: #2e2f32;
+    border-radius: 0.2rem;
+    width: 8.6rem;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-top: -2rem;
+    margin-left: -4.3rem;
+    text-align: left;
+    z-index: 99999;
+    height: auto;
+}
+
+#page-seat .hasOrder h2 {
+    margin-top: 0.9rem;
+    height: 0.48rem;
+    line-height: 0.48rem;
+    font-size: 0.42rem;
+    margin-left: 1.36rem;
+}
+
+#page-seat .hasOrder h3 {
+    margin-top: 0.66rem;
+    height: 0.44rem;
+    line-height: 0.44rem;
+    font-size: 0.42rem;
+    margin-left: 1.36rem;
+}
+
+#page-seat .hasOrder p {
+    height: 0.4rem;
+    line-height: 0.4rem;
+    font-size: 0.36rem;
+    margin-top: 0.4rem;
+    margin-left: 1.36rem;
+}
+
+#page-seat .hasOrder p span {
+    color: #666666;
+}
+
+#page-seat .hasOrder p em {
+    font-size: 0.46rem;
+    color: #df3031;
+}
+
+#page-seat .hasOrder a.newChoseSeat {
+    display: inline-block;
+    margin-top: 0.9rem;
+    margin-left: 1.36rem;
+    width: 2.6rem;
+    line-height: 0.86rem;
+    height: 0.86rem;
+    text-align: center;
+    color: #fff;
+    text-align: center;
+    background: #f46f16;
+    margin-bottom: 0.96rem;
+    border-radius: 5px;
+    font-size: 0.3rem;
+}
+
+#page-seat .hasOrder a.GoOnPay {
+    display: inline-block;
+    margin-top: 0.9rem;
+    margin-left: 0.5rem;
+    width: 2.6rem;
+    line-height: 0.86rem;
+    height: 0.86rem;
+    text-align: center;
+    color: #fff;
+    text-align: center;
+    background: #df3031;
+    margin-bottom: 0.96rem;
+    border-radius: 5px;
+    font-size: 0.3rem;
+}
+
+#page-seat .isGoToBack {
+    background: #fff;
+    color: #2e2f32;
+    border-radius: 0.2rem;
+    width: 8.6rem;
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    margin-top: -2.25rem;
+    margin-left: -4.3rem;
+    text-align: center;
+    z-index: 99999;
+    height: 4.5rem;
+}
+
+#page-seat .isGoToBack p {
+    margin-top: 0.76rem;
+    font-size: 0.42rem;
+    line-height: .82rem;
+    margin-left: 0.7rem;
+    text-align: left;
+}
+
+#page-seat .isGoToBack a {
+    width: 2.6rem;
+    height: 0.86rem;
+    text-align: center;
+    line-height: 0.86rem;
+    color: #fff;
+    display: inline-block;
+    border-radius: 5px;
+    font-size: 0.3rem;
+}
+
+#page-seat .isGoToBack a.INosure {
+    background: #696969;
+    margin-top: 0.6rem;
+    margin-right: 0.5rem;
+}
+
+#page-seat .isGoToBack a.yesIsure {
+    margin-top: 0.6rem;
+    background: #df3031;
+}
+
+
+/*    选座结束 */
+
+
+/*   支付页 */
+
+#page-pay {
+    position: absolute;
+    top: 6.075rem;
+    left: 0;
+    height: 12.52rem;
+    width: 100%;
+    background: url(../img/inshell/bg.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+#page-pay .payBody {
+    width: 100%;
+    height: 11.32rem;
+    position: absolute;
+    top: 1.2rem;
+    left: 0;
+}
+
+#page-pay #headImg {
+    width: 2rem;
+    height: 2rem;
+    margin-top: 0.9rem;
+}
+
+#page-pay #headImg img {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+
+#page-pay .payBody>p {
+    font-size: 0.42rem;
+    margin-top: 0.44rem;
+    color: #fff;
+    line-height: 0.46rem;
+    height: 0.46rem;
+    text-align: center;
+}
+
+#page-pay .payBody>p>time {
+    color: #df3031
+}
+
+#page-pay .payBody>h3 {
+    font-size: 0.36rem;
+    margin-top: 0.82rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 0.4rem;
+    height: 0.4rem;
+    text-align: center;
+    background: url(../img/pay/bg.png) 0 center no-repeat;
+    background-size: contain;
+}
+
+#page-pay .payType {
+    margin-top: 0.86rem;
+    height: auto;
+    width: 100%;
+    position: relative;
+}
+
+#page-pay #zfb {
+    margin-left: 1.45rem;
+    margin-right: 1.1rem;
+    width: 1.71rem;
+    height: 1.71rem;
+}
+
+#page-pay #weixin {
+    width: 1.71rem;
+    height: 1.71rem;
+}
+
+#page-pay #count {
+    margin-right: 1.1rem;
+    width: 2.3rem;
+    height: 2.3rem;
+}
+
+#page-pay .payType p {
+    color: #fff;
+    margin-top: 0.24rem;
+    height: 0.4rem;
+    line-height: 0.4rem;
+    font-size: 0.34rem;
+    text-align: left;
+}
+
+#page-pay .payType p span {
+    display: inline-block;
+    text-align: center
+}
+
+#page-pay .payType p span:first-child {
+    margin-left: 1.45rem;
+    margin-right: 1.1rem;
+    width: 1.71rem;
+}
+
+#page-pay .payType p span:nth-child(2) {
+    margin-right: 1.1rem;
+    width: 2.3rem;
+}
+
+#page-pay .payType p span:nth-child(3) {
+    width: 1.71rem;
+}
+
+#page-pay .payAlert {
+    width: 8.6rem;
+    height: 7rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -7rem;
+    margin-left: -4.3rem;
+    border-radius: 20px;
+    background: #fff;
+    z-index: 99999;
+    display: none;
+}
+
+#page-pay .payAlert .close {
+    position: absolute;
+    right: 0.3rem;
+    top: 0.3rem;
+    width: 0.34rem;
+    height: 0.34rem;
+}
+
+#page-pay .payAlert .ewmImg {
+    position: absolute;
+    right: 50%;
+    top: 1.6rem;
+    width: 2.4rem;
+    height: 2.4rem;
+    margin-right: -1.2rem;
+    z-index: 100;
+}
+
+#page-pay .payAlert .SySImg {
+    position: absolute;
+    right: 1.7rem;
+    top: 0.42rem;
+    width: 1.79rem;
+    height: 1.78rem;
+    z-index: 99999;
+}
+
+#page-pay .payAlert>h2 {
+    position: absolute;
+    right: 0rem;
+    top: 4.42rem;
+    height: 0.48rem;
+    line-height: 0.48rem;
+    font-size: 0.42rem;
+    text-align: center;
+    z-index: 99999;
+    color: #666666;
+    width: 100%;
+}
+
+#page-pay .payAlert>h3 {
+    position: absolute;
+    width: 100%;
+    right: 0rem;
+    top: 5.38rem;
+    height: 0.48rem;
+    line-height: 0.48rem;
+    font-size: 0.42rem;
+    text-align: center;
+    z-index: 99999;
+    color: #666666;
+}
+
+#page-pay .payAlert>h3>em {
+    color: #df3031;
+}
+
+#page-pay #acountPayAlert {
+    width: 8.6rem;
+    height: 6.2rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -6.2rem;
+    margin-left: -4.3rem;
+    border-radius: 20px;
+    background: #fff;
+    text-align: center;
+    z-index: 99999;
+    display: none;
+}
+
+#page-pay #acountPayAlert .close {
+    position: absolute;
+    right: 0.3rem;
+    top: 0.3rem;
+    width: 0.34rem;
+    height: 0.34rem;
+}
+
+#page-pay #acountPayAlert .headerImg {
+    width: 2rem;
+    height: 2rem;
+    position: absolute;
+    top: 0;
+    margin-top: -1rem;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    left: 50%;
+    margin-left: -1rem;
+    z-index: 99999;
+}
+
+#page-pay #acountPayAlert .headerImg>img {
+    width: 100%;
+    height: 100%;
+}
+
+#page-pay #acountPayAlert p {
+    text-align: center;
+    font-size: 0.4rem;
+    color: #2e2f32;
+    width: 100%;
+    height: 0.42rem;
+    line-height: 0.42rem;
+    margin-top: 1.24rem;
+}
+
+#page-pay #acountPayAlert h2 {
+    text-align: center;
+    font-size: 0.42rem;
+    color: #666666;
+    width: 100%;
+    height: 0.42rem;
+    line-height: 0.46rem;
+    margin-top: 0.64rem;
+}
+
+#page-pay #acountPayAlert h2 em {
+    color: #df3031;
+}
+
+#page-pay #acountPayAlert h3 {
+    text-align: center;
+    font-size: 0.42rem;
+    color: #666666;
+    width: 100%;
+    height: 0.42rem;
+    line-height: 0.46rem;
+    margin-top: 0.26rem;
+}
+
+#page-pay #acountPayAlert h3 em {
+    color: #df3031;
+}
+
+#page-pay #acountPayAlert #sureToPay {
+    display: inline-block;
+    height: 0.94rem;
+    line-height: 0.94rem;
+    width: 5.16rem;
+    text-align: center;
+    color: #fff;
+    font-size: 0.3rem;
+    background: #df3031;
+    border-radius: 0.47rem;
+    margin-top: 0.8rem;
+}
+
+
+/*    支付页结束 */
+
+
+/*   等待结果页面 */
+
+#page-wait {
+    position: absolute;
+    top: 6.075rem;
+    left: 0;
+    height: 12.52rem;
+    width: 100%;
+    background: url(../img/inshell/bg.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+#page-wait .waitBody {
+    width: 100%;
+    height: 11.32rem;
+    position: absolute;
+    top: 1.2rem;
+    left: 0;
+    text-align: center;
+}
+
+#page-wait .waitBody .imgBox {
+    margin-top: 1.7rem;
+    width: 4.3rem;
+    height: 4.4rem;
+    display: inline-block;
+    position: relative;
+}
+
+#page-wait .waitBody .imgBox>img {
+    width: 100%;
+    height: 100%;
+}
+
+#page-wait .waitBody .imgBox .leftImg {
+    position: absolute;
+    width: 1.3rem;
+    height: 1.3rem;
+    left: 0.8rem;
+    top: 0.25rem;
+    background: url(../img/pay/left/1.png) no-repeat;
+    background-size: 100% 100%;
+    -webkit-animation: rotateImg 2s linear infinite;
+}
+
+#page-wait .waitBody .imgBox .rightImg {
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    right: 0.35rem;
+    top: 0;
+    background: url(../img/pay/right/1.png) no-repeat;
+    background-size: 100% 100%;
+    animation: rotateImg 2s linear infinite;
+    -webkit-animation: rotateImg 2s linear infinite;
+}
+
+#page-wait .waitBody p{
+    text-align: center;
+    font-size: 0.34rem;
+    color: #fff;
+    margin-top: 0.7rem;
+}
+
+/*   等待结果页面结束 */
+
+
+/*   打票页面*/
+
+#page-result {
+    position: absolute;
+    top: 6.075rem;
+    left: 0;
+    height: 12.52rem;
+    width: 100%;
+    background: url(../img/inshell/bg3.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+#page-result .resultBody {
+    width: 100%;
+    height: 11.32rem;
+    position: absolute;
+    top: 1.2rem;
+    left: 0;
+    text-align: center;
+    overflow: hidden;
+}
+#page-result .reSultInfoTop{
+    width: 7.2rem;
+    height: 1.18rem;
+    position: absolute;
+    top: 0.8rem;
+    left: 50%;
+    margin-left: -3.6rem;
+    background:url(../img/pay/bar_01.png) no-repeat;
+    background-size: 100% 100%;
+    z-index: 9999;
+ }
+#page-result .reSultInfoTop p{
+    height: 0.7rem;
+    width: 6.8rem;
+    position: absolute;
+    left: 0.2rem;
+    top:0.2rem;
+    line-height: 0.7rem;
+    font-size: 0.24rem;
+    color: #2e2f32;
+    text-align: center;
+    z-index: 999;
+}
+#page-result .reSultInfoTop p var{
+    color: #df3031;
+    font-style: normal;
+}
+#page-result .reSultInfoBt{
+     width: 7.2rem;
+    height: 0.32rem;
+    position: absolute;
+    top: 1.98rem;
+    left: 50%;
+    margin-left: -3.6rem;
+    background:url(../img/pay/bar_02.png) no-repeat;
+    background-size: 100% 100%;
+    z-index: 1;
+}
+#page-result  .pAdminit{
+    width: 6.02rem;
+    height: 5.42rem;
+    position: absolute;
+    top:-3.45rem;
+    left: 50%;
+     margin-left: -3.01rem;
+    z-index: 99    
+}
+#page-result  .zzBgImg{
+     width: 100%;
+    height: 1.97rem;
+    position: absolute;
+    top: 0rem;
+    left:0;
+    z-index: 999;
+    background:url(../img/pay/zIndexBg.png) no-repeat;
+    background-size: 100% 100%;
+}
+#page-result   .sytemInfoImg{
+    background: url(../img/pay/quan.png) no-repeat;
+    background-size: 100% 100%;
+}
+#page-result   .sytemError{
+    background: url(../img/pay/systemError.png) no-repeat;
+    background-size: 100% 100%;
+}
+#page-result   .systemInfo{
+    font-size: 0.26rem;
+    color: #fff;
+    text-align: center;
+    height: 0.3rem;
+    line-height: 0.3rem;
+    position: absolute;
+    top: 8rem;
+    left: 0rem;
+    width: 100%;
+}
+#page-result   .systemInfo time{
+    color: #df3031;
+}
+#page-result   .resultError .errorImg{
+    width: 4.38rem;
+    height:4.38rem;
+    margin-top: 1.1rem;
+    margin-bottom: 0.7rem;
+    display: none;
+}
+#page-result   .resultError .errorImg>img{
+    width: 100%;
+    height:100%;
+}
+#page-result   .resultError p{
+    margin-top: 0.4rem;
+    line-height: 0.3rem;
+    font-size: 0.3rem;
+    text-align: center;
+    height: 0.3rem;
+    width: 100%;
+    color: #fff;
+}
+#page-result   .resultError p em{
+    color: #df3031;
+}
+#page-result   .resultError p  time{
+    color: #df3031;
+}
+
+
+/*   打票页面结束 */
+
+
+/*   取票页面*/
+
+#page-checkin {
+    position: absolute;
+    top: 6.075rem;
+    left: 0;
+    height: 12.52rem;
+    width: 100%;
+    background: url(../img/inshell/bg3.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+#page-checkin .checkinBody {
+    width: 100%;
+    height: 11.32rem;
+    position: absolute;
+    top: 1.2rem;
+    left: 0;
+    text-align: center;
+    overflow: hidden;
+}
+#page-checkin #inputOrder{
+    width: 6.7rem;
+    height: 0.9rem;
+    background: #fff;
+    font-size: 0.34rem;
+    line-height: 0.9rem;
+    text-align: center;
+    margin-top: 0.82rem;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+}
+#page-checkin #inputOrder:focus{
+    border:1px solid #df3031;
+    box-shadow:  0 0 6px 2px #df3031;
+}
+#page-checkin #inputFilmCode{
+    width: 6.7rem;
+    height: 0.9rem;
+    background: #fff;
+    font-size: 0.34rem;
+    line-height: 0.9rem;
+    text-align: center;
+    margin-top: 0.4rem;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+}
+#page-checkin #inputFilmCode:focus{
+    border:1px solid #df3031;
+    box-shadow:   0 0 6px 2px #df3031;
+}
+#page-checkin .ewmCode{
+    position: absolute;
+    top: 4.64rem;
+    right: 0;
+     background: url(../img/getFilm/ewm.png) no-repeat;
+    background-size: 100% 100%;
+    width: 0.8rem;
+    height: 2.88rem;
+    cursor: pointer;
+}
+#page-checkin .numKeyBoard{
+    width: 6.7rem;
+    height: 4.4rem;
+    margin-top: 0.4rem;
+}
+#page-checkin .numKeyBoard li{
+    width: 2.16rem;
+    height: 1rem;
+    line-height: 1rem;
+    text-align: center;
+    margin-right: 0.1rem;
+    margin-bottom: 0.1rem;
+    background: #fff;
+    float: left;
+    font-size: 0;
+    cursor: pointer;
+    border-radius:6px;
+    color: #fff;
+}
+#page-checkin .numKeyBoard li:nth-child(3n){
+    margin-right: 0;
+}
+#page-checkin .numKeyBoard li.num1{
+    background: url(../img/getFilm/1.png) no-repeat;
+    background-size:contain;
+}
+#page-checkin .numKeyBoard li.num2{
+    background: url(../img/getFilm/2.png) no-repeat;
+    background-size:contain;
+}
+#page-checkin .numKeyBoard li.num3{
+    background: url(../img/getFilm/3.png) no-repeat;
+    background-size:contain;
+}
+#page-checkin .numKeyBoard li.num4{
+    background: url(../img/getFilm/4.png) no-repeat;
+    background-size:contain;
+}
+#page-checkin .numKeyBoard li.num5{
+    background: url(../img/getFilm/5.png) no-repeat;
+    background-size:contain;
+}
+#page-checkin .numKeyBoard li.num6{
+    background: url(../img/getFilm/6.png) no-repeat;
+    background-size:contain;
+}
+#page-checkin .numKeyBoard li.num7{
+    background: url(../img/getFilm/7.png) no-repeat;
+    background-size:contain;
+}
+#page-checkin .numKeyBoard li.num8{
+    background: url(../img/getFilm/8.png) no-repeat;
+    background-size:contain;
+}
+#page-checkin .numKeyBoard li.num9{
+    background: url(../img/getFilm/9.png) no-repeat;
+    background-size:contain;
+}
+#page-checkin .numKeyBoard li.num0{
+    background: url(../img/getFilm/0.png) no-repeat;
+    background-size:contain;
+}
+#page-checkin .numKeyBoard li.reinput{
+    background: url(../img/getFilm/resput.png) no-repeat;
+    background-size:contain;
+}
+#page-checkin .numKeyBoard li.deleteBack{
+    background: url(../img/getFilm/delete.png) no-repeat;
+    background-size:contain;
+}
+#page-checkin .numKeyBoard li.check{
+    background: #df3031 !important;
+    font-size: 0.36rem !important;
+}
+#page-checkin .getBtn{
+    width: 6.7rem;
+    height: 0.9rem;
+    line-height: 0.9rem;
+    background: #999999;
+    text-align: center;
+    font-size: 0.3rem;
+    color: #fff;
+    margin-top: 0.3rem;
+    border-radius: 0.08rem;
+    cursor: pointer;
+}
+#page-checkin .systemInfo{
+    margin-top: 0.48rem;
+    text-align: center;
+    width: 100%;
+    height: 0.28rem;
+    font-size: 0.26rem;
+    color: #fff;
+}
+#page-checkin .systemInfo time{
+    color: #df3031;
+}
+/*   取票页面 结束 */
+
+/*    遮罩通用弹窗 */
+
+#zzBG {
+    background: #fff;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+/*    css3原地转圈圈动画 */
+@keyframes rotateImg {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes rotateImg {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}

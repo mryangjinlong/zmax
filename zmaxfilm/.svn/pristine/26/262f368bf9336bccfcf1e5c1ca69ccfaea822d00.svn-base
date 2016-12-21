@@ -1,0 +1,102 @@
+package com.zmaxfilm.model.socket;
+
+import com.alibaba.fastjson.JSON;
+import com.zmaxfilm.Constant;
+import com.zmaxfilm.util.EncryptUtil;
+
+import java.util.List;
+
+/**
+ * Created by jimmy on 2016/12/5.
+ * 设备心跳包
+ */
+public class DeviceHeartbeat {
+    private String action = "deviceHeartbeatDetection";
+    private String macAddress;
+    private List<PrintData> printData;
+    private List<ScanData> scanData;
+    private long requestTime;
+    private String verifyInfo;
+
+    public DeviceHeartbeat(String macAddress, List<PrintData> printData, List<ScanData> scanData, long requestTime) {
+        this.macAddress = macAddress;
+        this.printData = printData;
+        this.scanData = scanData;
+        this.requestTime = requestTime;
+        this.verifyInfo = generateVerifyInfo();
+    }
+
+    private String generateVerifyInfo(){
+        String sb = "action" +
+                this.action +
+                "macAddress" +
+                this.macAddress +
+                "printData" +
+                JSON.toJSONString(this.printData) +
+                "scanData" +
+                JSON.toJSONString(this.scanData) +
+                "requestTime" +
+                this.requestTime;
+        return EncryptUtil.encrypt4Socket(sb);
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "action:'" + action + '\'' +
+                ", macAddress:'" + macAddress + '\'' +
+                ", printData:" + printData +
+                ", scanData:" + scanData +
+                ", requestTime:" + requestTime +
+                ", verifyInfo:'" + verifyInfo + '\'' +
+                "}";
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public String getMacAddress() {
+        return macAddress;
+    }
+
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
+    }
+
+    public List<PrintData> getPrintData() {
+        return printData;
+    }
+
+    public void setPrintData(List<PrintData> printData) {
+        this.printData = printData;
+    }
+
+    public List<ScanData> getScanData() {
+        return scanData;
+    }
+
+    public void setScanData(List<ScanData> scanData) {
+        this.scanData = scanData;
+    }
+
+    public long getRequestTime() {
+        return requestTime;
+    }
+
+    public void setRequestTime(long requestTime) {
+        this.requestTime = requestTime;
+    }
+
+    public String getVerifyInfo() {
+        return verifyInfo;
+    }
+
+    public void setVerifyInfo(String verifyInfo) {
+        this.verifyInfo = verifyInfo;
+    }
+}

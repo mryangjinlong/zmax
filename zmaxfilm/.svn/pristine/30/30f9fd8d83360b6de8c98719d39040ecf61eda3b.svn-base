@@ -1,0 +1,31 @@
+package com.zmaxfilm.model;
+
+import lombok.Data;
+
+/**
+ * Created by Faith on 2016/12/17.
+ */
+@Data
+public class GoodsInfo {
+
+    private String goodsNo;
+
+    private String goodsName;
+
+    private String cinemaName;
+
+    private String goodsDescribe;
+
+    private Double channelFee;
+
+    private Double marketFee;
+
+    private Double accessFee;
+
+    private String channelStock;
+
+    private Integer validity;
+
+    private String goodsCoverImage;
+
+}

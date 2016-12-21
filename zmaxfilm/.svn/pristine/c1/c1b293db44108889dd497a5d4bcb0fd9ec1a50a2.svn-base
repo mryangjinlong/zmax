@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>中瑞影城</title>
+    <meta name="description" content="中瑞影城">
+    <meta name="author" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="css/light7.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/swiper.css">
+<!--    <link type="text/css" href="css/jquery.jscrollpane.css" rel="stylesheet" media="all" />-->
+</head>
+
+<body>
+    <div class="wrap">
+        <header id="header">
+                <ul class="swiper-wrapper">
+                    <li class="swiper-slide">
+                         <img src="./img/index/banner.png" alt="" draggable="false">
+                    </li>
+                    <li class="swiper-slide">
+                         <img src="./img/index/banner.png" alt="" draggable="false">
+                    </li>
+                    <li class="swiper-slide">
+                         <img src="./img/index/banner.png" alt="" draggable="false">
+                    </li>
+                    <li class="swiper-slide">
+                         <img src="./img/index/banner.png" alt="" draggable="false">
+                    </li>
+                </ul>
+        </header>
+        <address id="footer">
+                Copyright © 2014-2016 福州最美影视网络科技有限公司 版权所有
+        </address>
+        <!--    首页    -->
+        <div class="page" id="page-index">
+            <section class="newcontent">
+                <ul>
+                    <li>
+                        <a class="liImgText" href="plan.html?userType=2">
+                            <img src="./img/index/man.png" alt="" draggable="false">
+                            <h2>会员购票</h2>
+                            <h3>Member Ticket</h3>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="liImgText"  href="goods.html">
+                            <img src="./img/index/goods.png" alt="" draggable="false">
+                            <h2>买卖品</h2>
+                            <h3>Buy Snacks</h3>
+                        </a>
+                    </li>
+                    <li>
+                        <div class="liDiv">
+                            <a class="liImgText"  href="cards.html?userType=1">
+                            <img src="./img/index/id.png" alt="" draggable="false">
+                            <h2>会员卡专区</h2>
+                            <h3>Membership Card Zone</h3>
+                        </a>
+                        </div>
+                        <div class="liDiv">
+                            <a class="liImgText"  href="choseCpType.html">
+                            <img src="./img/index/tag.png" alt="" draggable="false">
+                            <h2>优惠券专区</h2>
+                            <h3>Coupon Zone</h3>
+                        </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="liDiv">
+                            <a class="liImgText"  href="checkin.html">
+                            <img src="./img/index/getFilm.png" alt="" draggable="false">
+                            <h2>取影票</h2>
+                            <h3>Exchange Ticket</h3>
+                        </a>
+                        </div>
+                        <div class="liDiv">
+                            <a class="liImgText"  href="getgoods.html">
+                            <img src="./img/index/fingerprint.png" alt="" draggable="false">
+                            <h2>取卖品</h2>
+                            <h3>Exchange Snaks</h3>
+                        </a>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+            <footer class="adImg">
+                <img src="./img/index/ad.jpg" alt="" draggable="false">
+            </footer>
+        </div>
+        <!--    首页结束    -->
+<!--    ---------------------------------------------------------------------------------------   -->          
+    </div>
+    <script type="text/javascript" src="js/jquery.js"></script>
+<!--
+    <script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="js/jquery.jscrollpane.min.js"></script>
+-->
+    <script type="text/javascript" src="js/swiper.js"></script>
+    <script type="text/javascript" src="js/light7.js"></script>
+    <script type="text/javascript" src="js/jquery.Spinner.js"></script>
+    <script type="text/javascript" src="js/style.js"></script>
+</body>
+
+</html>

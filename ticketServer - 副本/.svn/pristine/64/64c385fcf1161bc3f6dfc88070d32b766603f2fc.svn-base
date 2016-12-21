@@ -1,0 +1,80 @@
+package com.zmaxfilm.service.impl;
+
+import com.zmaxfilm.Constant;
+import com.zmaxfilm.service.DeviceDetectionService;
+import com.zmaxfilm.util.FileUtils;
+import com.zmaxfilm.util.HttpUtil;
+
+import java.io.File;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
+/**
+ * Created by jimmy on 2016/11/15.
+ */
+public class DeviceDetectionServiceImpl implements DeviceDetectionService {
+
+    private static final long CHECK_PERIOD = 1000*60*60*12;
+    @Override
+    public void run() {
+        Timer timer = new Timer(true);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                //TODO 每隔一段时间检测一下系统是否正常并发送心跳包
+            }
+        },new Date(),CHECK_PERIOD);
+    }
+
+    @Override
+    public void updateHtml() {
+        deleteHtml();
+        downloadHtml();
+    }
+
+    @Override
+    public void updateAd() {
+        deleteAd();
+        downloadAd();
+    }
+
+    @Override
+    public void updateAll() {
+        updateHtml();
+        updateAd();
+    }
+
+    @Override
+    public void deleteHtml() {
+        FileUtils.deleteFolder(Constant.HTML_PATH);
+    }
+
+    @Override
+    public void downloadHtml() {
+        String filePath = Constant.WEB_PATH + "html.rar";
+        //下载html.rar文件
+        HttpUtil.downloadFile(Constant.HTML_DOWNLOAD_URL,filePath);
+        //解压文件到当前目录
+        FileUtils.unRarFile(filePath , Constant.WEB_PATH);
+        //删除下载下来的rar文件
+        FileUtils.deleteFile(filePath);
+    }
+
+    @Override
+    public void deleteAd() {
+        FileUtils.deleteFolder(Constant.AD_PATH);
+    }
+
+    @Override
+    public void downloadAd() {
+        String filePath = Constant.WEB_PATH + "ad.rar";
+        //下载ad.rar文件
+        HttpUtil.downloadFile(Constant.AD_DOWNLOAD_URL , filePath);
+        //解压文件到当前目录
+        FileUtils.unRarFile(filePath , Constant.WEB_PATH);
+        //删除下载下来的rar文件
+        FileUtils.deleteFile(filePath);
+    }
+
+}

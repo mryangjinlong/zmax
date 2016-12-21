@@ -1,0 +1,270 @@
+package com.zmaxfilm.service.impl;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.google.gson.reflect.TypeToken;
+import com.zmaxfilm.Constant;
+<<<<<<< .mine
+=======
+import com.zmaxfilm.Factory;
+import com.zmaxfilm.model.*;
+>>>>>>> .r36658
+import com.zmaxfilm.model.http.*;
+import com.zmaxfilm.service.FilmService;
+import com.zmaxfilm.util.EhcacheUtil;
+import com.zmaxfilm.util.HttpUtil;
+<<<<<<< .mine
+import org.apache.log4j.Logger;
+=======
+import com.zmaxfilm.util.TwoDimensionCodeUtil;
+>>>>>>> .r36658
+
+import javax.print.PrintException;
+import javax.print.PrintService;
+import java.awt.*;
+import java.lang.reflect.Type;
+import java.net.ConnectException;
+import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.List;
+
+/**
+ * 电影相关服务
+ * Created by jimmy on 2016/11/28.
+ */
+public class FilmServiceImpl implements FilmService{
+
+    private EhcacheUtil ehcacheUtil = EhcacheUtil.getInstance();
+
+<<<<<<< .mine
+    private static Logger logger = Logger.getLogger(FilmServiceImpl.class);
+
+=======
+    private com.zmaxfilm.service.PrintService printService= Factory.getPrintService(Constant.DEFAULT_IMPL);
+
+>>>>>>> .r36658
+    /**
+     * 获取所有电影院信息
+     */
+    @Override
+    public List<Cinema> getCinemas() {
+        List<Cinema> cinemas = (ArrayList<Cinema>)ehcacheUtil.get(Constant.CACHE_KEY_CINEMA);
+        if(cinemas == null){
+            String msg = null;
+            try {
+                msg = HttpUtil.sendHttpPost(Constant.FUNSTIONNAME_CINEMA , null);
+            } catch (ConnectException e) {
+                logger.debug(e.getMessage());
+                return null;
+            } catch (UnknownHostException e) {
+                logger.debug(e.getMessage());
+                return null;
+            }
+            Type type = new TypeToken<HttpData<ArrayList<Cinema>>>(){}.getType();
+            HttpData<ArrayList<Cinema>> httpData = JSON.parseObject(msg,type);
+            cinemas = httpData.getResultData();
+            ehcacheUtil.put(Constant.CACHE_KEY_CINEMA, cinemas , Constant.CACHE_TIME_CINEMA);
+        }
+        return cinemas;
+    }
+
+    //获取影厅对应的所有座位信息
+    @Override
+    public List<HallSite> getHallSites(String cinemaNo, String hallNo) {
+        List<HallSite> hallSites = (ArrayList<HallSite>)ehcacheUtil.get(Constant.CACHE_KEY_HALL_SITE);
+
+        if(hallSites == null){
+            LinkedHashMap<String, String> map = new LinkedHashMap<>();
+            map.put("cinemaNo",cinemaNo);
+            map.put("hallNo",hallNo);
+            String hallSiteMsg = null;
+            try {
+                hallSiteMsg = HttpUtil.sendHttpPost(Constant.FUNSTIONNAME_HALL_SITE , map);
+            } catch (ConnectException e) {
+                logger.debug(e.getMessage());
+                return null;
+            } catch (UnknownHostException e) {
+                logger.debug(e.getMessage());
+                return null;
+            }
+            Type type = new TypeToken<HttpData<ArrayList<HallSite>>>(){}.getType();
+            HttpData<ArrayList<HallSite>> httpData = JSON.parseObject(hallSiteMsg,type);
+            hallSites = httpData.getResultData();
+            ehcacheUtil.put(Constant.CACHE_KEY_HALL_SITE, hallSites , Constant.CACHE_TIME_HALL_SITE);
+        }
+        return hallSites;
+    }
+    //取排期的座位状态
+    @Override
+    public List<PlanSeat> getPlanSeats(String cinemaNo, String featureAppNo, String seatType) {
+        LinkedHashMap<String, String> map = new LinkedHashMap<>();
+        map.put("cinemaNo",cinemaNo);
+        map.put("featureAppNo",featureAppNo);
+        map.put("seatType",seatType);
+        String planSeatMsg = null;
+        try {
+            planSeatMsg = HttpUtil.sendHttpPost(Constant.FUNSTIONNAME_PLAN_SEAT , map);
+        } catch (ConnectException e) {
+            logger.debug(e.getMessage());
+            return null;
+        } catch (UnknownHostException e) {
+            logger.debug(e.getMessage());
+            return null;
+        }
+
+        Type type = new TypeToken<HttpData<PlanSiteStates>>(){}.getType();
+        HttpData<PlanSiteStates> httpData = JSON.parseObject(planSeatMsg,type);
+
+        return httpData.getResultData().getPlanSiteStates();
+    }
+
+
+    /**
+     * 获取影院当前所有排期
+     */
+    @Override
+    public List<FilmPlan4Http> getPlans(String cinemaNo) {
+        String key = Constant.CACHE_KEY_PLAN + cinemaNo;
+        List<FilmPlan4Http> filmPlan4Https = (List<FilmPlan4Http>)ehcacheUtil.get(key);
+        if(filmPlan4Https == null){
+
+            LinkedHashMap<String, String> map = new LinkedHashMap<>();
+            map.put("cinemaNo",35012401+"");
+            String msg = "";// HttpUtil.sendHttpPost(Constant.FUNSTIONNAME_PLAN , map);
+            //测试用数据
+            msg = "{\"resultCode\":0,\"resultData\":[{\"featureAppNo\":\"5029690744\",\"filmNo\":\"035101402016\",\"filmName\":\"血战钢锯岭\",\"hallNo\":\"02\",\"hallName\":\"2号厅\",\"startTime\":\"2016-12-14 14:50:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"139\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691006\",\"filmNo\":\"001104152016\",\"filmName\":\"三少爷的剑\",\"hallNo\":\"08\",\"hallName\":\"8号厅\",\"startTime\":\"2016-12-14 15:00:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"107\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691086\",\"filmNo\":\"012101382016\",\"filmName\":\"你的名字\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-14 15:10:00\",\"copyType\":\"2D\",\"copyLanguage\":\"其他\",\"totalTime\":\"107\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691160\",\"filmNo\":\"051201332016\",\"filmName\":\"神奇动物在哪里\",\"hallNo\":\"09\",\"hallName\":\"9号厅\",\"startTime\":\"2016-12-14 15:20:00\",\"copyType\":\"3D\",\"copyLanguage\":\"英语\",\"totalTime\":\"133\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690653\",\"filmNo\":\"051201322016\",\"filmName\":\"海洋奇缘\",\"hallNo\":\"04\",\"hallName\":\"4号厅\",\"startTime\":\"2016-12-14 15:30:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"107\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690924\",\"filmNo\":\"051201392016\",\"filmName\":\"佩小姐的奇幻城堡\",\"hallNo\":\"06\",\"hallName\":\"6号厅\",\"startTime\":\"2016-12-14 15:45:00\",\"copyType\":\"3D\",\"copyLanguage\":\"英语\",\"totalTime\":\"126\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690655\",\"filmNo\":\"012101382016\",\"filmName\":\"你的名字\",\"hallNo\":\"01\",\"hallName\":\"1号厅\",\"startTime\":\"2016-12-14 16:00:00\",\"copyType\":\"2D\",\"copyLanguage\":\"其他\",\"totalTime\":\"107\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691008\",\"filmNo\":\"035101402016\",\"filmName\":\"血战钢锯岭\",\"hallNo\":\"05\",\"hallName\":\"5号厅\",\"startTime\":\"2016-12-14 16:20:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"139\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691343\",\"filmNo\":\"001106212016\",\"filmName\":\"28岁未成年\",\"hallNo\":\"07\",\"hallName\":\"7号厅\",\"startTime\":\"2016-12-14 16:30:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"109\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690832\",\"filmNo\":\"051101422016\",\"filmName\":\"萨利机长\",\"hallNo\":\"08\",\"hallName\":\"8号厅\",\"startTime\":\"2016-12-14 17:00:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"96\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690926\",\"filmNo\":\"012101382016\",\"filmName\":\"你的名字\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-14 17:10:00\",\"copyType\":\"2D\",\"copyLanguage\":\"其他\",\"totalTime\":\"107\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691010\",\"filmNo\":\"035101402016\",\"filmName\":\"血战钢锯岭\",\"hallNo\":\"02\",\"hallName\":\"2号厅\",\"startTime\":\"2016-12-14 17:20:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"139\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691255\",\"filmNo\":\"001106212016\",\"filmName\":\"28岁未成年\",\"hallNo\":\"04\",\"hallName\":\"4号厅\",\"startTime\":\"2016-12-14 17:30:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"109\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691257\",\"filmNo\":\"012101382016\",\"filmName\":\"你的名字\",\"hallNo\":\"01\",\"hallName\":\"1号厅\",\"startTime\":\"2016-12-14 18:00:00\",\"copyType\":\"2D\",\"copyLanguage\":\"其他\",\"totalTime\":\"107\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690558\",\"filmNo\":\"051201392016\",\"filmName\":\"佩小姐的奇幻城堡\",\"hallNo\":\"09\",\"hallName\":\"9号厅\",\"startTime\":\"2016-12-14 18:05:00\",\"copyType\":\"3D\",\"copyLanguage\":\"英语\",\"totalTime\":\"126\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691162\",\"filmNo\":\"035101402016\",\"filmName\":\"血战钢锯岭\",\"hallNo\":\"06\",\"hallName\":\"6号厅\",\"startTime\":\"2016-12-14 18:10:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"140\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691083\",\"filmNo\":\"051101422016\",\"filmName\":\"萨利机长\",\"hallNo\":\"07\",\"hallName\":\"7号厅\",\"startTime\":\"2016-12-14 18:30:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"96\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690834\",\"filmNo\":\"035101402016\",\"filmName\":\"血战钢锯岭\",\"hallNo\":\"05\",\"hallName\":\"5号厅\",\"startTime\":\"2016-12-14 18:50:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"139\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690650\",\"filmNo\":\"001106212016\",\"filmName\":\"28岁未成年\",\"hallNo\":\"08\",\"hallName\":\"8号厅\",\"startTime\":\"2016-12-14 19:10:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"109\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"2\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691164\",\"filmNo\":\"012101382016\",\"filmName\":\"你的名字\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-14 19:20:00\",\"copyType\":\"2D\",\"copyLanguage\":\"其他\",\"totalTime\":\"107\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691345\",\"filmNo\":\"051201322016\",\"filmName\":\"海洋奇缘\",\"hallNo\":\"04\",\"hallName\":\"4号厅\",\"startTime\":\"2016-12-14 19:30:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"107\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690836\",\"filmNo\":\"035101402016\",\"filmName\":\"血战钢锯岭\",\"hallNo\":\"02\",\"hallName\":\"2号厅\",\"startTime\":\"2016-12-14 19:50:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"139\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691347\",\"filmNo\":\"012101382016\",\"filmName\":\"你的名字\",\"hallNo\":\"01\",\"hallName\":\"1号厅\",\"startTime\":\"2016-12-14 20:00:00\",\"copyType\":\"2D\",\"copyLanguage\":\"其他\",\"totalTime\":\"107\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690923\",\"filmNo\":\"001106212016\",\"filmName\":\"28岁未成年\",\"hallNo\":\"07\",\"hallName\":\"7号厅\",\"startTime\":\"2016-12-14 20:15:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"109\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690740\",\"filmNo\":\"051201332016\",\"filmName\":\"神奇动物在哪里\",\"hallNo\":\"09\",\"hallName\":\"9号厅\",\"startTime\":\"2016-12-14 20:30:00\",\"copyType\":\"3D\",\"copyLanguage\":\"英语\",\"totalTime\":\"133\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690560\",\"filmNo\":\"035101402016\",\"filmName\":\"血战钢锯岭\",\"hallNo\":\"06\",\"hallName\":\"6号厅\",\"startTime\":\"2016-12-14 20:40:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"140\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691252\",\"filmNo\":\"051101422016\",\"filmName\":\"萨利机长\",\"hallNo\":\"08\",\"hallName\":\"8号厅\",\"startTime\":\"2016-12-14 21:10:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"96\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690562\",\"filmNo\":\"012101382016\",\"filmName\":\"你的名字\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-14 21:15:00\",\"copyType\":\"2D\",\"copyLanguage\":\"其他\",\"totalTime\":\"107\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690652\",\"filmNo\":\"035101402016\",\"filmName\":\"血战钢锯岭\",\"hallNo\":\"05\",\"hallName\":\"5号厅\",\"startTime\":\"2016-12-14 21:20:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"139\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691085\",\"filmNo\":\"001106212016\",\"filmName\":\"28岁未成年\",\"hallNo\":\"04\",\"hallName\":\"4号厅\",\"startTime\":\"2016-12-14 21:30:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"109\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691087\",\"filmNo\":\"012101382016\",\"filmName\":\"你的名字\",\"hallNo\":\"01\",\"hallName\":\"1号厅\",\"startTime\":\"2016-12-14 22:00:00\",\"copyType\":\"2D\",\"copyLanguage\":\"其他\",\"totalTime\":\"107\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691161\",\"filmNo\":\"051101422016\",\"filmName\":\"萨利机长\",\"hallNo\":\"07\",\"hallName\":\"7号厅\",\"startTime\":\"2016-12-14 22:15:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"96\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690654\",\"filmNo\":\"035101402016\",\"filmName\":\"血战钢锯岭\",\"hallNo\":\"02\",\"hallName\":\"2号厅\",\"startTime\":\"2016-12-14 22:20:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"139\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690831\",\"filmNo\":\"001104152016\",\"filmName\":\"三少爷的剑\",\"hallNo\":\"09\",\"hallName\":\"9号厅\",\"startTime\":\"2016-12-14 22:55:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"107\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690649\",\"filmNo\":\"051101362016\",\"filmName\":\"间谍同盟\",\"hallNo\":\"08\",\"hallName\":\"8号厅\",\"startTime\":\"2016-12-14 23:00:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"120\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690741\",\"filmNo\":\"035101402016\",\"filmName\":\"血战钢锯岭\",\"hallNo\":\"06\",\"hallName\":\"6号厅\",\"startTime\":\"2016-12-14 23:10:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"140\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690743\",\"filmNo\":\"012101382016\",\"filmName\":\"你的名字\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-14 23:15:00\",\"copyType\":\"2D\",\"copyLanguage\":\"其他\",\"totalTime\":\"107\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690925\",\"filmNo\":\"001106212016\",\"filmName\":\"28岁未成年\",\"hallNo\":\"04\",\"hallName\":\"4号厅\",\"startTime\":\"2016-12-14 23:30:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"109\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029691254\",\"filmNo\":\"035101402016\",\"filmName\":\"血战钢锯岭\",\"hallNo\":\"05\",\"hallName\":\"5号厅\",\"startTime\":\"2016-12-14 23:45:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"139\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029690927\",\"filmNo\":\"075101412016\",\"filmName\":\"反黑行动组\",\"hallNo\":\"01\",\"hallName\":\"1号厅\",\"startTime\":\"2016-12-14 23:55:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"94\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808307\",\"filmNo\":\"035101402016\",\"filmName\":\"血战钢锯岭\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-15 10:00:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"140\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808390\",\"filmNo\":\"001106212016\",\"filmName\":\"28岁未成年\",\"hallNo\":\"07\",\"hallName\":\"7号厅\",\"startTime\":\"2016-12-15 10:20:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"109\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808250\",\"filmNo\":\"012101382016\",\"filmName\":\"你的名字\",\"hallNo\":\"05\",\"hallName\":\"5号厅\",\"startTime\":\"2016-12-15 11:20:00\",\"copyType\":\"2D\",\"copyLanguage\":\"其他\",\"totalTime\":\"107\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808278\",\"filmNo\":\"001106212016\",\"filmName\":\"28岁未成年\",\"hallNo\":\"07\",\"hallName\":\"7号厅\",\"startTime\":\"2016-12-15 12:20:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"109\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808167\",\"filmNo\":\"035101402016\",\"filmName\":\"血战钢锯岭\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-15 12:30:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"140\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808369\",\"filmNo\":\"012101382016\",\"filmName\":\"你的名字\",\"hallNo\":\"05\",\"hallName\":\"5号厅\",\"startTime\":\"2016-12-15 13:20:00\",\"copyType\":\"2D\",\"copyLanguage\":\"其他\",\"totalTime\":\"107\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808222\",\"filmNo\":\"001106212016\",\"filmName\":\"28岁未成年\",\"hallNo\":\"07\",\"hallName\":\"7号厅\",\"startTime\":\"2016-12-15 14:20:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"109\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808195\",\"filmNo\":\"035101402016\",\"filmName\":\"血战钢锯岭\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-15 15:00:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"140\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808355\",\"filmNo\":\"012101382016\",\"filmName\":\"你的名字\",\"hallNo\":\"05\",\"hallName\":\"5号厅\",\"startTime\":\"2016-12-15 15:20:00\",\"copyType\":\"2D\",\"copyLanguage\":\"其他\",\"totalTime\":\"107\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808306\",\"filmNo\":\"001106212016\",\"filmName\":\"28岁未成年\",\"hallNo\":\"07\",\"hallName\":\"7号厅\",\"startTime\":\"2016-12-15 16:20:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"109\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808335\",\"filmNo\":\"012101382016\",\"filmName\":\"你的名字\",\"hallNo\":\"05\",\"hallName\":\"5号厅\",\"startTime\":\"2016-12-15 17:20:00\",\"copyType\":\"2D\",\"copyLanguage\":\"其他\",\"totalTime\":\"107\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808251\",\"filmNo\":\"035101402016\",\"filmName\":\"血战钢锯岭\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-15 17:30:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"140\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808166\",\"filmNo\":\"001106212016\",\"filmName\":\"28岁未成年\",\"hallNo\":\"07\",\"hallName\":\"7号厅\",\"startTime\":\"2016-12-15 18:20:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"109\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028705558\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"04\",\"hallName\":\"4号厅\",\"startTime\":\"2016-12-15 19:05:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808223\",\"filmNo\":\"012101382016\",\"filmName\":\"你的名字\",\"hallNo\":\"05\",\"hallName\":\"5号厅\",\"startTime\":\"2016-12-15 19:20:00\",\"copyType\":\"2D\",\"copyLanguage\":\"其他\",\"totalTime\":\"107\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028705530\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"02\",\"hallName\":\"2号厅\",\"startTime\":\"2016-12-15 19:35:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028705502\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-15 20:05:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808194\",\"filmNo\":\"001106212016\",\"filmName\":\"28岁未成年\",\"hallNo\":\"07\",\"hallName\":\"7号厅\",\"startTime\":\"2016-12-15 20:20:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"109\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028705572\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"06\",\"hallName\":\"6号厅\",\"startTime\":\"2016-12-15 20:35:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028705544\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"04\",\"hallName\":\"4号厅\",\"startTime\":\"2016-12-15 21:00:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808279\",\"filmNo\":\"012101382016\",\"filmName\":\"你的名字\",\"hallNo\":\"05\",\"hallName\":\"5号厅\",\"startTime\":\"2016-12-15 21:15:00\",\"copyType\":\"2D\",\"copyLanguage\":\"其他\",\"totalTime\":\"107\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028705445\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"02\",\"hallName\":\"2号厅\",\"startTime\":\"2016-12-15 21:30:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028705516\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-15 22:00:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808334\",\"filmNo\":\"001106212016\",\"filmName\":\"28岁未成年\",\"hallNo\":\"07\",\"hallName\":\"7号厅\",\"startTime\":\"2016-12-15 22:20:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"109\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028705488\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"06\",\"hallName\":\"6号厅\",\"startTime\":\"2016-12-15 22:30:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028705459\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"04\",\"hallName\":\"4号厅\",\"startTime\":\"2016-12-15 23:00:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029808391\",\"filmNo\":\"012101382016\",\"filmName\":\"你的名字\",\"hallNo\":\"05\",\"hallName\":\"5号厅\",\"startTime\":\"2016-12-15 23:15:00\",\"copyType\":\"2D\",\"copyLanguage\":\"其他\",\"totalTime\":\"107\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028705586\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"02\",\"hallName\":\"2号厅\",\"startTime\":\"2016-12-15 23:30:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028187904\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-16 00:00:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"2\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029313831\",\"filmNo\":\"001107832016\",\"filmName\":\"罗曼蒂克消亡史\",\"hallNo\":\"01\",\"hallName\":\"1号厅\",\"startTime\":\"2016-12-16 00:00:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"125\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028188128\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-16 10:00:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"2\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029711430\",\"filmNo\":\"001107832016\",\"filmName\":\"罗曼蒂克消亡史\",\"hallNo\":\"01\",\"hallName\":\"1号厅\",\"startTime\":\"2016-12-16 10:30:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"125\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028188212\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-16 12:00:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"2\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029711416\",\"filmNo\":\"001107832016\",\"filmName\":\"罗曼蒂克消亡史\",\"hallNo\":\"01\",\"hallName\":\"1号厅\",\"startTime\":\"2016-12-16 12:45:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"125\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028188156\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-16 14:00:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"2\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029711444\",\"filmNo\":\"001107832016\",\"filmName\":\"罗曼蒂克消亡史\",\"hallNo\":\"01\",\"hallName\":\"1号厅\",\"startTime\":\"2016-12-16 15:00:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"125\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028188184\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-16 16:00:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"2\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029711458\",\"filmNo\":\"001107832016\",\"filmName\":\"罗曼蒂克消亡史\",\"hallNo\":\"01\",\"hallName\":\"1号厅\",\"startTime\":\"2016-12-16 17:15:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"125\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028188114\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-16 18:00:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"2\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029711472\",\"filmNo\":\"001107832016\",\"filmName\":\"罗曼蒂克消亡史\",\"hallNo\":\"01\",\"hallName\":\"1号厅\",\"startTime\":\"2016-12-16 19:30:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"125\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028188198\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-16 20:00:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"2\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029711402\",\"filmNo\":\"001107832016\",\"filmName\":\"罗曼蒂克消亡史\",\"hallNo\":\"01\",\"hallName\":\"1号厅\",\"startTime\":\"2016-12-16 21:50:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"125\",\"lowestPrice\":\"25.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028188142\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-16 22:00:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"2\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5028188170\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-16 23:55:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"2\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029649112\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"01\",\"hallName\":\"1号厅\",\"startTime\":\"2016-12-17 10:00:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029769279\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"08\",\"hallName\":\"8号厅\",\"startTime\":\"2016-12-17 14:00:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029768628\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"09\",\"hallName\":\"9号厅\",\"startTime\":\"2016-12-17 14:30:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029768658\",\"filmNo\":\"001206882016\",\"filmName\":\"长城\",\"hallNo\":\"04\",\"hallName\":\"4号厅\",\"startTime\":\"2016-12-17 15:00:00\",\"copyType\":\"3D\",\"copyLanguage\":\"国语\",\"totalTime\":\"104\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"100.00\",\"settlementPrice\":\"30.00\",\"cinemaServiceCharge\":\"0.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029313875\",\"filmNo\":\"001108282016\",\"filmName\":\"摆渡人\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-23 00:00:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"130\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"-5.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029314504\",\"filmNo\":\"001108282016\",\"filmName\":\"摆渡人\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-23 10:10:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"130\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"-5.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029314490\",\"filmNo\":\"001108282016\",\"filmName\":\"摆渡人\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-23 12:30:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"130\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"-5.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029314476\",\"filmNo\":\"001108282016\",\"filmName\":\"摆渡人\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-23 14:50:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"130\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"-5.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029314518\",\"filmNo\":\"001108282016\",\"filmName\":\"摆渡人\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-23 17:10:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"130\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"-5.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029314546\",\"filmNo\":\"001108282016\",\"filmName\":\"摆渡人\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-23 19:30:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"130\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"-5.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"},{\"featureAppNo\":\"5029314532\",\"filmNo\":\"001108282016\",\"filmName\":\"摆渡人\",\"hallNo\":\"03\",\"hallName\":\"3号巨幕厅\",\"startTime\":\"2016-12-23 21:50:00\",\"copyType\":\"2D\",\"copyLanguage\":\"国语\",\"totalTime\":\"130\",\"lowestPrice\":\"30.00\",\"listingPrice\":\"120.00\",\"settlementPrice\":\"25.00\",\"cinemaServiceCharge\":\"-5.00\",\"seatPieceInfo\":[],\"planStatus\":\"1\",\"saleStatus\":\"1\"}]}";
+//            msg = "{\"resultCode\":0,\"resultData\":[{\"featureAppNo\":\"5028796018\",\"filmNo\":\"035101402016\",\"filmName\":\"血战钢锯岭\",\"hallNo\":\"04\",\"hallName\":\"4号厅\",\"startTime\":\"2016-12-09 11:50:00\",\"copyType\":\"2D\",\"copyLanguage\":\"英语\",\"totalTime\":\"139\",\"lowestPrice\":\"20.00\",\"listingPrice\":\"80.00\",\"settlementPrice\":\"38.00\",\"cinemaServiceCharge\":\"2.00\",\"seatPieceInfo\":[{\"seatPieceNo\":6,\"seatPieceName\":\"黄金座区\",\"settlementPrice\":43,\"cinemaServiceCharge\":4},{\"seatPieceNo\":15,\"seatPieceName\":\"减价座区\",\"settlementPrice\":37,\"cinemaServiceCharge\":1}],\"planStatus\":\"1\",\"saleStatus\":\"1\"}]}";
+
+            Type type = new TypeToken<HttpData<ArrayList<FilmPlan4Http>>>(){}.getType();
+            HttpData<ArrayList<FilmPlan4Http>> httpData = JSON.parseObject(msg,type);
+            filmPlan4Https = httpData.getResultData();
+            assert filmPlan4Https != null;
+//            planMap = processFilmPlan4Http(filmPlan4Https);
+            ehcacheUtil.put(key, filmPlan4Https ,Constant.CACHE_TIME_PLAN);
+     }
+
+        return filmPlan4Https;
+    }
+
+    @Override
+    public String getMovieTicketsAndGoods(String cinemaNo,String orderNumber,String validCode,String requestType,int type) {
+        LinkedHashMap<String,String>map=new LinkedHashMap<>();
+        map.put("cinemaNo",cinemaNo);
+        map.put("orderNo",orderNumber);
+        map.put("validCode",validCode);
+        map.put("requestType",requestType);
+        ResultInfo resultInfo=new ResultInfo();
+        if(type==FilmService.MOVIE_TICKET){
+<<<<<<< .mine
+            try {
+                return HttpUtil.sendHttpPost("printTicket",map);
+            } catch (ConnectException e) {
+                logger.debug(e.getMessage());
+                return null;
+            } catch (UnknownHostException e) {
+                logger.debug(e.getMessage());
+                return null;
+            }
+=======
+
+            String str=HttpUtil.sendHttpPost("printTicket",map);
+            MovieTicketResultInfo ticket=
+                    JSON.parseObject(str,MovieTicketResultInfo.class);
+            if(ticket.getResultCode().equals("100605")){
+                resultInfo.setResult(false);
+                resultInfo.setMessage("订单号错误！");
+            }else if(!ticket.getResultCode().equals("0")){
+                resultInfo.setResult(false);
+                resultInfo.setMessage("取票失败！");
+            }else{
+                try {
+                    this.printMovieTiket(ticket.getResultData(),printService.getPrintDevice("POS80_2"));
+                    resultInfo.setResult(true);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                } catch (PrintException e) {
+                    e.printStackTrace();
+                }
+            }
+>>>>>>> .r36658
+        }else if(type==FilmService.GOODS){
+        }
+        return JSONObject.toJSONString(resultInfo);
+    }
+
+    @Override
+    public void printMovieTiket(OrderInfo orderInfo, PrintService printDevice) throws ParseException, PrintException {
+        int x=5;
+        int y=20;
+        int size=12;
+
+        int x1=79;
+        int y1=73;
+        int size1=8;
+
+        int x2=160;
+        int y2=25;
+
+        List<MovieTicket> ticketList=orderInfo.getTicketList();
+        for(MovieTicket ticket:ticketList){
+            List<Print> prints=new ArrayList<>();
+            Print print=new Print(orderInfo.getCinemaName(),x,y,Font.TRUETYPE_FONT,size);
+            prints.add(print);
+            print=new Print(orderInfo.getFilmName(),x,y+11,Font.TRUETYPE_FONT,size);
+            prints.add(print);
+            print=new Print(orderInfo.getHallName(),x,y+22,Font.TRUETYPE_FONT,size);
+            print.setType(1);
+            prints.add(print);
+            String seatRow=ticket.getSeatRow();
+            String seatCol=ticket.getSeatCol();
+            print=new Print(seatRow+"排"+seatCol+"号",x,y+33,Font.TRUETYPE_FONT,size);
+            prints.add(print);
+            print=new Print(TwoDimensionCodeUtil.qRCodeCommon(ticket.getTicketNo(),"7",9),x,y+40);
+            prints.add(print);
+            String startTime=orderInfo.getStartTime();
+            if(startTime!=null&&!"".equals(startTime)){
+                String[]str=startTime.split(" ");
+                print=new Print(str[1],110,40,Font.TRUETYPE_FONT,size);
+                prints.add(print);
+                print=new Print(str[0],80,55,Font.TRUETYPE_FONT,size);
+                prints.add(print);
+            }
+            print=new Print("票价:"+ticket.getTicketPrice()+"元",x1,y1,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            print=new Print("服务费:"+ticket.getServiceCharge()+"元",x1,y1+10,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            print=new Print(ticket.getPrintTime()+"出票",x1,y1+20,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            print=new Print(ticket.getCpnName(),x1,y1+30,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            print=new Print(ticket.getTicketNo2(),x1,y1+40,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            print=new Print(orderInfo.getHallName(),x2,y2,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            print=new Print(seatRow+"排"+seatCol+"号",x2,y2+10,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+
+            if(startTime!=null&&!"".equals(startTime)){
+                String[]str=startTime.split(" ");
+                print=new Print(str[1],x2,y2+20,Font.TRUETYPE_FONT,y2+20);
+                prints.add(print);
+                print=new Print(str[0],x2,y2+30,Font.TRUETYPE_FONT,size1);
+                prints.add(print);
+            }
+            print=new Print(orderInfo.getFilmName(),x2,y2+40,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            print=new Print(ticket.getTicketPrice()+"元",x2,y2+75,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            print=new Print(ticket.getTicketNo2(),x2,y2+85,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            printService.print(prints,printDevice);
+        }
+
+    }
+
+
+
+}
+
+

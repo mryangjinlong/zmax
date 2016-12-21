@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>中瑞影城</title>
+    <meta name="description" content="中瑞影城">
+    <meta name="author" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="css/light7.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/swiper.css">
+    <!--    <link type="text/css" href="css/jquery.jscrollpane.css" rel="stylesheet" media="all" />-->
+</head>
+
+<body>
+    <div class="wrap">
+        <header id="header">
+            <ul class="swiper-wrapper">
+                <li class="swiper-slide">
+                    <img src="./img/index/banner.png" alt="" draggable="false">
+                </li>
+                <li class="swiper-slide">
+                    <img src="./img/index/banner.png" alt="" draggable="false">
+                </li>
+                <li class="swiper-slide">
+                    <img src="./img/index/banner.png" alt="" draggable="false">
+                </li>
+                <li class="swiper-slide">
+                    <img src="./img/index/banner.png" alt="" draggable="false">
+                </li>
+            </ul>
+        </header>
+        <address id="footer">
+                Copyright © 2014-2016 福州最美影视网络科技有限公司 版权所有
+        </address>
+
+        <!--    ---------------------------------------------------------------------------------------   -->
+        <!--    选座    -->
+        <div class="page" id="page-cardPay">
+            <div class="seatTop">
+                <h1>支付</h1>
+                <a class="toBack" href="seat.html"></a>
+                <div class="backIndex">安全退出</div>
+            </div>
+            <div class="cardPayBody">
+                <p class="payTime">请在
+                    <time>14.30</time>内完成支付</p>
+                <img class="cardImg" src="./img/cards/card.png" alt="" draggable="false">
+                <p>当前卡余额：<em>￥300</em></p>
+                <p>当前应付金额：<em>￥215.00</em></p>
+                <!--    余额不足的时候要加上 toRecharge这个类 并且 把文字改成   余额不足，去充值    -->
+                <a href="" class="btnHerf">确认支付</a>
+                
+                <!--    下面是弹窗    -->
+                <div id="zzBG"></div>
+                <div class="seatErrorAlert">
+                    <p>支付超时，系统已自助取消订单，请返回重新选座。</p>
+                    <a href="#">我知道了</a>
+                </div>
+            </div>
+        </div>
+        <!--    选座结束    -->
+        <!--    ---------------------------------------------------------------------------------------   -->
+
+    </div>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <!--
+    <script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="js/jquery.jscrollpane.min.js"></script>
+-->
+    <script type="text/javascript" src="js/swiper.js"></script>
+    <script type="text/javascript" src="js/light7.js"></script>
+    <script type="text/javascript" src="js/jquery.Spinner.js"></script>
+    <script type="text/javascript" src="js/style.js"></script>
+</body>
+
+</html>

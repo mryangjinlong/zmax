@@ -1,0 +1,100 @@
+package com.zmaxfilm.service.impl;
+
+import com.alibaba.fastjson.JSON;
+import com.zmaxfilm.Constant;
+import com.zmaxfilm.Factory;
+import com.zmaxfilm.service.DeviceDetectionService;
+import com.zmaxfilm.service.MsgHanderService;
+import com.zmaxfilm.service.PrintService;
+import com.zmaxfilm.service.ScanService;
+import com.zmaxfilm.util.DeviceUtil;
+import com.zmaxfilm.util.EncryptUtil;
+import org.apache.log4j.Logger;
+
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * 消息处理服务
+ * Created by jimmy on 2016/11/29.
+ */
+public class MsgHanderServiceImpl implements MsgHanderService {
+
+
+    //  socketMap 键值
+    private  final String SOCKETMSG_KEY_ACTION = "action";
+    private  final String SOCKETMSG_KEY_IMG = "img";
+    private  final String SOCKETMSG_KEY_VIDEO = "video";
+//    private static final String SOCKETMSG_KEY_VERSION = "version";
+    private  final String SOCKETMSG_KEY_URL = "url";
+    //心跳包键值
+    private final String HEARTBEAT_KEY_MAC = "mac";    //mac
+    private final String HEARTBEAT_KEY_PRINTSTATUS = "printStatus";    //打印机状态
+    private final String HEARTBEAT_KEY_SCANSTATUS = "scanStatus";    //扫描仪状态
+
+    private  final String SOCKETMSG_KEY_SIGN = "sign";
+
+    //心跳包action值
+    private  final String HEARTBEAT_ACTION_VALUE = "deviceHeartbeatDetection";
+
+    //action 可能的值
+    private static final String ACTION_VAL_UPDATENOTIFICATION = "updateNotification";
+    private static final String ACTION_VAL_ADVERTISINGPUSH = "advertisingPush";
+
+    private DeviceDetectionService deviceDetectionService = Factory.getDeviceDetectionService();
+    private PrintService printService = Factory.getPrintService(Constant.DEFAULT_IMPL);
+    private ScanService scanService = Factory.getScanService(Constant.DEFAULT_IMPL);
+
+
+    @Override
+    public void processSocketMsg(String msg) {
+            Map msgMap = JSON.parseObject(msg, HashMap.class);
+            if(!checkMsgMD5(msgMap)) return;
+            String action = (String)msgMap.get(SOCKETMSG_KEY_ACTION);
+            //提示更新html
+            if(action.equals(ACTION_VAL_UPDATENOTIFICATION)){
+                String url = (String)msgMap.get(SOCKETMSG_KEY_URL);
+                deviceDetectionService.updateHtml(url);
+             }
+             //提示更新广告
+            if(action.equals(ACTION_VAL_ADVERTISINGPUSH)){
+                Map videoMap = (HashMap)msgMap.get(SOCKETMSG_KEY_VIDEO);
+                Map imgMap = (HashMap) msgMap.get(SOCKETMSG_KEY_IMG);
+                deviceDetectionService.updateAd(videoMap,imgMap);
+            }
+    }
+
+    @Override
+    public boolean checkMsgMD5(Map msgMap) {
+        if(msgMap == null) return false;
+        String sign = (String) msgMap.get(SOCKETMSG_KEY_SIGN);
+        msgMap.remove(SOCKETMSG_KEY_SIGN);
+        String json = JSON.toJSONString(msgMap);
+        return EncryptUtil.MD5(json).equals(sign);
+    }
+
+    @Override
+    public String processDeviceMsg() {
+        Map<String , Map> prints = printService.getPrintDeviceList();
+        if(prints.isEmpty()) return "";
+
+        Map<String,Object> msgMap = new HashMap<>();
+        msgMap.put(SOCKETMSG_KEY_ACTION, HEARTBEAT_ACTION_VALUE);   //设置action
+        msgMap.put(HEARTBEAT_KEY_MAC , DeviceUtil.getLocalMac());       //设置mac
+        Map<String,Object> printStatusMap = new HashMap<>();
+
+        for (String s : prints.keySet()) {
+            printStatusMap.put(s, prints.get(s).get("status"));
+        }
+        msgMap.put(HEARTBEAT_KEY_PRINTSTATUS , printStatusMap);     //设置打印机状态
+        int scannerStatus = scanService.getStatus();
+        msgMap.put(HEARTBEAT_KEY_SCANSTATUS , new HashMap<String,Integer>().put("scanner1",scannerStatus));   //设置扫描仪状态
+        String tempJson = JSON.toJSONString(msgMap);
+        String sign = EncryptUtil.MD5(tempJson);
+        msgMap.put(SOCKETMSG_KEY_SIGN, sign);
+
+        return JSON.toJSONString(msgMap);
+    }
+}

@@ -1,0 +1,34 @@
+package com.zmaxfilm.service;
+
+import com.zmaxfilm.model.Film;
+import com.zmaxfilm.model.MovieTicket;
+import com.zmaxfilm.model.OrderInfo;
+import com.zmaxfilm.model.http.Cinema;
+import com.zmaxfilm.model.http.FilmData;
+import com.zmaxfilm.model.http.FilmPlan4Http;
+
+import javax.print.PrintException;
+import java.text.ParseException;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 电影相关服务
+ * Created by jimmy on 2016/11/28.
+ */
+public interface FilmService {
+
+    List<Cinema> getCinemas();  //获取电影院信息
+//    Map<String,Map<String,List<FilmPlan4Http>>> getPlan(String cinemaNo);    //获取影院所有排期
+    List<FilmPlan4Http> getPlan(String cinemaNo);    //获取影院所有排期
+    //操作类型，1：取影票 2：取卖品
+    public static final int MOVIE_TICKET=1;
+    public static final int GOODS=2;
+
+
+    String getMovieTicketsAndGoods(String cinemaNo,String orderNumber,String validCode,String requestType,int type);//去影票或卖品
+
+
+    void printMovieTiket(OrderInfo orderInfo, javax.print.PrintService printDevice) throws ParseException, PrintException;
+
+}

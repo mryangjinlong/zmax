@@ -1,0 +1,408 @@
+(function ($) {
+    //方法扩展
+    $.zxfun = {};
+    //适配
+    var adapt = function () {
+        var w = $('body').width();
+        var fontSize = w / 1080 * 100;
+        $('html').css('font-size', fontSize + 'px');
+    };
+    adapt();
+    //当窗口大小变化的时候调用函数
+    $(window).resize(function () {
+        adapt();
+    });
+
+    //初始化banner
+    $.zxfun.swiperBanner = new Swiper('#header', {
+        autoplay: 1000,
+        loop: true
+    });
+    $.zxfun.swiperBanner.startAutoplay();
+
+
+    //首页面初始化
+    $(document).on("pageInit", "#page-index", function () {
+
+    });
+    //排期页初始化
+    $(document).on("pageInit", "#page-plan", function () {
+
+        var TimeSwiper = new Swiper('.planTime', {
+            slidesPerView: 5,
+            paginationClickable: true,
+            spaceBetween: 0,
+            freeMode: true
+        });
+
+        var FilmSwiper = new Swiper('.planBody', {
+            paginationClickable: true,
+            effect: 'coverflow',
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            coverflow: {
+                rotate: 30,
+                stretch: 0,
+                depth: 20,
+                modifier: 1,
+                slideShadows: false
+            },
+            onTap: function (swiper) {
+                FilmSwiper.slideTo(FilmSwiper.clickedIndex, 1000, false); //切换到第一个slide，速度为1秒 第三个是回调行数
+            }
+
+        });
+        $('.planTime li').on('click', function () {
+            $('.planTime li').removeClass('active');
+            $(this).addClass('active');
+        });
+        //        滚动条
+        //        $('.planBt').jScrollPane();
+
+        //停售提示框
+        $(document).on('click', '.stopShell li:eq(4)', function () {
+            $('.alert').show();
+            clearTimeout(timer);
+            var timer;
+            timer = setTimeout(function () {
+                $('.alert').hide();
+            }, 2000)
+        });
+        //选择影院
+        $(document).on('click', '.downIcon', function () {
+            $('#cityChose').show();
+            $('#cinemaChose').hide();
+            $('.choseCinema').slideToggle();
+            $('.cinemaTop img').remove();
+        });
+        $(document).on('click', '.cinemaTop a', function () {
+            $('.choseCinema').slideUp();
+        });
+        $(document).on('click', '.cinemaTop img', function () {
+            $('#cityChose').fadeToggle();
+            $('#cinemaChose').fadeToggle();
+            $('.cinemaTop img').remove();
+        });
+        $(document).on('click', '#cityChose ul li', function () {
+            var _this = $(this);
+            $('#cityChose').fadeOut();
+            $('#cinemaChose').fadeIn();
+            $('.cinemaTop span').html(_this.html());
+            var _downImg = '<img src="./img/inshell/redDown.png" alt="" draggable="false">';
+            $('.cinemaTop').append(_downImg);
+        })
+        $(document).on('click', '#cinemaChose ul li>a', function () {
+            var _this = $(this);
+            $('.choseCinema').slideUp();
+            var _ciname = _this.find('h2').html();
+            $('.planTop .ciname').html(_ciname);
+            $('.cinemaTop img').remove();
+        })
+//=======================================================具体业务开始==========================================================
+
+        var planPage = {
+            filmService : window.app.getFilmService() ,
+            init : function() {
+                this.cinemas = this.filmService.getCinemas();
+                this.initPage();
+            },
+            initPage : function () {
+                this.buildPlanBody();
+            },
+            buildPlanBody : function () {
+
+            }
+        };
+
+        planPage.init();
+        $.toast(planPage.cinemas);
+        // $.toast(planPage.cinemas[0].cinemaNo);
+        // $.toast(1);
+
+
+    });
+
+    //选座页面初始化
+    $(document).on("pageInit", "#page-seat", function () {
+        //选座页面li的宽度   让ul宽度随li宽度展开
+        $('.choseSeatRt ul').each(function () {
+            var _liWidth = $(this).children('li').outerWidth(true);
+            var _liLength = $(this).children('li').length;
+            //            情侣座操作            
+            //            var _fimilySeat = $(this).children('.fimilySeat').length;
+            //            var _fimilySeatChose = $(this).children('.fimilySeatChose').length;
+            //            var _ulWidth = (_liWidth * _liLength + _fimilySeat * _liWidth + _fimilySeatChose * _liWidth) + 20;
+            var _ulWidth = (_liWidth * _liLength) + 20;
+            $(this).css('width', _ulWidth);
+        });
+        //选座 左边块的半透明固定
+        $('.choseSeatCT').scroll(function () {
+            $('.choseSeatLf').css('left', ($('.choseSeatCT').scrollLeft()) / 100 + 'rem');
+        });
+
+        $('.choseSeatRt ul li').on('click', function () {
+            var _this = $(this);
+            var _activeTength = $('.BtBtLf ul li.isSeat').length;
+            var _ifCanSeat = true;
+
+            if (_activeTength == 4) {
+                _ifCanSeat = false;
+            }
+            //              情侣座判断            
+            //            else if (_activeTength == 3) {
+            //                if (_this.is('.fimilySeat')) {
+            //                    _ifCanSeat = false;
+            //                }
+            //            }           
+            //                else if (_this.is('.fimilySeat')) {
+            //                    _this.removeClass('fimilySeat').addClass('fimilySeatChose').addClass('active');
+            //                    $('.BtBtLf ul li').each(function () {
+            //                            var _isSeat = $(this);
+            //                            if (!_isSeat.is('.isSeat')) {
+            //                                _isSeat.html('<span>' + _this.attr('data-seat') + '</span><img src="./img/seat/x.png" alt="" draggable="false">');
+            //                                _isSeat.addClass('isSeat').addClass('qlSeat');
+            //                                _isSeat.next().html('<span>' + _this.attr('data-seatTwo') + '</span><img src="./img/seat/x.png" alt="" draggable="false">');
+            //                                _isSeat.next().addClass('isSeat').addClass('qlSeat');
+            //                                return false;
+            //                            }
+            //                        })
+            //                            else if (_this.is('.fimilySeatChose')) {
+            //                                _this.removeClass('fimilySeatChose').removeClass('active').addClass('fimilySeat');
+            //                            }
+            if (_ifCanSeat) {
+
+                //点击选座
+                if (_this.is('.canSeat')) {
+                    _this.removeClass('canSeat').addClass('hasChose').addClass('active');
+                    $('.BtBtLf ul li').each(function () {
+                        var _isSeat = $(this);
+                        if (!_isSeat.is('.isSeat')) {
+
+                            _isSeat.html('<span>' + _this.attr('data-seat') + '</span><img src="./img/seat/x.png" alt="" draggable="false">');
+                            _isSeat.addClass('isSeat');
+                            return false;
+                        }
+                    })
+                } else if (_this.is('.vipSeat')) {
+                    _this.removeClass('vipSeat').addClass('vipSeatChose').addClass('active');
+                    $('.BtBtLf ul li').each(function () {
+                        var _isSeat = $(this);
+                        if (!_isSeat.is('.isSeat')) {
+
+                            _isSeat.html('<span>' + _this.attr('data-seat') + '</span><img src="./img/seat/x.png" alt="" draggable="false">');
+                            _isSeat.addClass('isSeat');
+                            return false;
+                        }
+                    })
+                } else if (_this.is('.star')) {
+                    _this.removeClass('star').addClass('starChose').addClass('active');
+                    $('.BtBtLf ul li').each(function () {
+                        var _isSeat = $(this);
+                        if (!_isSeat.is('.isSeat')) {
+                            _isSeat.html('<span>' + _this.attr('data-seat') + '</span><img src="./img/seat/x.png" alt="" draggable="false">');
+                            _isSeat.addClass('isSeat');
+                            return false;
+                        }
+                    })
+                }
+                //下面开始是取消座位的了
+                else if (_this.is('.vipSeatChose')) {
+                    _this.removeClass('vipSeatChose').removeClass('active').addClass('vipSeat');
+                    $('.BtBtLf li').each(function () {
+                        if (_this.attr('data-seat') == $(this).find('span').html()) {
+                            $(this).remove();
+                            $('.BtBtLf ul').append('<li><span>待选座位</span></li>');
+                            return false;
+                        }
+                    })
+
+
+                } else if (_this.is('.starChose')) {
+                    _this.removeClass('starChose').removeClass('active').addClass('star');
+                    $('.BtBtLf li').each(function () {
+                        if (_this.attr('data-seat') == $(this).find('span').html()) {
+                            $(this).remove();
+                            $('.BtBtLf ul').append('<li><span>待选座位</span></li>');
+                            return false;
+                        }
+                    })
+
+                } else if (_this.is('.hasChose')) {
+                    _this.removeClass('hasChose').removeClass('active').addClass('canSeat');
+                    $('.BtBtLf li').each(function () {
+                        if (_this.attr('data-seat') == $(this).find('span').html()) {
+                            $(this).remove();
+                            $('.BtBtLf ul').append('<li><span>待选座位</span></li>');
+                            return false;
+                        }
+                    })
+
+                }
+
+            }
+        })
+
+
+        $(document).on('click', '.BtBtLf ul li.isSeat>img', function () {
+            var _this = $(this);
+            _this.parent('li').remove();
+            $('.BtBtLf ul').append('<li><span>待选座位</span></li>');
+            $('.choseSeatRt li').each(function () {
+                if ($(this).attr('data-seat') == _this.siblings('span').html()) {
+                    if ($(this).is('.starChose')) {
+                        $(this).attr('class', '').addClass('star');
+                    } else if ($(this).is('.hasChose')) {
+                        $(this).attr('class', '').addClass('canSeat');
+                    } else if ($(this).is('.vipSeatChose')) {
+                        $(this).attr('class', '').addClass('vipSeat');
+                    }
+
+                }
+            })
+
+        })
+        $('.pay').on('click', function () {
+            $('#zzBG').show();
+            $('.SeatAlert').fadeIn();
+            setTimeout(function () {
+                $('#zzBG').hide();
+                $('.SeatAlert').fadeOut();
+            }, 5000)
+            setTimeout(function () {
+                $('.seatErrorAlert').fadeIn();
+            }, 10000)
+            setTimeout(function () {
+                location.href = 'pay.html';
+            }, 20000)
+        })
+        $(document).on('click', '.seatErrorAlert>a', function () {
+            $(this).parent().fadeOut()
+        })
+        $(document).on('click', '.newChoseSeat', function () {
+            $(this).parent().fadeOut()
+        })
+        $(document).on('click', '.INosure', function () {
+            $(this).parent().fadeOut()
+        })
+
+
+
+
+    });
+
+    //支付页面
+    $(document).on("pageInit", "#page-pay", function () {
+
+        $('#zfb').on('click', function () {
+            $('#payZfbAlert').fadeIn();
+            $('#zzBG').show();
+        })
+        $('#weixin').on('click', function () {
+            $('#payWxAlert').fadeIn();
+            $('#zzBG').show();
+        })
+        $('#count').on('click', function () {
+            $('#acountPayAlert').fadeIn();
+            $('#zzBG').show();
+        })
+        $(document).on('click', '.close', function () {
+            $(this).parent().fadeToggle();
+            $('#zzBG').hide();
+            location.href = 'wait.html'
+        })
+
+    });
+    // 等待结果页面
+    $(document).on("pageInit", "#page-wait", function () {
+
+        setTimeout(function () {
+            location.href = 'result.html';
+        }, 10000)
+    });
+
+    // 成功回调页页面
+    $(document).on("pageInit", "#page-result", function () {
+        //speedNum 速度
+        var _showImg = function (speedNum) {
+            clearInterval(timer);
+            var timer;
+            var speed = speedNum;
+            timer = setInterval(function () {
+                var _this_top = parseFloat($('.pAdminit').css('top'));
+                _this_top += speed;
+
+                if (_this_top >= 197) {
+                    clearInterval(timer);
+                    setTimeout(function () {
+                        $('.pAdminit').fadeOut("slow", function () {
+                            $('.pAdminit').css('top', '-3.45rem');
+                            clearTimeout(_timer);
+                            var _timer;
+                            _timer = setTimeout(function () {
+                                $('.pAdminit').show();
+                                _showImg(10);
+                            }, 1000)
+                        })
+                    }, 500)
+                } else {
+                    $('.pAdminit').css('top', (_this_top / 100) + 'rem');
+                }
+            }, 50)
+        }
+        _showImg(10)
+        var _timeBack = 10;
+        var _tiemr;
+        clearInterval(_tiemr);
+        _tiemr = setInterval(function () {
+            _timeBack--;
+            if (_timeBack == 0) {
+                clearInterval(_tiemr);
+            }
+            $('.systemInfo>time').html(_timeBack);
+        }, 1000)
+        var _timeBack2 = 10;
+        var _tiemr2;
+        clearInterval(_tiemr2);
+        _tiemr2 = setInterval(function () {
+            _timeBack2--;
+            if (_timeBack == 0) {
+                clearInterval(_tiemr2);
+            }
+            $('.resultError>p>time').html(_timeBack2 + 's');
+        }, 1000)
+
+
+
+    });
+
+    // 取票
+    $(document).on("pageInit", "#page-checkin", function () {
+        var _timeBack = 5;
+        var _tiemr;
+        clearInterval(_tiemr);
+        _tiemr = setInterval(function () {
+                _timeBack--;
+                if (_timeBack == 0) {
+                    clearInterval(_tiemr);
+                }
+                $('.systemInfo>time').html(_timeBack);
+            }, 1000)
+                    $('#page-checkin .numKeyBoard li').on('click', function () {
+                        $(this).addClass('check');
+                        setTimeout(function () {
+                            $('#page-checkin .numKeyBoard li').removeClass('check');
+                        }, 300)
+                    })
+                    $('#page-checkin .numKeyBoard li').on('mouseover', function () {
+                        $(this).addClass('check');
+                    })
+                    $('#page-checkin .numKeyBoard li').on('mouseout', function () {
+                        $('#page-checkin .numKeyBoard li').removeClass('check');
+                    })
+
+        
+    });
+
+    $.init();
+})($)

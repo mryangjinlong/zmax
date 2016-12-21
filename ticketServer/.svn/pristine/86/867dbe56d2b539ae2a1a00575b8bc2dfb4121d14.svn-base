@@ -1,0 +1,106 @@
+package com.zmaxfilm.service.impl;
+
+import com.zmaxfilm.Constant;
+import com.zmaxfilm.service.DeviceDetectionService;
+import com.zmaxfilm.util.FileUtils;
+import com.zmaxfilm.util.HttpUtil;
+
+import java.io.File;
+import java.util.Date;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
+/**
+ * Created by jimmy on 2016/11/15.
+ */
+public class DeviceDetectionServiceImpl implements DeviceDetectionService {
+
+    private static final long CHECK_PERIOD = 1000*60*2;
+    private static final String HTML_FILE_PATH = Constant.WEB_PATH + "html.rar";
+
+
+
+    @Override
+    public void run() {
+        Timer timer = new Timer(true);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                //TODO 每隔一段时间检测一下系统是否正常并发送心跳包
+            }
+        },new Date(),CHECK_PERIOD);
+    }
+
+    @Override
+    public void updateHtml(String url) {
+        boolean flag = downloadHtml(url);
+        if(flag){
+            deleteHtml();
+            unRarHtml();
+        }
+    }
+
+    @Override
+    public boolean downloadHtml(String url) {
+        //下载html.rar文件
+        HttpUtil.downloadFile(url , HTML_FILE_PATH);
+        if(new File(HTML_FILE_PATH).exists())
+            return true;
+        return false;
+    }
+
+    @Override
+    public void deleteHtml() {
+        FileUtils.deleteFolder(Constant.HTML_PATH);
+    }
+    public void unRarHtml(){
+        //解压文件到当前目录
+        FileUtils.unRarFile(HTML_FILE_PATH , Constant.WEB_PATH);
+        //删除下载下来的rar文件
+        FileUtils.deleteFile(HTML_FILE_PATH);
+    }
+
+
+/*    public void unRarAd(){
+        //解压文件到当前目录
+        FileUtils.unRarFile(AD_FILE_PATH , Constant.WEB_PATH);
+        //删除下载下来的rar文件
+        FileUtils.deleteFile(AD_FILE_PATH);
+    }*/
+
+    @Override
+    public void updateAd(Map videoMap , Map imgMap) {
+       deleteAd();
+       boolean flag = downloadAd(videoMap , imgMap);
+    }
+
+    @Override
+    public void updateAll() {
+        /*updateHtml();
+        updateAd();*/
+    }
+
+
+    @Override
+    public void deleteAd() {
+        FileUtils.deleteFolder(Constant.AD_PATH);
+    }
+
+    @Override
+    public boolean downloadAd(Map videoMap , Map imgMap) {
+        String a = Constant.WEB_PATH;
+        for (Object o : videoMap.keySet()) {
+            String fileName = (String)o;
+            String url = (String) videoMap.get(o);
+            HttpUtil.downloadFile(url , Constant.WEB_PATH + fileName);
+        }
+        for (Object o : imgMap.keySet()) {
+            String fileName = (String)o;
+            String url = (String) videoMap.get(o);
+            HttpUtil.downloadFile(url , Constant.WEB_PATH + fileName);
+        }
+        return true;
+    }
+
+}

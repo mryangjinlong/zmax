@@ -1,0 +1,71 @@
+package com.zmaxfilm;
+
+import com.zmaxfilm.service.*;
+import com.zmaxfilm.service.impl.*;
+import lombok.Getter;
+
+/**
+ * Created by drj on 2016/11/14.
+ */
+public class Factory {
+
+
+    private static SocketClientService socketClientService=new SocketClientServiceImpl();
+
+    private static DeviceDetectionService deviceDetectionService = new DeviceDetectionServiceImpl();
+
+    private static MsgHanderService msgHanderService = new MsgHanderServiceImpl();
+
+    private static FilmService filmService = new FilmServiceImpl();
+
+    private static UserService userService = new UserServiceImpl();
+
+    @Getter
+    private static GoodsService goodsService=new GoodsServiceImpl();
+
+    public static UserService getUserService(){
+        return userService;
+    }
+
+    //获取打印服务
+    public static PrintService getPrintService(int type){
+        switch (type){
+            case Constant.DEFAULT_IMPL:
+                return PrintServiceImpl.getInstance();
+        }
+        return null;
+    }
+
+    //获取二维码服务
+    public static ScanService getScanService(int type){
+        switch (type){
+            case Constant.DEFAULT_IMPL:
+                return ScannerServiceImpl.getInstance();
+        }
+        return null;
+    }
+
+    //获取socket服务
+    public static SocketClientService getSocketClientService(int type){
+        switch (type){
+            case Constant.DEFAULT_IMPL:return socketClientService;
+        }
+        return null;
+    }
+    //消息处理服务
+    public static MsgHanderService getMsgHanderService(){
+        return msgHanderService;
+    }
+    //设置检测服务
+    public static DeviceDetectionService getDeviceDetectionService(){
+        return deviceDetectionService;
+    }
+
+
+    public static FilmService getFilmService(){
+        return filmService;
+    }
+
+
+
+}

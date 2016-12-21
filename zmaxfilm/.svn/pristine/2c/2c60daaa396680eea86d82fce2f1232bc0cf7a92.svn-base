@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>中瑞影城</title>
+    <meta name="description" content="中瑞影城">
+    <meta name="author" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="css/light7.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/swiper.css">
+    <!--    <link type="text/css" href="css/jquery.jscrollpane.css" rel="stylesheet" media="all" />-->
+</head>
+
+<body>
+    <div class="wrap">
+        <header id="header">
+            <ul class="swiper-wrapper">
+                <li class="swiper-slide">
+                    <img src="./img/index/banner.png" alt="" draggable="false">
+                </li>
+                <li class="swiper-slide">
+                    <img src="./img/index/banner.png" alt="" draggable="false">
+                </li>
+                <li class="swiper-slide">
+                    <img src="./img/index/banner.png" alt="" draggable="false">
+                </li>
+                <li class="swiper-slide">
+                    <img src="./img/index/banner.png" alt="" draggable="false">
+                </li>
+            </ul>
+        </header>
+        <address id="footer">
+                Copyright © 2014-2016 福州最美影视网络科技有限公司 版权所有
+        </address>
+
+        <!--    ---------------------------------------------------------------------------------------   -->
+        <!--    选座    -->
+        <div class="page" id="page-newGet">
+            <div class="seatTop">
+                <h1>重新打票</h1>
+                <a class="toBack" href="choseCpType.html"></a>
+                <div class="backIndex">安全退出</div>
+            </div>
+            <div class="newGetBody">
+                <div class="newGetSerch">
+                    <input id="newGetInput" type="text" placeholder="请输入订单号或手机号">
+                    <a href="javascript:;">使用</a>
+                    <div class="numKeyBoard allkeyboxposition">
+                        <ul>
+                            <li class="key">1</li>
+                            <li class="key">2</li>
+                            <li class="key">3</li>
+                        </ul>
+                        <ul>
+                            <li class="key">4</li>
+                            <li class="key">5</li>
+                            <li class="key">6</li>
+                        </ul>
+                        <ul>
+                            <li class="key">7</li>
+                            <li class="key">8</li>
+                            <li class="key">9</li>
+                        </ul>
+                        <ul>
+                            <li class="reinput">
+                                清空
+                            </li>
+                            <li class="key">0</li>
+                            <li class="key deleteBack">
+                                <img src="./img/login/delete-icon.png" alt="">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="searchFalse">
+                    <img src="./img/system/x.png" alt="" draggable="false">
+                    <p>订单查询失败</p>
+                </div>
+                <div class="searchShow">
+                   <div class="preImg"></div>
+                    <div class="searInfo">
+                        <ul>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                    </div>
+                    <div class="nextImg"></div>
+                    <p><em>1</em>/<span>2</span></p>
+                </div>
+            </div>
+        </div>
+        <!--    选座结束    -->
+        <!--    ---------------------------------------------------------------------------------------   -->
+
+    </div>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <!--
+    <script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="js/jquery.jscrollpane.min.js"></script>
+-->
+    <script type="text/javascript" src="js/swiper.js"></script>
+    <script type="text/javascript" src="js/light7.js"></script>
+    <script type="text/javascript" src="js/jquery.Spinner.js"></script>
+    <script type="text/javascript" src="js/style.js"></script>
+</body>
+
+</html>

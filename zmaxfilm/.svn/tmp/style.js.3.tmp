@@ -1,0 +1,747 @@
+(function ($) {
+    //方法扩展
+    $.zxfun = {};
+    //适配
+    var adapt = function () {
+        var w = $('body').width();
+        var fontSize = w / 1080 * 100;
+        $('html').css('font-size', fontSize + 'px');
+    };
+    adapt();
+    //当窗口大小变化的时候调用函数
+    $(window).resize(function () {
+        adapt();
+    });
+    
+    //初始化banner
+    $.zxfun.swiperBanner = new Swiper('#header', {
+        autoplay: 1000,
+        loop: true
+    });
+    $.zxfun.swiperBanner.startAutoplay();
+
+    $.zxfun.get_unix_time = function(dateStr)
+    {
+        var newstr = dateStr.replace(/-/g,'/');
+        var date =  new Date(newstr);
+        var time_str = date.getTime().toString();
+        return time_str.substr(0, 10);
+    }
+    //时间如果为单位数补0
+    function fixZero(num, length){
+        var str = "" + num;
+        var len = str.length;
+        var s = "";
+        for (var i = length; i-- > len;) {
+            s += "0";
+        }
+        return s + str;
+    }
+    //时间转换  now时间截格式
+    function formatDate(now, tyle) {
+        var now = new Date(now*1000);
+        var year = now.getFullYear();
+        var month = now.getMonth() + 1;
+        var date = now.getDate();
+        var hour = now.getHours();
+        var minute = now.getMinutes();
+        var second = now.getSeconds();
+        var week = now.getDay();
+        if (tyle == 1) {
+            return year + "-" + fixZero(month, 2) + "-" + fixZero(date, 2) + "    " +
+                "" + fixZero(hour, 2) + ":" + fixZero(minute, 2);
+        } else if (tyle == 2) {
+            return '剩余' + fixZero(minute, 2) + '分' + fixZero(second, 2) + '秒';
+        } else if (tyle == 3) {
+            return fixZero(month, 2) + '月' + fixZero(date, 2) + '日';
+        } else if (tyle == 4) {
+            return year + "-" + fixZero(month, 2) + "-" + fixZero(date, 2);
+        } else if (tyle == 5) {
+            if (week == 1) {
+                return "周一";
+            } else if (week == 2) {
+                return "周二";
+            } else if (week == 3) {
+                return "周三";
+            } else if (week == 4) {
+                return "周四";
+            } else if (week == 5) {
+                return "周五";
+            } else if (week == 6) {
+                return "周六";
+            } else if (week == 0) {
+                return "周日";
+            }
+
+        } else if (tyle == 6) {
+            return fixZero(month, 2) + "-" + fixZero(date, 2) + "    " +
+                "" + fixZero(hour, 2) + ":" + fixZero(minute, 2);
+        } else if (tyle == 7) {
+            return fixZero(hour, 2) + ":" + fixZero(minute, 2);
+        } else if (tyle == 8) {
+            return fixZero(month, 2) + '-' + fixZero(date, 2);
+        }
+
+    }
+
+
+
+    //数字键盘调用 只针对页面两个输入框
+    $.zxfun.numberKeyBoard=function(conf){
+        var confExtend=({
+            pageId:conf.pageId,
+            inpuIdOne:conf.inpuIdOne,
+            inpuIdTwo:conf.inpuIdTwo
+        },conf);
+        
+        var CaretPos = 0;
+        var _inputTab = true;
+        $(''+confExtend.inpuIdOne+'').focus(function () {
+            _inputTab = true;
+        });
+        $(''+confExtend.inpuIdTwo+'').focus(function () {
+            _inputTab = false;
+        });    
+        
+    $(''+confExtend.pageId+' .numKeyBoard li').on('click', function () {
+            var _this = $(this);
+            $(this).addClass('check');
+            setTimeout(function () {
+                    $(''+confExtend.pageId+' .numKeyBoard li').removeClass('check');
+                }, 100)
+                //判断开关，如果是true输入在第一个框 否则输入在第二个
+                //模拟键盘 未封装
+            if (_inputTab) {
+                if (_this.is('.reinput')) {
+                    $(''+confExtend.inpuIdOne+'').val('');
+                } else if (_this.is('.deleteBack')) {
+                    var _oldVal = $(''+confExtend.inpuIdOne+'').val();
+                    if (CaretPos >= 1) {
+                        var _arr = _oldVal.split('');
+                        _arr.splice(CaretPos - 1, 1);
+                        $(''+confExtend.inpuIdOne+'').val(_arr.join(''));
+                        CaretPos--;
+                    }
+                } else {
+                    var _oldVal = $(''+confExtend.inpuIdOne+'').val();
+                    if (CaretPos >= 1) {
+                        var _arr = _oldVal.split('');
+                        _arr.splice(CaretPos, 0, $(this).html());
+                        $(''+confExtend.inpuIdOne+'').val(_arr.join(''));
+                        CaretPos++;
+                    } else {
+                        var _newVal = $(this).html();
+                        $(''+confExtend.inpuIdOne+'').val(_oldVal + _newVal);
+                    }
+                }
+
+            } 
+            else {
+                if (_this.is('.reinput')) {
+                    $(''+confExtend.inpuIdTwo+'').val('');
+                } else if (_this.is('.deleteBack')) {
+                    var _oldVal = $(''+confExtend.inpuIdTwo+'').val();
+                    if (CaretPos >= 1) {
+                        var _arr = _oldVal.split('');
+                        _arr.splice(CaretPos - 1, 1);
+                        $(''+confExtend.inpuIdTwo+'').val(_arr.join(''));
+                        CaretPos--;
+                    }
+                } else {
+                    var _oldVal = $(''+confExtend.inpuIdTwo+'').val();
+                    if (CaretPos >= 1) {
+                        var _arr = _oldVal.split('');
+                        _arr.splice(CaretPos, 0, $(this).html());
+                        $(''+confExtend.inpuIdTwo+'').val(_arr.join(''));
+                        CaretPos++;
+                    } else {
+                        var _newVal = $(this).html();
+                        $(''+confExtend.inpuIdTwo+'').val(_oldVal + _newVal);
+                    }
+                }
+
+            }
+
+
+
+        })
+        $(''+confExtend.inpuIdOne+'').blur(function () {
+            var _this = $(this).get(0);
+            getCursortPosition(_this);
+        });
+        $(''+confExtend.inpuIdTwo+'').blur(function () {
+            var _this = $(this).get(0);
+            getCursortPosition(_this);
+        });
+
+        function getCursortPosition(ctrl) {
+            if (document.selection) {
+                ctrl.focus();
+                var Sel = document.selection.createRange();
+                Sel.moveStart('character', -ctrl.value.length);
+                CaretPos = Sel.text.length;
+            }
+            // Firefox support
+            else if (ctrl.selectionStart || ctrl.selectionStart == '0') {
+                CaretPos = ctrl.selectionStart;
+            }
+            //return (CaretPos);
+        }
+    }
+    
+    //首页面初始化
+    $(document).on("pageInit", "#page-index", function () {
+
+    });
+    //排期页初始化
+    $(document).on("pageInit", "#page-plan", function () {
+
+        var TimeSwiper = new Swiper('.planTime', {
+            slidesPerView: 5,
+            paginationClickable: true,
+            spaceBetween: 0,
+            freeMode: true
+        });
+
+        var FilmSwiper = new Swiper('.planBody', {
+            paginationClickable: true,
+            effect: 'coverflow',
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            coverflow: {
+                rotate: 30,
+                stretch: 0,
+                depth: 20,
+                modifier: 1,
+                slideShadows: false
+            },
+            onTap: function (swiper) {
+                FilmSwiper.slideTo(FilmSwiper.clickedIndex, 1000, false); //切换到第一个slide，速度为1秒 第三个是回调行数
+            }
+
+        });
+        $('.planTime li').on('click', function () {
+            $('.planTime li').removeClass('active');
+            $(this).addClass('active');
+        });
+        //        滚动条
+        //        $('.planBt').jScrollPane();
+
+        //停售提示框
+        $(document).on('click', '.stopShell li:eq(4)', function () {
+            $('.alert').show();
+            clearTimeout(timer);
+            var timer;
+            timer = setTimeout(function () {
+                $('.alert').hide();
+            }, 2000)
+        });
+        //选择影院
+        $(document).on('click', '.downIcon', function () {
+            $('#cityChose').show();
+            $('#cinemaChose').hide();
+            $('.choseCinema').slideToggle();
+            $('.cinemaTop img').remove();
+        });
+        $(document).on('click', '.cinemaTop a', function () {
+            $('.choseCinema').slideUp();
+        });
+        $(document).on('click', '.cinemaTop img', function () {
+            $('#cityChose').fadeToggle();
+            $('#cinemaChose').fadeToggle();
+            $('.cinemaTop img').remove();
+        });
+        $(document).on('click', '#cityChose ul li', function () {
+            var _this = $(this);
+            $('#cityChose').fadeOut();
+            $('#cinemaChose').fadeIn();
+            $('.cinemaTop span').html(_this.html());
+            var _downImg = '<img src="./img/inshell/redDown.png" alt="" draggable="false">';
+            $('.cinemaTop').append(_downImg);
+        })
+        $(document).on('click', '#cinemaChose ul li>a', function () {
+            var _this = $(this);
+            $('.choseCinema').slideUp();
+            var _ciname = _this.find('h2').html();
+            $('.planTop .ciname').html(_ciname);
+            $('.cinemaTop img').remove();
+        })
+//=======================================================具体业务开始==========================================================
+
+        var planPage = {
+            planTop : $(".planTop"),
+            planBody : $(".planBody"),
+            planTime :  $(".planTime"),
+            planBt : $(".planBt"),
+            Cinema_Status : {
+                NORMAL :1,
+                CLOSE : 2
+            },
+
+            init : function() {
+                this.cinemas =  eval("("+window.app.getCinemas()+")");
+                this.cinema = this.cinemas[0];
+                this.planTemp = window.app.getPlan(this.cinemas[0].cinemaNo);
+                this.plan = eval("("+window.app.getPlan(this.cinema.cinemaNo)+")");
+                this.initPage();
+            },
+            initPage : function () {
+                this.buildPlanTop();
+                this.buildPlanBody();
+                this.buildPlanTime("035101402016");
+            },
+            buildPlanTop : function () {
+                var html = [];
+                if(this.cinema.status == this.Cinema_Status.NORMAL){
+                    html.push('<h1>正在售票</h1>');
+                }else{
+                    html.push('<h1>关闭售票</h1>');
+                }
+                html.push('<a class="toBack" href="index.html"></a>');
+                html.push('<a class="ciname" href="#">'+this.cinema.cinemaName+'</a>');
+                html.push('<img class="downIcon" src="./img/inshell/down.png" alt="" draggable="false">');
+               this.planTop.append(html.join(""));
+            },
+            //构建planBody
+            buildPlanBody : function () {
+                var html = [];
+                window.app.console(this.planTemp);
+                html.push('<ul class="swiper-wrapper">');
+                var filmNames = [];
+                for(var i = 0 ; i < this.plan.length ; i ++){
+
+                    var data = this.plan[i];
+
+
+                    if($.inArray(data.filmName, filmNames) != -1)
+                        continue;
+
+                    filmNames.push(data.filmName);
+
+                    html.push('<li class="swiper-slide">');
+                    html.push('<img src="./img/inshell/1.jpg" alt="" draggable="false">');
+                    html.push('<div class="indexAll">1/10</div>');
+                    html.push('<p>'+data.filmName+'</p><em>8.3</em>');  //TODO 分数
+                    html.push('<div class="film3d"></div>');
+                    html.push('</li>')
+
+                }
+                html.push('</ul>');
+                this.planBody.append(html.join(""));
+            },
+            buildPlanTime : function (filmNo) {
+                this.planTime.empty();
+                var html = [];
+                html.push('<ul class="swiper-wrapper">');
+                var dateStrs = [];
+                for(var i = 0 ; i < this.plan.length ; i ++){
+                    var data = this.plan[i];
+                    var dateStr = data.startTime.substring(0,10);
+                    if(data.filmNo == filmNo && ($.inArray(dateStr, dateStrs) == -1)){
+                        html.push('<li class="swiper-slide active">');
+                        var dateTemp = $.zxfun.get_unix_time(data.startTime);
+                        html.push('<h3>'+ formatDate(dateTemp,5) +'</h3>');
+                        html.push('<h2>' + formatDate(dateTemp,3) + '</h2>');
+                    }
+
+                }
+                html.push('</ul>');
+
+                this.planTime.append(html.join(""));
+            },
+            buildPlanBt : function (filmNo,dateStr) {
+                this.planBt.empty();
+                var html = [];
+
+                for(var i = 0 ; i < this.plan.length ; i ++){
+                    html.push('<ul class="dragFilmPlan">');
+                    html.push('<li>');
+                    html.push('<ul class="filmUl stopShell">');
+                    html.push('<li>');
+                    html.push('<ul class="dragFilmPlan">');
+                    html.push('<ul class="dragFilmPlan">');
+                    html.push('<ul class="dragFilmPlan">');
+                    html.push('<ul class="dragFilmPlan">');
+                    html.push('<ul class="dragFilmPlan">');
+                    html.push('<ul class="dragFilmPlan">');
+                    html.push('<ul class="dragFilmPlan">');
+                    html.push('<ul class="dragFilmPlan">');
+                    html.push('<ul class="dragFilmPlan">');
+                    html.push('<ul class="dragFilmPlan">');
+                    html.push('<ul class="dragFilmPlan">');
+                }
+
+
+                //     <li>
+                //     <h2>18:45</h2>
+                // <h3>11:30散场</h3>
+                // </li>
+                // <li>
+                // <h2>英语</h2>
+                // <h3>3D</h3>
+                // </li>
+                // <li>
+                // <h2>ZMAX激光厅</h2>
+                // <h3>座位充足：70%-100%</h3>
+                // </li>
+                // <li>
+                // <h2>¥75<em>起</em></h2>
+                // <del>¥100</del>
+                // </li>
+                // <li>
+                // <a href="#">选座购票</a>
+                //     </li>
+                //     <img src="img/inshell/border.png" alt="">
+                //     </ul>
+                //     </li>
+                //     </ul>
+                this.planBt.append(html.join(""));
+            }
+
+
+        };
+
+        planPage.init();
+        // window.app.console(planPage.cinemas[0].cinemaNo);
+        // window.app.console(planPage.plan);
+
+
+    });
+
+    //选座页面初始化
+    $(document).on("pageInit", "#page-seat", function () {
+        //选座页面li的宽度   让ul宽度随li宽度展开
+        $('.choseSeatRt ul').each(function () {
+            var _liWidth = $(this).children('li').outerWidth(true);
+            var _liLength = $(this).children('li').length;
+            //            情侣座操作            
+            //            var _fimilySeat = $(this).children('.fimilySeat').length;
+            //            var _fimilySeatChose = $(this).children('.fimilySeatChose').length;
+            //            var _ulWidth = (_liWidth * _liLength + _fimilySeat * _liWidth + _fimilySeatChose * _liWidth) + 20;
+            var _ulWidth = (_liWidth * _liLength) + 20;
+            $(this).css('width', _ulWidth);
+        });
+        //选座 左边块的半透明固定
+        $('.choseSeatCT').scroll(function () {
+            $('.choseSeatLf').css('left', ($('.choseSeatCT').scrollLeft()) / 100 + 'rem');
+        });
+
+        $('.choseSeatRt ul li').on('click', function () {
+            var _this = $(this);
+            var _activeTength = $('.BtBtLf ul li.isSeat').length;
+            var _ifCanSeat = true;
+
+            if (_activeTength == 4) {
+                _ifCanSeat = false;
+            }
+            //              情侣座判断            
+            //            else if (_activeTength == 3) {
+            //                if (_this.is('.fimilySeat')) {
+            //                    _ifCanSeat = false;
+            //                }
+            //            }           
+            //                else if (_this.is('.fimilySeat')) {
+            //                    _this.removeClass('fimilySeat').addClass('fimilySeatChose').addClass('active');
+            //                    $('.BtBtLf ul li').each(function () {
+            //                            var _isSeat = $(this);
+            //                            if (!_isSeat.is('.isSeat')) {
+            //                                _isSeat.html('<span>' + _this.attr('data-seat') + '</span><img src="./img/seat/x.png" alt="" draggable="false">');
+            //                                _isSeat.addClass('isSeat').addClass('qlSeat');
+            //                                _isSeat.next().html('<span>' + _this.attr('data-seatTwo') + '</span><img src="./img/seat/x.png" alt="" draggable="false">');
+            //                                _isSeat.next().addClass('isSeat').addClass('qlSeat');
+            //                                return false;
+            //                            }
+            //                        })
+            //                            else if (_this.is('.fimilySeatChose')) {
+            //                                _this.removeClass('fimilySeatChose').removeClass('active').addClass('fimilySeat');
+            //                            }
+            if (_ifCanSeat) {
+
+                //点击选座
+                if (_this.is('.canSeat')) {
+                    _this.removeClass('canSeat').addClass('hasChose').addClass('active');
+                    $('.BtBtLf ul li').each(function () {
+                        var _isSeat = $(this);
+                        if (!_isSeat.is('.isSeat')) {
+
+                            _isSeat.html('<span>' + _this.attr('data-seat') + '</span><img src="./img/seat/x.png" alt="" draggable="false">');
+                            _isSeat.addClass('isSeat');
+                            return false;
+                        }
+                    })
+                } else if (_this.is('.vipSeat')) {
+                    _this.removeClass('vipSeat').addClass('vipSeatChose').addClass('active');
+                    $('.BtBtLf ul li').each(function () {
+                        var _isSeat = $(this);
+                        if (!_isSeat.is('.isSeat')) {
+
+                            _isSeat.html('<span>' + _this.attr('data-seat') + '</span><img src="./img/seat/x.png" alt="" draggable="false">');
+                            _isSeat.addClass('isSeat');
+                            return false;
+                        }
+                    })
+                } else if (_this.is('.star')) {
+                    _this.removeClass('star').addClass('starChose').addClass('active');
+                    $('.BtBtLf ul li').each(function () {
+                        var _isSeat = $(this);
+                        if (!_isSeat.is('.isSeat')) {
+                            _isSeat.html('<span>' + _this.attr('data-seat') + '</span><img src="./img/seat/x.png" alt="" draggable="false">');
+                            _isSeat.addClass('isSeat');
+                            return false;
+                        }
+                    })
+                }
+                //下面开始是取消座位的了
+                else if (_this.is('.vipSeatChose')) {
+                    _this.removeClass('vipSeatChose').removeClass('active').addClass('vipSeat');
+                    $('.BtBtLf li').each(function () {
+                        if (_this.attr('data-seat') == $(this).find('span').html()) {
+                            $(this).remove();
+                            $('.BtBtLf ul').append('<li><span>待选座位</span></li>');
+                            return false;
+                        }
+                    })
+
+
+                } else if (_this.is('.starChose')) {
+                    _this.removeClass('starChose').removeClass('active').addClass('star');
+                    $('.BtBtLf li').each(function () {
+                        if (_this.attr('data-seat') == $(this).find('span').html()) {
+                            $(this).remove();
+                            $('.BtBtLf ul').append('<li><span>待选座位</span></li>');
+                            return false;
+                        }
+                    })
+
+                } else if (_this.is('.hasChose')) {
+                    _this.removeClass('hasChose').removeClass('active').addClass('canSeat');
+                    $('.BtBtLf li').each(function () {
+                        if (_this.attr('data-seat') == $(this).find('span').html()) {
+                            $(this).remove();
+                            $('.BtBtLf ul').append('<li><span>待选座位</span></li>');
+                            return false;
+                        }
+                    })
+
+                }
+
+            }
+        })
+
+
+        $(document).on('click', '.BtBtLf ul li.isSeat>img', function () {
+            var _this = $(this);
+            _this.parent('li').remove();
+            $('.BtBtLf ul').append('<li><span>待选座位</span></li>');
+            $('.choseSeatRt li').each(function () {
+                if ($(this).attr('data-seat') == _this.siblings('span').html()) {
+                    if ($(this).is('.starChose')) {
+                        $(this).attr('class', '').addClass('star');
+                    } else if ($(this).is('.hasChose')) {
+                        $(this).attr('class', '').addClass('canSeat');
+                    } else if ($(this).is('.vipSeatChose')) {
+                        $(this).attr('class', '').addClass('vipSeat');
+                    }
+
+                }
+            })
+
+        })
+        $('.pay').on('click', function () {
+            $('#zzBG').show();
+            $('.SeatAlert').fadeIn();
+            setTimeout(function () {
+                $('#zzBG').hide();
+                $('.SeatAlert').fadeOut();
+            }, 5000)
+            setTimeout(function () {
+                $('.seatErrorAlert').fadeIn();
+            }, 10000)
+            setTimeout(function () {
+                location.href = 'pay.html';
+            }, 20000)
+        })
+        $(document).on('click', '.seatErrorAlert>a', function () {
+            $(this).parent().fadeOut()
+        })
+        $(document).on('click', '.newChoseSeat', function () {
+            $(this).parent().fadeOut()
+        })
+        $(document).on('click', '.INosure', function () {
+            $(this).parent().fadeOut()
+        })
+
+
+
+
+    });
+
+    //支付页面
+    $(document).on("pageInit", "#page-pay", function () {
+
+        $('#zfb').on('click', function () {
+            $('#payZfbAlert').fadeIn();
+            $('#zzBG').show();
+        })
+        $('#weixin').on('click', function () {
+            $('#payWxAlert').fadeIn();
+            $('#zzBG').show();
+        })
+        $('#count').on('click', function () {
+            $('#acountPayAlert').fadeIn();
+            $('#zzBG').show();
+        })
+        $(document).on('click', '.close', function () {
+            $(this).parent().fadeToggle();
+            $('#zzBG').hide();
+            location.href = 'wait.html'
+        })
+
+    });
+    // 等待结果页面
+    $(document).on("pageInit", "#page-wait", function () {
+
+        setTimeout(function () {
+            location.href = 'result.html';
+        }, 10000)
+    });
+
+    // 成功回调页页面
+    $(document).on("pageInit", "#page-result", function () {
+        //speedNum 速度
+        var _showImg = function (speedNum) {
+            clearInterval(timer);
+            var timer;
+            var speed = speedNum;
+            timer = setInterval(function () {
+                var _this_top = parseFloat($('.pAdminit').css('top'));
+                _this_top += speed;
+
+                if (_this_top >= 197) {
+                    clearInterval(timer);
+                    setTimeout(function () {
+                        $('.pAdminit').fadeOut("slow", function () {
+                            $('.pAdminit').css('top', '-3.45rem');
+                            clearTimeout(_timer);
+                            var _timer;
+                            _timer = setTimeout(function () {
+                                $('.pAdminit').show();
+                                _showImg(10);
+                            }, 1000)
+                        })
+                    }, 500)
+                } else {
+                    $('.pAdminit').css('top', (_this_top / 100) + 'rem');
+                }
+            }, 50)
+        }
+        _showImg(10)
+        var _timeBack = 10;
+        var _tiemr;
+        clearInterval(_tiemr);
+        _tiemr = setInterval(function () {
+            _timeBack--;
+            if (_timeBack == 0) {
+                clearInterval(_tiemr);
+            }
+            $('.systemInfo>time').html(_timeBack);
+        }, 1000)
+        var _timeBack2 = 10;
+        var _tiemr2;
+        clearInterval(_tiemr2);
+        _tiemr2 = setInterval(function () {
+            _timeBack2--;
+            if (_timeBack == 0) {
+                clearInterval(_tiemr2);
+            }
+            $('.resultError>p>time').html(_timeBack2 + 's');
+        }, 1000)
+
+
+
+    });
+
+    // 取票
+    $(document).on("pageInit", "#page-checkin", function () {
+        var _timeBack = 5;
+        var _tiemr;
+        clearInterval(_tiemr);
+        _tiemr = setInterval(function () {
+            _timeBack--;
+            if (_timeBack == 0) {
+                clearInterval(_tiemr);
+            }
+            $('.systemInfo>time').html(_timeBack);
+        }, 1000);
+        //调用数字键盘
+           $.zxfun.numberKeyBoard({
+                pageId:'#page-checkin',
+                inpuIdOne:'#inputOrder',
+                inpuIdTwo:'#inputFilmCode'
+           })
+        
+        
+        //二维码出场动画
+        $('.ewmCode').on('click', function () {
+            $('.howToGetFilm').animate({
+                right: '50%',
+                opacity: '1',
+                marginRight: '-3.5rem'
+            })
+        })
+        $('.close').on('click', function () {
+            $(this).parent().animate({
+                right: '-7rem',
+                opacity: '0',
+                marginRight: '0rem'
+            })
+        })
+        $(document).on('click','.seatErrorAlert a',function(){
+            $(this).parent().fadeOut();
+        })
+
+    });
+    
+    
+    // 取卖品
+    $(document).on("pageInit", "#page-getgoods", function () {
+        var _timeBack = 5;
+        var _tiemr;
+        clearInterval(_tiemr);
+        _tiemr = setInterval(function () {
+            _timeBack--;
+            if (_timeBack == 0) {
+                clearInterval(_tiemr);
+            }
+            $('.systemInfo>time').html(_timeBack);
+        }, 1000);
+        //调用数字键盘
+         $.zxfun.numberKeyBoard({
+                pageId:'#page-getgoods',
+                inpuIdOne:'#inputOrder',
+                inpuIdTwo:'#inputFilmCode'
+           })
+        
+        
+        //二维码出场动画
+        $('.ewmCode').on('click', function () {
+            $('.howToGetFilm').animate({
+                right: '50%',
+                opacity: '1',
+                marginRight: '-3.5rem'
+            })
+        })
+        $('.close').on('click', function () {
+            $(this).parent().animate({
+                right: '-7rem',
+                opacity: '0',
+                marginRight: '0rem'
+            })
+        })
+        $(document).on('click','.seatErrorAlert a',function(){
+            $(this).parent().fadeOut();
+        })
+    });
+    $.init();
+})($)

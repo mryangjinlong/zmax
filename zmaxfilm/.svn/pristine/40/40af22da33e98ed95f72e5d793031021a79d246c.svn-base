@@ -1,0 +1,1486 @@
+(function ($) {
+
+    //全局信息
+    var SelfServiceData = {
+        cinemaNO : "",   //当前影院编号
+        user : ""        //用户信息
+    };
+
+    //方法扩展
+    $.zxfun = {};
+    //适配
+    var adapt = function () {
+        var w = $('body').width();
+        var fontSize = w / 1080 * 100;
+        $('html').css('font-size', fontSize + 'px');
+    };
+    adapt();
+    //当窗口大小变化的时候调用函数
+    $(window).resize(function () {
+        adapt();
+    });
+
+    //初始化banner
+    $.zxfun.swiperBanner = new Swiper('#header', {
+        autoplay: 1000,
+        loop: true
+    });
+    $.zxfun.swiperBanner.startAutoplay();
+    //获取url参数值
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+
+    $.zxfun.get_unix_time = function (dateStr) {
+        var newstr = dateStr.replace(/-/g, '/');
+        var date = new Date(newstr);
+        var time_str = date.getTime().toString();
+        return time_str.substr(0, 10);
+    }
+    //时间如果为单位数补0
+    function fixZero(num, length) {
+        var str = "" + num;
+        var len = str.length;
+        var s = "";
+        for (var i = length; i-- > len;) {
+            s += "0";
+        }
+        return s + str;
+    }
+    //时间转换  now时间截格式
+    function formatDate(now, tyle) {
+        var now = new Date(now * 1000);
+        var year = now.getFullYear();
+        var month = now.getMonth() + 1;
+        var date = now.getDate();
+        var hour = now.getHours();
+        var minute = now.getMinutes();
+        var second = now.getSeconds();
+        var week = now.getDay();
+        if (tyle == 1) {
+            return year + "-" + fixZero(month, 2) + "-" + fixZero(date, 2) + "    " +
+                "" + fixZero(hour, 2) + ":" + fixZero(minute, 2);
+        } else if (tyle == 2) {
+            return '剩余' + fixZero(minute, 2) + '分' + fixZero(second, 2) + '秒';
+        } else if (tyle == 3) {
+            return fixZero(month, 2) + '月' + fixZero(date, 2) + '日';
+        } else if (tyle == 4) {
+            return year + "-" + fixZero(month, 2) + "-" + fixZero(date, 2);
+        } else if (tyle == 5) {
+            if (week == 1) {
+                return "周一";
+            } else if (week == 2) {
+                return "周二";
+            } else if (week == 3) {
+                return "周三";
+            } else if (week == 4) {
+                return "周四";
+            } else if (week == 5) {
+                return "周五";
+            } else if (week == 6) {
+                return "周六";
+            } else if (week == 0) {
+                return "周日";
+            }
+
+        } else if (tyle == 6) {
+            return fixZero(month, 2) + "-" + fixZero(date, 2) + "    " +
+                "" + fixZero(hour, 2) + ":" + fixZero(minute, 2);
+        } else if (tyle == 7) {
+            return fixZero(hour, 2) + ":" + fixZero(minute, 2);
+        } else if (tyle == 8) {
+            return fixZero(month, 2) + '-' + fixZero(date, 2);
+        }
+
+    }
+    //获取get值
+    $.zxfun.urlGet = function (key) {
+        var aQuery = window.location.href.split("?"); //取得Get参数
+        var aGET = new Array();
+        if (aQuery.length > 1) {
+            var aBuf = aQuery[1].split("&");
+            for (var i = 0, iLoop = aBuf.length; i < iLoop; i++) {
+                var aTmp = aBuf[i].split("="); //分离key与Value
+                aGET[aTmp[0]] = aTmp[1];
+            }
+        }
+        if (typeof (key) == "undefined") {
+            return aGET;
+        }
+        return aGET[key];
+    }
+    //数字键盘调用 只针对页面两个输入框
+    $.zxfun.numberKeyBoard = function (conf) {
+        var confExtend = ({
+            pageId: conf.pageId,
+            inpuIdOne: conf.inpuIdOne,
+            inpuIdTwo: conf.inpuIdTwo
+        }, conf);
+
+        var CaretPos = 0;
+        var _inputTab = true;
+        $('' + confExtend.inpuIdOne + '').focus(function () {
+            _inputTab = true;
+        });
+        $('' + confExtend.inpuIdTwo + '').focus(function () {
+            _inputTab = false;
+        });
+
+        $('' + confExtend.pageId + ' .numKeyBoard li').on('click', function () {
+            var _this = $(this);
+            $(this).addClass('check');
+            setTimeout(function () {
+                $('' + confExtend.pageId + ' .numKeyBoard li').removeClass('check');
+            }, 100)
+            //判断开关，如果是true输入在第一个框 否则输入在第二个
+            //模拟键盘 未封装
+            if (_inputTab) {
+                if (_this.is('.reinput')) {
+                    $('' + confExtend.inpuIdOne + '').val('');
+                } else if (_this.is('.deleteBack')) {
+                    var _oldVal = $('' + confExtend.inpuIdOne + '').val();
+                    if (CaretPos >= 1) {
+                        var _arr = _oldVal.split('');
+                        _arr.splice(CaretPos - 1, 1);
+                        $('' + confExtend.inpuIdOne + '').val(_arr.join(''));
+                        CaretPos--;
+                    }
+                } else {
+                    var _oldVal = $('' + confExtend.inpuIdOne + '').val();
+                    if (CaretPos >= 1) {
+                        var _arr = _oldVal.split('');
+                        _arr.splice(CaretPos, 0, $(this).html());
+                        $('' + confExtend.inpuIdOne + '').val(_arr.join(''));
+                        CaretPos++;
+                    } else {
+                        var _newVal = $(this).html();
+                        $('' + confExtend.inpuIdOne + '').val(_oldVal + _newVal);
+                    }
+                }
+                $('' + confExtend.inpuIdOne + '').get(0).setSelectionRange(CaretPos, CaretPos)
+                $('' + confExtend.inpuIdOne + '').get(0).focus()
+            } else {
+                if (_this.is('.reinput')) {
+                    $('' + confExtend.inpuIdTwo + '').val('');
+                } else if (_this.is('.deleteBack')) {
+                    var _oldVal = $('' + confExtend.inpuIdTwo + '').val();
+                    if (CaretPos >= 1) {
+                        var _arr = _oldVal.split('');
+                        _arr.splice(CaretPos - 1, 1);
+                        $('' + confExtend.inpuIdTwo + '').val(_arr.join(''));
+                        CaretPos--;
+                    }
+                } else {
+                    var _oldVal = $('' + confExtend.inpuIdTwo + '').val();
+                    if (CaretPos >= 1) {
+                        var _arr = _oldVal.split('');
+                        _arr.splice(CaretPos, 0, $(this).html());
+                        $('' + confExtend.inpuIdTwo + '').val(_arr.join(''));
+                        CaretPos++;
+                    } else {
+                        var _newVal = $(this).html();
+                        $('' + confExtend.inpuIdTwo + '').val(_oldVal + _newVal);
+                    }
+                }
+                $('' + confExtend.inpuIdTwo + '').get(0).setSelectionRange(CaretPos, CaretPos)
+                $('' + confExtend.inpuIdTwo + '').get(0).focus()
+            }
+
+            var _inputOne= $('' + confExtend.inpuIdOne + '').val();
+            var _inputTwo= $('' + confExtend.inpuIdTwo + '').val();
+            if(_inputOne.length>=1&&_inputTwo.length>=1){
+                $('' + conf.getBtn + '').addClass('active');
+            }else{
+                $('' + conf.getBtn + '').removeClass('active');
+            }
+
+        })
+        $('' + confExtend.inpuIdOne + '').blur(function () {
+            var _this = $(this).get(0);
+            getCursortPosition(_this);
+        });
+        $('' + confExtend.inpuIdTwo + '').blur(function () {
+            var _this = $(this).get(0);
+            getCursortPosition(_this);
+        });
+
+        function getCursortPosition(ctrl) {
+            if (document.selection) {
+                ctrl.focus();
+                var Sel = document.selection.createRange();
+                Sel.moveStart('character', -ctrl.value.length);
+                CaretPos = Sel.text.length;
+            }
+            // Firefox support
+            else if (ctrl.selectionStart || ctrl.selectionStart == '0') {
+                CaretPos = ctrl.selectionStart;
+            }
+            //return (CaretPos);
+        }
+    }
+
+    // 全键盘调用 使用方法：传入pageId 目标输入框  如果只有一个如果框就一个 两个就传两个（inpuIdOne跟inpuIdTwo）
+    $.zxfun.keyBod = function (conf) {
+        var confExtend = ({
+            pageId: conf.pageId,
+            inpuIdOne: conf.inpuIdOne
+        }, conf);
+        //如果第二个框存在的话
+        if (conf.inpuIdTwo) {
+            confExtend.inpuIdTwo = conf.inpuIdTwo;
+        }
+        var CaretPos = 0;
+        var _inputTab = true;
+        $('' + confExtend.inpuIdOne + '').focus(function () {
+            _inputTab = true;
+        });
+        //如果第二个框存在的话
+        if (confExtend.inpuIdTwo) {
+            $('' + confExtend.inpuIdTwo + '').focus(function () {
+                _inputTab = false;
+            });
+        }
+        //分大小写
+
+        var _keBoxObj = confExtend.pageId + ' #keyBoxAllSmall .key,' + confExtend.pageId + ' #keyBoxAllBig .key';
+        $(document).off('click').on('click', '' + _keBoxObj + '', function () {
+            var _this = $(this);
+            $(this).addClass('check');
+            setTimeout(function () {
+                    $('' + _keBoxObj + '').removeClass('check');
+                }, 100)
+                //判断开关，如果是true输入在第一个框 否则输入在第二个
+                //模拟键盘 未封装
+            if (_inputTab) {
+                if (_this.is('.deleteBack')) {
+                    var _oldVal = $('' + confExtend.inpuIdOne + '').val();
+                    if (CaretPos >= 1) {
+                        var _arr = _oldVal.split('');
+                        _arr.splice(CaretPos - 1, 1);
+                        $('' + confExtend.inpuIdOne + '').val(_arr.join(''));
+                        CaretPos--;
+                    }
+                } else {
+                    var _oldVal = $('' + confExtend.inpuIdOne + '').val();
+                    if (CaretPos >= 1) {
+                        var _arr = _oldVal.split('');
+                        _arr.splice(CaretPos, 0, $(this).html());
+                        $('' + confExtend.inpuIdOne + '').val(_arr.join(''));
+                        CaretPos++;
+                    } else {
+                        var _newVal = $(this).html();
+                        $('' + confExtend.inpuIdOne + '').val(_oldVal + _newVal);
+                    }
+                }
+                $('' + confExtend.inpuIdOne + '').get(0).setSelectionRange(CaretPos, CaretPos)
+                $('' + confExtend.inpuIdOne + '').get(0).focus()
+            } else {
+                if (_this.is('.deleteBack')) {
+                    var _oldVal = $('' + confExtend.inpuIdTwo + '').val();
+                    if (CaretPos >= 1) {
+                        var _arr = _oldVal.split('');
+                        _arr.splice(CaretPos - 1, 1);
+                        $('' + confExtend.inpuIdTwo + '').val(_arr.join(''));
+                        CaretPos--;
+                    }
+                } else {
+                    var _oldVal = $('' + confExtend.inpuIdTwo + '').val();
+                    if (CaretPos >= 1) {
+                        var _arr = _oldVal.split('');
+                        _arr.splice(CaretPos, 0, $(this).html());
+                        $('' + confExtend.inpuIdTwo + '').val(_arr.join(''));
+                        CaretPos++;
+                    } else {
+                        var _newVal = $(this).html();
+                        $('' + confExtend.inpuIdTwo + '').val(_oldVal + _newVal);
+                    }
+                }
+                $('' + confExtend.inpuIdTwo + '').get(0).setSelectionRange(CaretPos, CaretPos)
+                $('' + confExtend.inpuIdTwo + '').get(0).focus()
+            }
+        })
+        $('' + confExtend.inpuIdOne + '').blur(function () {
+            var _this = $(this).get(0);
+            getCursortPosition(_this);
+        });
+
+        //如果第二个框存在的话
+        if (confExtend.inpuIdTwo) {
+            $('' + confExtend.inpuIdTwo + '').blur(function () {
+                var _this = $(this).get(0);
+                getCursortPosition(_this);
+            });
+        }
+
+        function getCursortPosition(ctrl) {
+            if (document.selection) {
+                ctrl.focus();
+                var Sel = document.selection.createRange();
+                Sel.moveStart('character', -ctrl.value.length);
+                CaretPos = Sel.text.length;
+            }
+            // Firefox support
+            else if (ctrl.selectionStart || ctrl.selectionStart == '0') {
+                CaretPos = ctrl.selectionStart;
+            }
+            //return (CaretPos);
+        }
+    }
+
+
+
+    //首页面初始化
+    $(document).on("pageInit", "#page-index", function () {
+
+    });
+    //排期页初始化
+    $(document).on("pageInit", "#page-plan", function () {
+
+        var TimeSwiper = new Swiper('.planTime', {
+            slidesPerView: 5,
+            paginationClickable: true,
+            spaceBetween: 0,
+            freeMode: true
+        });
+
+
+
+        //        滚动条
+        //        $('.planBt').jScrollPane();
+
+
+        //选择影院
+        $(document).on('click', '.downIcon', function () {
+            $('#cityChose').show();
+            $('#cinemaChose').hide();
+            $('.choseCinema').slideToggle();
+            $('.cinemaTop img').remove();
+        });
+        $(document).on('click', '.cinemaTop a', function () {
+            $('.choseCinema').slideUp();
+        });
+        $(document).on('click', '.cinemaTop img', function () {
+            $('#cityChose').fadeToggle();
+            $('#cinemaChose').fadeToggle();
+            $('.cinemaTop img').remove();
+        });
+
+//***********************************************************************************************************************************************************************************
+//=======================================================================排期具体业务开始=============================================================================================
+//***********************************************************************************************************************************************************************************
+        function FilmData(filmNo, filmName , copyType , imgUrl, score, plan ) {
+            this.filmNo = filmNo;
+            this.filmName = filmName;
+            this.copyType = copyType;
+            //后面三个还没有完成
+            this.imgUrl = imgUrl;
+            this.score = score;
+            this.plan = plan;
+
+        }
+        //代表整个排期页面
+        var planPage = {
+            planTop: $(".planTop"),
+            planBody: $(".planBody"),
+            planTime: $(".planTime"),
+            planBt: $(".planBt"),
+            cityChose: $("#cityChose"),
+            cinemaChose : $("#cinemaChose"),
+            defaultFilmNo : "",
+            defaultStartTime : "",
+            //影院状态  1正常 2关闭
+            Cinema_Status: {
+                NORMAL: 1,
+                CLOSE: 2
+            },
+            Plan_Status: {
+                NORMAL: 1,
+                CLOSE: 2
+            },
+            Sale_Status: {
+                NORMAL: 1,
+                CLOSE: 2
+            },
+            CopyType : {
+
+            },
+            //初始化
+            init: function () {
+                this.initData();
+
+                this.initPage();
+
+            },
+            //初始化所有数据
+            initData: function () {
+                if(!(this.cinemas)){
+                    this.cinemas = eval("(" + window.app.getCinemas() + ")"); //所有影院信息
+                }
+                if(!(this.cinema)){
+                    //测试语句
+                    for(var i = 0 ; i < this.cinemas.length ; i ++){
+                        var cinema = this.cinemas[i];
+                        if(cinema.cinemaNo == "35012401"){
+                            this.cinema = cinema;
+                            break;
+                        }
+                    }
+                    // this.cinema = this.cinemas[0]; //当前影院信息  默认所有影院中的第一个
+                }
+
+                this.plan = eval("(" + window.app.getPlans(this.cinema.cinemaNo) + ")"); //所有排期信息
+               if(this.plan.length > 0){
+                   this.defaultFilmNo = this.plan[0].filmNo; //默认filmNo  默认为所有排期的第一部影片
+                   this.defaultStartTime = this.plan[0].startTime.substring(0, 10); //默认开始时间为所有排期中第一部影片的开始时间
+               }
+                this.defaultCity = this.cinema.city;
+                this.initFilmDatas();
+                this.initCitys();
+                SelfServiceData.cinemaNO = this.cinema.cinemaNo;
+
+            },
+            //初始化filmDatas
+            initFilmDatas: function () {
+                this.filmDatas = [];
+                var filmNames = [];
+                for (var i = 0; i < this.plan.length; i++) {
+                    var data = this.plan[i];
+                    if ($.inArray(data.filmName, filmNames) != -1)
+                        continue;
+                    filmNames.push(data.filmName);
+                    this.filmDatas.push(new FilmData(data.filmNo, data.filmName, data.copyType));
+                }
+            },
+            initCitys: function () {
+                this.citys = [];
+                if(this.citys.length == 0){
+                    for (var i = 0; i < this.cinemas.length; i++) {
+                        var cinema = this.cinemas[i];
+                        if ($.inArray(cinema.city, this.citys) == -1) {
+                            this.citys.push(cinema.city);
+                        }
+                    }
+                }
+
+            },
+            //初始化页面
+            initPage: function () {
+
+                this.buildPlanTop();
+                this.buildPlanBody();
+                this.buildPlanTime();
+                this.buildCityChose();
+            },
+            buildPlanTop: function () {
+                this.planTop.empty();
+                var html = [];
+                if (this.cinema.status == this.Cinema_Status.NORMAL) {
+                    html.push('<h1>正在售票</h1>');
+                } else {
+                    html.push('<h1>关闭售票</h1>');
+                }
+                html.push('<a class="toBack" href="index.html"></a>');
+                html.push('<a class="ciname" href="#">' + this.cinema.cinemaName + '</a>');
+                html.push('<img class="downIcon" src="./img/inshell/down.png" alt="" draggable="false">');
+                this.planTop.append(html.join(""));
+            },
+            //构建planBody
+            buildPlanBody: function () {
+                this.planBody.empty();
+                var html = [];
+
+                html.push('<ul class="swiper-wrapper">');
+                for (var i = 0; i < this.filmDatas.length; i++) {
+                    var data = this.filmDatas[i];
+                    html.push('<li filmNo="' + data.filmNo + '" class="swiper-slide">');
+                    html.push('<img src="./img/inshell/1.jpg" alt="" draggable="false">');
+                    html.push('<div class="indexAll">' + (i + 1) + '/' + this.filmDatas.length + '</div>');
+                    html.push('<p>' + data.filmName + '</p><em>8.3</em>'); //TODO 分数 影片制式
+                    html.push('<div class="film3d"></div>');
+                    if(data.copyType == "3d"){
+                        html.push('<div class="film3d"></div>');
+                    }else if(data.copyType == "3dmax"){
+                        html.push('<div class="film3d"></div>');
+                        html.push('<div class="filmMax3d"></div>');
+                    }else if(data.copyType == ""){
+                        html.push('<div class="willShell"></div>');
+                    }
+
+                    html.push('</li>')
+                }
+
+                html.push('</ul>');
+                this.planBody.append(html.join(""));
+
+                //添加planBody的事件
+                var FilmSwiper = new Swiper('.planBody', {
+                    paginationClickable: true,
+                    effect: 'coverflow',
+                    grabCursor: true,
+                    centeredSlides: true,
+                    slidesPerView: 'auto',
+                    coverflow: {
+                        rotate: 30,
+                        stretch: 0,
+                        depth: 20,
+                        modifier: 1,
+                        slideShadows: false
+                    },
+                    onTap: function (swiper) {
+                        FilmSwiper.slideTo(FilmSwiper.clickedIndex, 1000, false); //切换到第一个slide，速度为1秒 第三个是回调行数
+                        var li = $(".planBody > ul").find("li");
+                        li = li[FilmSwiper.clickedIndex];
+                        var filmNo = $(li).attr("filmNo");
+                        if (filmNo) {
+                            planPage.buildPlanTime(filmNo);
+                        }
+                    }
+                });
+
+            },
+            buildPlanTime: function (filmNo) {
+
+                if (!filmNo) {
+                    filmNo = this.defaultFilmNo;
+                }
+                this.planTime.empty();
+                var html = [];
+                html.push('<ul class="swiper-wrapper">');
+                var dateStrs = [];
+                var dateStrTemp;
+                for (var i = 0; i < this.plan.length; i++) {
+                    var data = this.plan[i];
+
+                    var dateStr = data.startTime.substring(0, 10);
+                    if (data.filmNo == filmNo && ($.inArray(dateStr, dateStrs) == -1)) {
+                        dateStrs.push(dateStr);
+                        if (dateStrs.length == 1) {
+                            dateStrTemp = dateStr;
+                            html.push('<li filmNo="' + data.filmNo + '" dateStr="' + dateStr + '" class="swiper-slide active">');
+                        } else {
+                            html.push('<li filmNo="' + data.filmNo + '" dateStr="' + dateStr + '" class="swiper-slide">');
+                        }
+                        var dateTemp = $.zxfun.get_unix_time(data.startTime);
+                        html.push('<h3>' + formatDate(dateTemp, 5) + '</h3>');
+                        html.push('<h2>' + formatDate(dateTemp, 3) + '</h2>');
+                    }
+                }
+
+                html.push('</ul>');
+                this.planTime.append(html.join(""));
+
+                //添加事件
+                $('.planTime li').on('click', function () {
+                    $('.planTime li').removeClass('active');
+                    $(this).addClass('active');
+                    var filmNo = $(this).attr("filmNo");
+                    var dateStr = $(this).attr("dateStr");
+
+                    planPage.buildPlanBt(filmNo, dateStr);
+
+                });
+
+                this.buildPlanBt(filmNo, dateStrTemp);
+
+
+            },
+            buildPlanBt: function (filmNo, dateStr) {
+                if (!filmNo) {
+                    filmNo = this.defaultFilmNo;
+                }
+                if (!dateStr) {
+                    dateStr = this.defaultStartTime;
+                }
+                this.planBt.empty();
+
+                var html = [];
+                var showPlanNum = 0; //当前日期显示的排期数量
+                for (var i = 0; i < this.plan.length; i++) {
+                    var data = this.plan[i];
+                    if (data.saleStatus != this.Sale_Status.CLOSE && data.planStatus != this.Plan_Status.CLOSE) {
+                        var dateTemp = data.startTime.substring(0, 10); //开始放映日期
+
+                        if (data.filmNo == filmNo && dateTemp == dateStr) {
+                            showPlanNum++;
+                            var startTimeTemp = data.startTime.substring(11, 16); //开始放映时间
+                            var startTime = new Date(data.startTime.replace(/-/g, "/"));
+                            var endTime = startTime;
+                            //处理结束时间
+                            var playMin = parseInt(data.totalTime);
+                            var hour = playMin / 60;
+                            var minute = playMin % 60;
+                            endTime.setHours(endTime.getHours() + hour);
+                            endTime.setMinutes(endTime.getMinutes() + minute);
+                            var endTimeStr = endTime.getHours() + ":" + endTime.getMinutes();
+
+                            var isStopSale = ((new Date().getTime() - startTime.getTime()) >= 0); //是否已经停止售票  判断依据开始时间是否已过
+
+
+                            html.push('<ul class="dragFilmPlan">');
+                            html.push('<li cinemaNo="'+this.cinema.cinemaNo +'" hallNo="'+data.hallNo+'">');
+
+                            if (isStopSale) {
+                                html.push('<ul class="filmUl stopShell">');
+                            } else {
+                                html.push('<ul class="filmUl ">');
+                            }
+
+                            html.push('<li>');
+                            html.push('<h2>' + startTimeTemp + '</h2>');
+                            html.push('<h3>' + endTimeStr + '散场</h3>');
+                            html.push('</li>');
+                            html.push('<li>');
+                            html.push('<h2>' + data.copyLanguage + '</h2>');
+                            html.push('<h3>' + data.copyType + '</h3>');
+                            html.push('</li>');
+                            html.push('<li>');
+                            html.push('<h2>' + data.hallName + '</h2>');
+                            html.push('<h3>座位充足：70%-100%</h3>');
+                            html.push('</li>');
+                            html.push('<li>');
+                            html.push('<h2>¥' + data.lowestPrice + '<em>起</em></h2>');
+                            html.push('<del>¥'+data.listingPrice+'</del>');
+                            html.push('</li>');
+                            html.push('<li>');
+                            if (isStopSale) {
+                                html.push('<a href="#">停止售票</a>');
+                            } else {
+                                var preFeatureAppNo = "";   //上一场排期NO
+                                var nextFeatureAppNo = "";  //下一场排期NO
+
+                                var href = "seat.html?cinemaNo=" + this.cinema.cinemaNo + "&featureAppNo=" + data.featureAppNo ;
+
+                                html.push('<a href="'+href+'">选座购票</a>');
+                            }
+
+                            html.push('</li>');
+                            html.push('<img src="img/inshell/border.png" alt="">');
+                            html.push('</ul>');
+                            html.push('</li>');
+                            html.push('</ul>');
+                        }
+                    }
+
+                }
+
+                if (showPlanNum == 0) {
+                    html.push('<div class="planNone">');
+                    html.push('<img src="./img/inshell/calendar.png" alt="" draggable="false">');
+                    html.push('<p>今天所有场次已结束放映</p>');
+                    html.push('</div>');
+                }
+                this.planBt.append(html.join(""));
+
+                //停售提示框
+                $(document).on('click', '.stopShell li', function () {
+                    $('.alert').show();
+                    clearTimeout(timer);
+                    var timer;
+                    timer = setTimeout(function () {
+                        $('.alert').hide();
+                    }, 2000)
+                });
+            },
+            buildCityChose: function () {
+                this.cityChose.empty();
+                var html = [];
+                html.push("<ul>");
+                for (var i = 0; i < this.citys.length; i++) {
+                    html.push("<li city='"+ this.citys[i] + "'>" + this.citys[i] + "</li>");
+                }
+                html.push("</ul>");
+                this.cityChose.append(html.join(""));
+
+                $(document).on('click', '#cityChose ul li', function () {
+
+                    var city = $(this).attr("city");
+                    planPage.buildCinemaChose(city);
+
+                    var _this = $(this);
+                    $('#cityChose').fadeOut();
+                    $('#cinemaChose').fadeIn();
+                    $('.cinemaTop span').html(_this.html());
+                    var _downImg = '<img src="./img/inshell/redDown.png" alt="" draggable="false">';
+                    $('.cinemaTop').append(_downImg);
+
+
+                });
+            },
+            buildCinemaChose : function (city) {
+                this.cinemaChose.empty();
+                if(!city) city = this.defaultCity;
+                var html = [];
+                html.push('<ul>');
+                for(var i = 0 ; i < this.cinemas.length ; i ++){
+                    var data = this.cinemas[i];
+                    if(data.city == city){
+                        html.push('<li cinemaNo="'+data.cinemaNo+'">');
+                        html.push('<a href="javascript:;">');
+                        html.push('<h2>'+data.cinemaName+'</h2>');
+                        html.push('<h3>'+data.address+'</h3>');
+                        html.push('<img src="./img/inshell/right.png" alt="" draggable="false">');
+                        html.push('</a>');
+                        html.push('</li>');
+                    }
+                }
+                html.push('</ul>');
+                this.cinemaChose.append(html.join(""));
+
+                $(document).on('click', '#cinemaChose ul li>a', function () {
+
+                    var cinemaNo = $(this).attr("cinemaNo");
+                    for(var i = 0 ; i < planPage.cinemas.length ; i++){
+                        var cinema = planPage.cinemas[i];
+                        if(cinemaNo == cinema.cinemaNo){
+                            planPage.cinema = cinema;
+                            break;
+                        }
+                    }
+
+                    planPage.init();
+
+                    var _this = $(this);
+                    $('.choseCinema').slideUp();
+                    var _ciname = _this.find('h2').html();
+                    $('.planTop .ciname').html(_ciname);
+                    $('.cinemaTop img').remove();
+                });
+
+            }
+        };
+
+        planPage.init();
+//***********************************************************************************************************************************************************************************
+//=======================================================================排期具体业务结束=============================================================================================
+//***********************************************************************************************************************************************************************************
+
+    });
+
+    //选座页面初始化
+    $(document).on("pageInit", "#page-seat", function () {
+
+        $(document).on('click', '.BtBtLf ul li.isSeat>img', function () {
+            var _this = $(this);
+            _this.parent('li').remove();
+            $('.BtBtLf ul').append('<li><span>待选座位</span></li>');
+            $('.choseSeatRt li').each(function () {
+                if ($(this).attr('data-seat') == _this.siblings('span').html()) {
+                    if ($(this).is('.starChose')) {
+                        $(this).attr('class', '').addClass('star');
+                    } else if ($(this).is('.hasChose')) {
+                        $(this).attr('class', '').addClass('canSeat');
+                    } else if ($(this).is('.vipSeatChose')) {
+                        $(this).attr('class', '').addClass('vipSeat');
+                    }
+
+                }
+            })
+
+        })
+        $(document).on('click', '.seatErrorAlert>a', function () {
+            $(this).parent().fadeOut()
+        })
+        $(document).on('click', '.newChoseSeat', function () {
+            $(this).parent().fadeOut()
+        })
+        $(document).on('click', '.INosure', function () {
+            $(this).parent().fadeOut()
+        })
+
+//***********************************************************************************************************************************************************************************
+//=======================================================================选座具体业务开始=============================================================================================
+//***********************************************************************************************************************************************************************************
+        /**
+         * 进入选座页面需要传以下参数    cinemaNo   featureAppNo
+         * @type {{seatTop: (*), init: init, initData: initData, initPage: initPage, initSeatTop: initSeatTop}}
+         */
+        var seatPage = {
+            seatTop : $(".seatTop"),
+            bodyTop : $(".bodyTop"),
+            //当前影厅的信息
+            hallData : {
+                maxRowNum : 1,      //最大行坐标
+                maxColNum : 1,      //最大列坐标
+                minRowNum : 1,      //最小行坐标
+                minColNum : 1       //最小列坐标
+            },
+            init : function () {
+                window.app.console("seatPage Init");
+                this.initData();
+                this.initPage();
+                this.addEvent();
+            },
+            initData : function () {
+                //所有影院信息
+                this.cinemas = eval("(" + window.app.getCinemas() + ")");
+
+                //初始化当前页面的影院
+                var cinemaNo = getQueryString("cinemaNo");
+
+                for(var i = 0 ; i < this.cinemas.length ; i++){
+                    var cinema = this.cinemas[i];
+                    if(cinemaNo == cinema.cinemaNo){
+                        this.cinema = cinema;
+                        break;
+                    }
+                }
+
+                this.plans = eval("(" + window.app.getPlans(this.cinema.cinemaNo) + ")"); //所有排期信息
+
+                var featureAppNo = getQueryString("featureAppNo");                          //排期ID
+
+                for(var i = 0 ; i < this.plans.length ; i++){
+                    var plan = this.plans[i];
+                    if(featureAppNo == plan.featureAppNo){
+                        this.plan = plan;
+                        break;
+                    }
+                }
+                this.thisFilmNoPlans = [];                                                  //当前电影的排期
+                for(var i = 0 ; i < this.plans.length ; i++){
+                    var plan = this.plans[i];
+                    if(plan.filmNo == this.plan.filmNo) {
+                        this.thisFilmNoPlans.push(plan);
+                    }
+                }
+
+                //对当前电影的排期进行排序
+                this.thisFilmNoPlans.sort(function (a,b) {
+                    var dateA = new Date(a.startTime.replace(/-/g, "/"));
+                    var dateB = new Date(b.startTime.replace(/-/g, "/"));
+                    return dateA.getTime() - dateB.getTime();
+                });
+
+                for(var i = 0 ; i < this.thisFilmNoPlans.length ; i++){
+                    var plan = this.thisFilmNoPlans[i];
+                    if(plan.featureAppNo == this.plan.featureAppNo){
+                        if(i == 0){
+                            this.preFeatureAppNo = null;
+                        }else{
+                            this.preFeatureAppNo = this.thisFilmNoPlans[i - 1].featureAppNo;
+                        }
+                        if(i == (this.thisFilmNoPlans.length - 1)){
+                            this.nextFeatureAppNo = null;
+                        }else{
+                            this.nextFeatureAppNo = this.thisFilmNoPlans[i + 1].featureAppNo;
+                        }
+                    }
+                }
+
+                this.hallSites =  eval("(" + window.app.getHallSites(this.cinema.cinemaNo,this.plan.hallNo) + ")");                     //影厅对应的所有座位信息  1维数组
+
+                //初始化 hallData
+                for(var i = 0 ; i < this.hallSites.length ; i++){
+                    var hallSite = this.hallSites[i];
+                    if(parseInt(hallSite.graphRow) > this.hallData.maxRowNum) this.hallData.maxRowNum = hallSite.graphRow;
+                    if(parseInt(hallSite.graphRow) < this.hallData.minRowNum) this.hallData.minRowNum = hallSite.graphRow;
+                    if(parseInt(hallSite.graphCol) > this.hallData.maxColNum) this.hallData.maxColNum = hallSite.graphCol;
+                    if(parseInt(hallSite.graphCol) < this.hallData.minColNum) this.hallData.minColNum = hallSite.graphCol;
+
+                }
+
+                this.hallSitesTwoD = [];                    //影厅对应的所有座位信息  2维数组
+                this.planSeatsTwoD = [];                    //排期的座位状态          2维数组
+                for(var i = this.hallData.minRowNum ; i <= this.hallData.maxRowNum ; i++){
+                    var temp1 = [];
+                    this.hallSitesTwoD[i] = temp1;
+                    var temp2 = [];
+                    this.planSeatsTwoD[i] = temp2;
+                }
+
+                for(var i = 0 ; i < this.hallSites.length ; i++){
+                    var hallSite = this.hallSites[i];
+                    var j = parseInt(hallSite.graphRow);
+                    var k = parseInt(hallSite.graphCol);
+                    this.hallSitesTwoD[j][k] = hallSite;
+                }
+
+                //排期的座位状态
+                this.planSeats =  eval("(" + window.app.getPlanSeats(this.cinema.cinemaNo,this.plan.featureAppNo,"Available") + ")");
+                for(var i = 0 ; i < this.planSeats.length ; i++){
+                    var planSeat = this.planSeats[i];
+                    var j = parseInt(planSeat.graphRow);
+                    var k = parseInt(planSeat.graphCol);
+                    this.planSeatsTwoD[j][k] = planSeat;
+                }
+
+
+                //初始化用户信息
+                var userStr = window.app.getUserFromCache();
+                if(userStr) SelfServiceData.user = eval("("+userStr+")");
+            },
+            initPage : function () {
+                this.initSeatTop();
+                this.initBodyTop();
+            },
+            initSeatTop :function () {
+                this.seatTop.empty();
+                var html = [];
+                html.push('<h1>'+this.plan.filmName+'</h1>');
+                html.push('<a class="toBack" href="#page-plan"></a>');
+                if(SelfServiceData.user){
+                    html.push('<div class="backIndex">安全退出</div>');
+                }
+
+                this.seatTop.append(html.join(""));
+            },
+            initBodyTop : function () {
+                this.bodyTop.empty();
+                var html = [];
+                html.push('<div class="topScrol"></div>');
+                html.push('<p class="filmInfo">'+ this.cinema.cinemaName+' '+ this.plan.filmName +' 荧幕 </p>');
+
+                html.push('<div class="seatImg">');
+                html.push('<img src="./img/seat/small/canSeat.png" alt="" draggable="false">');
+                html.push('<span>可选</span>');
+                html.push('<img src="./img/seat/small/hasSell.png" alt="" draggable="false">');
+                html.push('<span>已售</span>');
+                html.push('<img src="./img/seat/small/hasChose.png" alt="" draggable="false">');
+                html.push('<span>已选</span>');
+                html.push('<img src="./img/seat/small/star.png" alt="" draggable="false">');
+                html.push('<span>黄金座</span>');
+                html.push('<img src="./img/seat/small/vip.png" alt="" draggable="false">');
+                html.push('<span>vip座</span>');
+                html.push('<img src="./img/seat/small/ql.png" alt="" draggable="false" style="width:0.76rem">');
+                html.push('<span>情侣座</span>');
+                html.push('</div>');
+
+                html.push('<div class="choseSeat">');
+                html.push('<div class="choseSeatCT">');
+
+                html.push('<div class="choseSeatLf">');
+                html.push('<ul>');
+
+                for(var i = this.hallData.minRowNum ; i <= this.hallData.maxRowNum ; i++){
+                    if(this.hallData.minRowNum == 0){
+                        html.push('<li>' +(i+1)+ '</li>');
+                    }else{
+                        html.push('<li>' + i + '</li>');
+                    }
+                }
+                html.push('</ul>');
+                html.push('</div>');
+
+                html.push('<div class="choseSeatRt">');
+                //这里写for循环
+                for(var i = this.hallData.minRowNum ; i <= this.hallData.maxRowNum ;i++){
+                    html.push('<ul>');
+                    for(var j = this.hallData.minColNum ; j <= this.hallData.maxColNum ; j++){
+                        var hallSite = this.hallSitesTwoD[i][j];
+                        var planSeat = this.planSeatsTwoD[i][j];
+
+                        if(!hallSite){
+                            html.push('<li>'+j+'</li>');   //没有座位
+                        }else{
+                            var seatNo = hallSite.seatCol;
+                            if(planSeat){
+                                //位置可售
+                                var seatMsg = hallSite.seatRow + "排" + hallSite.seatCol + "座";
+                                html.push('<li class="canSeat" data-seat="'+seatMsg+'">'+seatNo+'</li>');
+                            }else{
+                                //位置不可售
+                                html.push('<li class="hasSell">'+seatNo+'</li>');
+                            }
+                        }
+
+                    }
+                    html.push('</ul>');
+                }
+
+                html.push('</div>');
+
+                html.push('</div>');
+
+                var prevHref;
+                var nextHref
+                if(seatPage.preFeatureAppNo){
+                    prevHref = "seat.html?cinemaNo=" + seatPage.cinema.cinemaNo + "&featureAppNo=" + seatPage.preFeatureAppNo ;
+                }else{
+                    prevHref = "#";
+                }
+                if(seatPage.nextFeatureAppNo){
+                    nextHref = "seat.html?cinemaNo=" + seatPage.cinema.cinemaNo + "&featureAppNo=" + seatPage.nextFeatureAppNo ;
+                }else{
+                    nextHref = "#";
+                }
+
+                html.push('<div class="prev"><a href="'+prevHref+'">上一场</a></div>');
+                html.push('<div class="next"><a href="'+nextHref+'">下一场</a></div>');
+                html.push('</div>');
+
+                this.bodyTop.append(html.join(""));
+            },
+            addEvent : function () {
+
+                //选座页面li的宽度   让ul宽度随li宽度展开
+                $('.choseSeatRt ul').each(function () {
+                    var _liWidth = $(this).children('li').outerWidth(true);
+                    var _liLength = $(this).children('li').length;
+                    //            情侣座操作
+                    //            var _fimilySeat = $(this).children('.fimilySeat').length;
+                    //            var _fimilySeatChose = $(this).children('.fimilySeatChose').length;
+                    //            var _ulWidth = (_liWidth * _liLength + _fimilySeat * _liWidth + _fimilySeatChose * _liWidth) + 20;
+                    var _ulWidth = (_liWidth * _liLength) + 20;
+                    $(this).css('width', _ulWidth);
+                });
+                //选座 左边块的半透明固定
+                $('.choseSeatCT').scroll(function () {
+                    $('.choseSeatLf').css('left', ($('.choseSeatCT').scrollLeft()) / 100 + 'rem');
+                });
+
+                $('.choseSeatRt ul li').on('click', function () {
+                    var _this = $(this);
+                    var _activeTength = $('.BtBtLf ul li.isSeat').length;
+                    var _ifCanSeat = true;
+
+                    if (_activeTength == 4) {
+                        _ifCanSeat = false;
+                    }
+                    //              情侣座判断
+                    //            else if (_activeTength == 3) {
+                    //                if (_this.is('.fimilySeat')) {
+                    //                    _ifCanSeat = false;
+                    //                }
+                    //            }
+                    //                else if (_this.is('.fimilySeat')) {
+                    //                    _this.removeClass('fimilySeat').addClass('fimilySeatChose').addClass('active');
+                    //                    $('.BtBtLf ul li').each(function () {
+                    //                            var _isSeat = $(this);
+                    //                            if (!_isSeat.is('.isSeat')) {
+                    //                                _isSeat.html('<span>' + _this.attr('data-seat') + '</span><img src="./img/seat/x.png" alt="" draggable="false">');
+                    //                                _isSeat.addClass('isSeat').addClass('qlSeat');
+                    //                                _isSeat.next().html('<span>' + _this.attr('data-seatTwo') + '</span><img src="./img/seat/x.png" alt="" draggable="false">');
+                    //                                _isSeat.next().addClass('isSeat').addClass('qlSeat');
+                    //                                return false;
+                    //                            }
+                    //                        })
+                    //                            else if (_this.is('.fimilySeatChose')) {
+                    //                                _this.removeClass('fimilySeatChose').removeClass('active').addClass('fimilySeat');
+                    //                            }
+                    if (_ifCanSeat) {
+
+                        //点击选座
+                        if (_this.is('.canSeat')) {
+                            _this.removeClass('canSeat').addClass('hasChose').addClass('active');
+                            $('.BtBtLf ul li').each(function () {
+                                var _isSeat = $(this);
+                                if (!_isSeat.is('.isSeat')) {
+
+                                    _isSeat.html('<span>' + _this.attr('data-seat') + '</span><img src="./img/seat/x.png" alt="" draggable="false">');
+                                    _isSeat.addClass('isSeat');
+                                    return false;
+                                }
+                            })
+                        } else if (_this.is('.vipSeat')) {
+                            _this.removeClass('vipSeat').addClass('vipSeatChose').addClass('active');
+                            $('.BtBtLf ul li').each(function () {
+                                var _isSeat = $(this);
+                                if (!_isSeat.is('.isSeat')) {
+
+                                    _isSeat.html('<span>' + _this.attr('data-seat') + '</span><img src="./img/seat/x.png" alt="" draggable="false">');
+                                    _isSeat.addClass('isSeat');
+                                    return false;
+                                }
+                            })
+                        } else if (_this.is('.star')) {
+                            _this.removeClass('star').addClass('starChose').addClass('active');
+                            $('.BtBtLf ul li').each(function () {
+                                var _isSeat = $(this);
+                                if (!_isSeat.is('.isSeat')) {
+                                    _isSeat.html('<span>' + _this.attr('data-seat') + '</span><img src="./img/seat/x.png" alt="" draggable="false">');
+                                    _isSeat.addClass('isSeat');
+                                    return false;
+                                }
+                            })
+                        }
+                        //下面开始是取消座位的了
+                        else if (_this.is('.vipSeatChose')) {
+                            _this.removeClass('vipSeatChose').removeClass('active').addClass('vipSeat');
+                            $('.BtBtLf li').each(function () {
+                                if (_this.attr('data-seat') == $(this).find('span').html()) {
+                                    $(this).remove();
+                                    $('.BtBtLf ul').append('<li><span>待选座位</span></li>');
+                                    return false;
+                                }
+                            })
+
+
+                        } else if (_this.is('.starChose')) {
+                            _this.removeClass('starChose').removeClass('active').addClass('star');
+                            $('.BtBtLf li').each(function () {
+                                if (_this.attr('data-seat') == $(this).find('span').html()) {
+                                    $(this).remove();
+                                    $('.BtBtLf ul').append('<li><span>待选座位</span></li>');
+                                    return false;
+                                }
+                            })
+
+                        } else if (_this.is('.hasChose')) {
+                            _this.removeClass('hasChose').removeClass('active').addClass('canSeat');
+                            $('.BtBtLf li').each(function () {
+                                if (_this.attr('data-seat') == $(this).find('span').html()) {
+                                    $(this).remove();
+                                    $('.BtBtLf ul').append('<li><span>待选座位</span></li>');
+                                    return false;
+                                }
+                            })
+
+                        }
+
+                    }
+                });
+
+                $('.pay').on('click', function () {
+                    $('#zzBG').show();
+                    $('.SeatAlert').fadeIn();
+                    setTimeout(function () {
+                        $('#zzBG').hide();
+                        $('.SeatAlert').fadeOut();
+                    }, 5000)
+                    setTimeout(function () {
+                        $('.seatErrorAlert').fadeIn();
+                    }, 10000)
+                    setTimeout(function () {
+                        location.href = 'pay.html';
+                    }, 20000)
+                });
+            },
+
+        };
+        seatPage.init();
+
+    });
+
+    //支付页面
+    $(document).on("pageInit", "#page-pay", function () {
+
+        $('#zfb').on('click', function () {
+            $('#payZfbAlert').fadeIn();
+            $('#zzBG').show();
+        })
+        $('#weixin').on('click', function () {
+            $('#payWxAlert').fadeIn();
+            $('#zzBG').show();
+        })
+        $('#count').on('click', function () {
+            $('#acountPayAlert').fadeIn();
+            $('#zzBG').show();
+        })
+        $(document).on('click', '.close', function () {
+            $(this).parent().fadeToggle();
+            $('#zzBG').hide();
+            location.href = 'wait.html'
+        })
+
+    });
+
+    // 等待结果页面
+    $(document).on("pageInit", "#page-wait", function () {
+        var count=$.zxfun.urlGet("count")
+        var queueCount=$.zxfun.urlGet("queueCount");
+        var deviceName=localStorage.deviceName;
+        var done=true;
+        if(parseInt(queueCount)>0){
+            var timeOut=5000*parseInt(count);
+            setTimeout(function () {
+                var nowQueueCount=app.getQueueCountByDeviceName(deviceName);
+                if(parseInt(nowQueueCount)>0){
+                    done=false;
+                }
+                location.href = 'result.html?count='+count+"&done="+done;
+            }, timeOut);
+        }else{
+            location.href = 'result.html?count='+count+"&done="+done;
+        }
+    });
+
+    // 成功回调页页面
+    $(document).on("pageInit", "#page-result", function () {
+        //speedNum 速度
+        var _showImg = function (speedNum) {
+            clearInterval(timer);
+            var timer;
+            var speed = speedNum;
+            timer = setInterval(function () {
+                var _this_top = parseFloat($('.pAdminit').css('top'));
+                _this_top += speed;
+
+                if (_this_top >= 197) {
+                    clearInterval(timer);
+                    setTimeout(function () {
+                        $('.pAdminit').fadeOut("slow", function () {
+                            $('.pAdminit').css('top', '-3.45rem');
+                            clearTimeout(_timer);
+                            var _timer;
+                            _timer = setTimeout(function () {
+                                $('.pAdminit').show();
+                                _showImg(10);
+                            }, 1000)
+                        })
+                    }, 500)
+                } else {
+                    $('.pAdminit').css('top', (_this_top / 100) + 'rem');
+                }
+            }, 50)
+        };
+        _showImg(10);
+        var done=$.zxfun.urlGet("done")
+        if(done==='false'){
+            $('.sytemInfoImg').removeClass('sytemInfoImg').addClass('sytemError');
+            $('.systemInfo').show();
+        }else{
+            setTimeout(function () {
+              $('.resultSucces').hide();
+                $('.resultSuccesBack').show();
+            },3000)
+        }
+
+//        倒计时跳转  现在产品狗取消了
+//        var _timeBack = 10;
+//        var _tiemr;
+//        clearInterval(_tiemr);
+//        _tiemr = setInterval(function () {
+//            _timeBack--;
+//            if (_timeBack == 0) {
+//                clearInterval(_tiemr);
+//            }
+//            $('.systemInfo>time').html(_timeBack);
+//        }, 1000)
+//        var _timeBack2 = 10;
+//        var _tiemr2;
+//        clearInterval(_tiemr2);
+//        _tiemr2 = setInterval(function () {
+//            _timeBack2--;
+//            if (_timeBack == 0) {
+//                clearInterval(_tiemr2);
+//            }
+//            $('.resultError>p>time').html(_timeBack2 + 's');
+//        }, 1000)
+    });
+
+    // 取票
+    $(document).on("pageInit", "#page-checkin", function () {
+        var _timeBack = 5;
+        var _tiemr;
+        clearInterval(_tiemr);
+        _tiemr = setInterval(function () {
+            _timeBack--;
+            if (_timeBack == 0) {
+                clearInterval(_tiemr);
+            }
+            $('.systemInfo>time').html(_timeBack);
+        }, 1000);
+        //调用数字键盘
+        $.zxfun.numberKeyBoard({
+            pageId: '#page-checkin',
+            inpuIdOne: '#inputOrder',
+            inpuIdTwo: '#inputFilmCode',
+            getBtn:'.getBtn'
+        })
+
+
+        //二维码出场动画
+        $('.ewmCode').on('click', function () {
+            $('.howToGetFilm').animate({
+                right: '50%',
+                opacity: '1',
+                marginRight: '-3.5rem'
+            })
+        })
+        $('.close').on('click', function () {
+            $(this).parent().animate({
+                right: '-7rem',
+                opacity: '0',
+                marginRight: '0rem'
+            }, "slow")
+        })
+        $(document).on('click', '.seatErrorAlert a', function () {
+            $(this).parent().fadeOut();
+        })
+        $('.getBtn').on('click', function () {
+            var orderNo=$('#inputOrder').val();
+            var validCode=$('#inputFilmCode').val();
+            if(orderNo==null||orderNo===''){
+                $.toast('请输入订单号！')
+                return
+            }
+            if(validCode==null||validCode===''){
+                $.toast('请输取票码！')
+                return
+            }
+            $('#zzBG').show();
+            $('.SeatAlert').show();
+            var data=app.getMovieTicketsAndGoods("35012401",orderNo,validCode,"0",1);
+            $('#zzBG').hide();
+            $('.SeatAlert').hide();
+            if(data==null){
+                $.toast("取票出错，请联系管理员！")
+            }else{
+                data=JSON.parse(data);
+                var value=data.value;
+
+                if(data.result==false){
+                    $.toast(data.message);
+                }else{
+                    localStorage.deviceName=value.deviceName;
+                    window.location.href='wait.html?count='+value.count+"&queueCount="+value.queueCount;
+                }
+            }
+        })
+    });
+
+
+    // 取卖品
+    $(document).on("pageInit", "#page-getgoods", function () {
+        var _timeBack = 5;
+        var _tiemr;
+        clearInterval(_tiemr);
+        _tiemr = setInterval(function () {
+            _timeBack--;
+            if (_timeBack == 0) {
+                clearInterval(_tiemr);
+            }
+            $('.systemInfo>time').html(_timeBack);
+        }, 1000);
+        //调用数字键盘
+        $.zxfun.numberKeyBoard({
+            pageId: '#page-getgoods',
+            inpuIdOne: '#inputOrder',
+            inpuIdTwo: '#inputFilmCode',
+            getBtn:'.getBtn'
+        })
+
+
+        //二维码出场动画
+        $('.ewmCode').on('click', function () {
+            $('.howToGetFilm').animate({
+                right: '50%',
+                opacity: '1',
+                marginRight: '-3.5rem'
+            }, "slow")
+        })
+        $('.close').on('click', function () {
+            $(this).parent().animate({
+                right: '-7rem',
+                opacity: '0',
+                marginRight: '0rem'
+            })
+        })
+        $(document).on('click', '.seatErrorAlert a', function () {
+            $(this).parent().fadeOut();
+        })
+        $('.getBtn').on('click', function () {
+            var data=app.getMovieTicketsAndGoods("35012401","815342939","142863",2);
+        })
+    });
+
+    // 选择使用卖品券 或者 电影券
+    $(document).on("pageInit", "#page-choseCpType", function () {
+        $('.useFilmCp').on('click', function () {
+            location.href = 'cuppon.html?type=films';
+        })
+        $('.useGoodCp').on('click', function () {
+            location.href = 'cuppon.html?type=goods';
+        })
+    });
+    // 选择卖品券 或者 电影券
+    $(document).on("pageInit", "#page-cuppon", function () {
+        var _type = $.zxfun.urlGet('type');
+        if (_type == 'films') {
+
+        } else if (_type == 'goods') {
+            //卖品 
+            $('#page-cuppon .seatTop').find('h1').html('使用卖品券');
+            $('.hasUseCp a').html('选卖品');
+            //下面数据也是静态的数据 需要换成接口提供的数据
+            $('#cupponBox ul').html('');
+            var _html;
+            _html += '<li class="mpqId">';
+            _html += '<div class="liLeft">';
+            _html += '<div class="liLeftTp">';
+            _html += '<em>¥</em>';
+            _html += '<strong>15</strong>';
+            _html += '</div>';
+            _html += '<div class="liLeftBt">卖品券</div>';
+            _html += ' </div>';
+            _html += ' <div class="liCenter">';
+            _html += '<h3>SDJ897KJEJ3</h3>';
+            _html += '<p>有效期截止：2016年12月31日</p>';
+            _html += ' <p>按券面值抵扣影票金额,特别场次需补差</p>';
+            _html += ' </div>';
+            _html += '  <div class="liRight">立即使用</div>';
+            _html += '</li>';
+            $('#cupponBox ul').append(_html);
+        }
+        $('#page-cuppon #cupponBox li .liRight').on('click', function () {
+            if ($(this).parent().is('.historyId')) {
+                return false;
+            }
+            $(this).toggleClass('active');
+            if ($(this).is('.active')) {
+                $(this).html('取消使用');
+            } else {
+                $(this).html('立即使用');
+            }
+            if ($('#page-cuppon #cupponBox li').find('.active').length >= 1) {
+                $('.hasUseCp').fadeIn();
+            } else {
+                $('.hasUseCp').fadeOut()
+            }
+        })
+    });
+    // 会员卡
+    $(document).on("pageInit", "#page-cards", function () {
+
+
+
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    $.init();
+})($)

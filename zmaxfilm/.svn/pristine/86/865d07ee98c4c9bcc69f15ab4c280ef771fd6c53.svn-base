@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>中瑞影城</title>
+    <meta name="description" content="中瑞影城">
+    <meta name="author" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="css/light7.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/swiper.css">
+    <!--    <link type="text/css" href="css/jquery.jscrollpane.css" rel="stylesheet" media="all" />-->
+</head>
+
+<body>
+    <div class="wrap">
+        <header id="header">
+            <ul class="swiper-wrapper">
+                <li class="swiper-slide">
+                    <img src="./img/index/banner.png" alt="" draggable="false">
+                </li>
+                <li class="swiper-slide">
+                    <img src="./img/index/banner.png" alt="" draggable="false">
+                </li>
+                <li class="swiper-slide">
+                    <img src="./img/index/banner.png" alt="" draggable="false">
+                </li>
+                <li class="swiper-slide">
+                    <img src="./img/index/banner.png" alt="" draggable="false">
+                </li>
+            </ul>
+        </header>
+        <address id="footer">
+                Copyright © 2014-2016 福州最美影视网络科技有限公司 版权所有
+        </address>
+
+        <!--    ---------------------------------------------------------------------------------------   -->
+        <!--    选座    -->
+        <div class="page" id="page-cardlogin">
+            <div class="seatTop bgNo">
+                <h1>登录</h1>
+                <a class="toBack" href="index.html"></a>
+            </div>
+            <div class="cardloginBody">
+                <div id="cardloginBox">
+                    <div class="cardloginBoxTop ">
+                       <img  class="home" src="./img/login/home.png" alt="" draggable="false">
+                       <span>请选择会员卡归属门店</span>
+                       <img class="lodingCinema" src="./img/login/down.png" alt="">
+                    </div>
+                    <div class="cardloginBoxBody">
+                            <div id="Tab">
+                                <input class="carNumber" type="text" placeholder="请输入会员卡号">
+                                <input class="psw" type="password" placeholder="请输入密码">
+                                <p>手机号或密码有误，请输入账号及密码</p>
+                                <div class="numKeyBoard allkeyboxposition">
+                                    <ul>
+                                        <li class="key">1</li>
+                                        <li class="key">2</li>
+                                        <li class="key">3</li>
+                                    </ul>
+                                    <ul>
+                                        <li class="key">4</li>
+                                        <li class="key">5</li>
+                                        <li class="key">6</li>
+                                    </ul>
+                                    <ul>
+                                        <li class="key">7</li>
+                                        <li class="key">8</li>
+                                        <li class="key">9</li>
+                                    </ul>
+                                    <ul>
+                                        <li class="reinput">
+                                            清空
+                                        </li>
+                                        <li class="key">0</li>
+                                        <li class="key deleteBack">
+                                            <img src="./img/login/delete-icon.png" alt="">
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="loginBoxBt">登录</div>
+                    <div class="cinemaBox">
+                        <div class="cinemaBoxTop">
+                            <span class="cityName">选择城市</span>
+                            <img src="./img/login/reddown.png" alt="" class="downRed">
+                            <div class="close"></div>
+                            <div class="line"></div>
+                        </div>
+                        <div class="cinemaBoxBt">
+                            <ul class="cinemaUl">
+                                <li>
+                                    <h2>中瑞国际影城福清融汇店</h2>
+                                    <p>福清市音西街道福和路9号4层401(裕荣汇4楼)</p>
+                                    <div class="line"></div>
+                                    <div class="rightImg"></div>
+                                </li>
+                                <li>
+                                    <h2>中瑞国际影城福清融汇店</h2>
+                                    <p>福清市音西街道福和路9号4层401(裕荣汇4楼)</p>
+                                    <div class="line"></div>
+                                    <div class="rightImg"></div>
+                                </li>
+                                <li>
+                                    <h2>中瑞国际影城福清融汇店</h2>
+                                    <p>福清市音西街道福和路9号4层401(裕荣汇4楼)</p>
+                                    <div class="line"></div>
+                                    <div class="rightImg"></div>
+                                </li>
+                                <li>
+                                    <h2>中瑞国际影城福清融汇店</h2>
+                                    <p>福清市音西街道福和路9号4层401(裕荣汇4楼)</p>
+                                    <div class="line"></div>
+                                    <div class="rightImg"></div>
+                                </li>
+                                <li>
+                                    <h2>中瑞国际影城福清融汇店</h2>
+                                    <p>福清市音西街道福和路9号4层401(裕荣汇4楼)</p>
+                                    <div class="line"></div>
+                                    <div class="rightImg"></div>
+                                </li>
+                            </ul>
+                            <ul class="cityUl">
+                                <li>福州</li>
+                                <li>厦门</li>
+                                <li>莆田</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--    选座结束    -->
+        <!--    ---------------------------------------------------------------------------------------   -->
+
+    </div>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <!--
+    <script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="js/jquery.jscrollpane.min.js"></script>
+-->
+    <script type="text/javascript" src="js/swiper.js"></script>
+    <script type="text/javascript" src="js/light7.js"></script>
+    <script type="text/javascript" src="js/jquery.Spinner.js"></script>
+    <script type="text/javascript" src="js/style.js"></script>
+</body>
+
+</html>

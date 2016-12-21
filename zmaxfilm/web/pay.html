@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>中瑞影城</title>
+    <meta name="description" content="中瑞影城">
+    <meta name="author" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="css/light7.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/swiper.css">
+<!--    <link type="text/css" href="css/jquery.jscrollpane.css" rel="stylesheet" media="all" />-->
+</head>
+
+<body>
+    <div class="wrap">
+        <header id="header">
+                <ul class="swiper-wrapper">
+                    <li class="swiper-slide">
+                         <img src="./img/index/banner.png" alt="" draggable="false">
+                    </li>
+                    <li class="swiper-slide">
+                         <img src="./img/index/banner.png" alt="" draggable="false">
+                    </li>
+                    <li class="swiper-slide">
+                         <img src="./img/index/banner.png" alt="" draggable="false">
+                    </li>
+                    <li class="swiper-slide">
+                         <img src="./img/index/banner.png" alt="" draggable="false">
+                    </li>
+                </ul>
+        </header>
+        <address id="footer">
+                Copyright © 2014-2016 福州最美影视网络科技有限公司 版权所有
+        </address>    
+        
+<!--    ---------------------------------------------------------------------------------------   -->       
+               <!--    选座    -->
+        <div class="page" id="page-pay">
+            <div class="seatTop">
+                <h1>支付</h1>
+                <a class="toBack" href="seat.html"></a>
+                <div class="backIndex">安全退出</div>
+            </div>
+            <div class="payBody">
+                <div id="headImg">
+                    <img  src="./img/pay/head.png" alt=" 头像" draggable="false">
+                </div>    
+                <p>请在<time>14.30</time>内完成支付</p>
+                <h3>选择支付方式</h3>
+                <div class="payType">
+                    <img src="./img/pay/zfb.png" alt="支付宝" id="zfb" draggable="false">
+                    <img src="./img/pay/count.png" alt="账户余额" id="count" draggable="false">
+                    <img src="./img/pay/weixin.png" alt="微信支付" id="weixin" draggable="false">
+                    <p>
+                        <span>支付宝支付</span>
+                        <span>账户余额支付</span>
+                        <span>微信支付</span>
+                    </p>
+                    
+                    <!--    支付弹窗     -->
+                    <div id="payWxAlert" class="payAlert">
+                        <img class="close" src="./img/pay/x.png" alt="取消" draggable="false">
+                        <img class="ewmImg" src="./img/pay/ewm.png" alt="二维码" draggable="false">
+                        <img class="SySImg" src="./img/pay/topay.png" alt="微信扫一扫" draggable="false">
+                        <h2>扫描二维码进行支付</h2>
+                        <h3>当前应付金额：<em>￥215.00</em></h3>
+                    </div>
+                    <div id="payZfbAlert" class="payAlert">
+                        <img class="close" src="./img/pay/x.png" alt="取消" draggable="false">
+                        <img class="ewmImg" src="./img/pay/ewm.png" alt="二维码" draggable="false">
+                        <img class="SySImg" src="./img/pay/toZFb.png" alt="支付宝扫一扫" draggable="false">
+                        <h2>扫描二维码进行支付</h2>
+                        <h3>当前应付金额：<em>￥215.00</em></h3>
+                    </div>
+                    <div id="acountPayAlert">
+                        <div class="headerImg"><img src="./img/pay/head.png" alt="" draggable="false"></div>
+                        <img class="close" src="./img/pay/x.png" alt="取消" draggable="false">
+                        <p>123****8910</p>
+                        <h2>当前账户总余额：<em>￥300</em></h2>
+                        <h3>当前应付金额：<em>￥215.00</em></h3>
+                        <a href="#" id="sureToPay">确认支付</a>
+                    </div>
+                     <!--    遮罩 弹窗必开    -->
+                    <div id="zzBG"></div>
+                </div>
+            </div>    
+        </div>
+                <!--    选座结束    -->      
+<!--    ---------------------------------------------------------------------------------------   -->       
+      
+    </div>
+    <script type="text/javascript" src="js/jquery.js"></script>
+<!--
+    <script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="js/jquery.jscrollpane.min.js"></script>
+-->
+    <script type="text/javascript" src="js/swiper.js"></script>
+    <script type="text/javascript" src="js/light7.js"></script>
+    <script type="text/javascript" src="js/jquery.Spinner.js"></script>
+    <script type="text/javascript" src="js/style.js"></script>
+</body>
+
+</html>

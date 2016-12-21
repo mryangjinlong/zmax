@@ -1,0 +1,21 @@
+package com.zmaxfilm;
+
+
+import com.zmaxfilm.frame.BaseFrame;
+import com.zmaxfilm.service.impl.SocketClientServiceImpl;
+import com.zmaxfilm.util.FileUtils;
+import com.zmaxfilm.util.HttpUtil;
+import com.zmaxfilm.util.Inspiry532Utils;
+import org.apache.log4j.Logger;
+
+/**
+ * Created by Administrator on 2016/11/5.
+ */
+public class Main extends BaseFrame {
+
+
+
+    public static void main(String[] args) {
+
+    }
+}

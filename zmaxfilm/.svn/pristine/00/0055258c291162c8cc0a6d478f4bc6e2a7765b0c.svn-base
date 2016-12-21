@@ -1,0 +1,306 @@
+package com.zmaxfilm.service.impl;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+ import com.google.gson.reflect.TypeToken;
+import com.zmaxfilm.Constant;
+import com.zmaxfilm.Factory;
+import com.zmaxfilm.model.*;
+import com.zmaxfilm.model.http.*;
+import com.zmaxfilm.service.FilmService;
+import com.zmaxfilm.util.DateUtils;
+import com.zmaxfilm.util.EhcacheUtil;
+import com.zmaxfilm.util.HttpUtil;
+import com.zmaxfilm.util.TwoDimensionCodeUtil;
+import org.apache.log4j.Logger;
+
+import javax.print.PrintException;
+import javax.print.PrintService;
+import java.awt.*;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.ConnectException;
+import java.net.UnknownHostException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.List;
+
+/**
+ * 电影相关服务
+ * Created by jimmy on 2016/11/28.
+ */
+public class FilmServiceImpl implements FilmService{
+
+    private EhcacheUtil ehcacheUtil = EhcacheUtil.getInstance();
+
+    private com.zmaxfilm.service.PrintService printService= Factory.getPrintService(Constant.DEFAULT_IMPL);
+    private static Logger logger = Logger.getLogger(FilmServiceImpl.class);
+    /**
+     * 获取所有电影院信息
+     */
+    @Override
+    public List<Cinema> getCinemas() {
+        List<Cinema> cinemas = (ArrayList<Cinema>)ehcacheUtil.get(Constant.CACHE_KEY_CINEMA);
+        if(cinemas == null){
+            String msg = null;
+            try {
+                msg = HttpUtil.sendHttpPost(Constant.FUNSTIONNAME_CINEMA , null);
+            } catch (IOException e) {
+                logger.debug(e.getMessage());
+                return null;
+            }
+            Type type = new TypeToken<HttpData<ArrayList<Cinema>>>(){}.getType();
+            HttpData<ArrayList<Cinema>> httpData = JSON.parseObject(msg,type);
+            cinemas = httpData.getResultData();
+            ehcacheUtil.put(Constant.CACHE_KEY_CINEMA, cinemas , Constant.CACHE_TIME_CINEMA);
+        }
+        return cinemas;
+    }
+
+    //获取影厅对应的所有座位信息
+    @Override
+    public List<HallSite> getHallSites(String cinemaNo, String hallNo) {
+        String cacheKey = Constant.CACHE_KEY_HALL_SITE + cinemaNo + hallNo;
+        List<HallSite> hallSites = (ArrayList<HallSite>)ehcacheUtil.get(cacheKey);
+
+        if(hallSites == null){
+            LinkedHashMap<String, String> map = new LinkedHashMap<>();
+            map.put("cinemaNo",cinemaNo);
+            map.put("hallNo",hallNo);
+            String hallSiteMsg = null;
+            try {
+                hallSiteMsg = HttpUtil.sendHttpPost(Constant.FUNSTIONNAME_HALL_SITE , map);
+            } catch (IOException e) {
+                logger.debug(e.getMessage());
+                return null;
+            }
+
+            Type type = new TypeToken<HttpData<ArrayList<HallSite>>>(){}.getType();
+            HttpData<ArrayList<HallSite>> httpData = JSON.parseObject(hallSiteMsg,type);
+            hallSites = httpData.getResultData();
+            ehcacheUtil.put(cacheKey , hallSites , Constant.CACHE_TIME_HALL_SITE);
+        }
+        return hallSites;
+    }
+    //取排期的座位状态
+    @Override
+    public List<PlanSeat> getPlanSeats(String cinemaNo, String featureAppNo, String seatType) {
+        LinkedHashMap<String, String> map = new LinkedHashMap<>();
+        map.put("cinemaNo",cinemaNo);
+        map.put("featureAppNo",featureAppNo);
+        map.put("seatType",seatType);
+        String planSeatMsg = null;
+        try {
+            planSeatMsg = HttpUtil.sendHttpPost(Constant.FUNSTIONNAME_PLAN_SEAT , map);
+        } catch (IOException e) {
+            logger.debug(e.getMessage());
+            return null;
+        }
+
+        Type type = new TypeToken<HttpData<PlanSiteStates>>(){}.getType();
+        HttpData<PlanSiteStates> httpData = JSON.parseObject(planSeatMsg,type);
+
+        return httpData.getResultData().getPlanSiteStates();
+    }
+
+
+    /**
+     * 获取影院当前所有排期
+     */
+    @Override
+    public List<FilmPlan4Http> getPlans(String cinemaNo) {
+        String key = Constant.CACHE_KEY_PLAN + cinemaNo;
+        List<FilmPlan4Http> filmPlan4Https = (List<FilmPlan4Http>)ehcacheUtil.get(key);
+        filmPlan4Https = null;
+        if(filmPlan4Https == null){
+
+            LinkedHashMap<String, String> map = new LinkedHashMap<>();
+            map.put("cinemaNo",cinemaNo);
+            String msg = null;
+            try {
+                msg = HttpUtil.sendHttpPost(Constant.FUNSTIONNAME_PLAN , map);
+            } catch (IOException e) {
+                logger.debug(e.getMessage());
+                return null;
+            }
+
+            Type type = new TypeToken<HttpData<ArrayList<FilmPlan4Http>>>(){}.getType();
+            HttpData<ArrayList<FilmPlan4Http>> httpData = JSON.parseObject(msg,type);
+            filmPlan4Https = httpData.getResultData();
+            assert filmPlan4Https != null;
+
+            ehcacheUtil.put(key, filmPlan4Https ,Constant.CACHE_TIME_PLAN);
+     }
+
+        return filmPlan4Https;
+    }
+
+    @Override
+    public String getMovieTicketsAndGoods(String cinemaNo,String orderNumber,String validCode,String requestType,int type) {
+        LinkedHashMap<String,String>map=new LinkedHashMap<>();
+        map.put("cinemaNo",cinemaNo);
+        map.put("orderNo",orderNumber);
+        map.put("validCode",validCode);
+        map.put("requestType",requestType);
+        ResultInfo resultInfo=new ResultInfo();
+        if(type==FilmService.MOVIE_TICKET){
+
+            String str= null;
+            try {
+                str = HttpUtil.sendHttpPost("printTicket",map);
+            } catch (IOException e) {
+                resultInfo.setResult(false);
+                resultInfo.setMessage("取票失败");
+                logger.debug(e.getMessage());
+            }
+            MovieTicketResultInfo ticket=
+                    JSON.parseObject(str,MovieTicketResultInfo.class);
+            if(ticket.getResultCode().equals("100605")){
+                resultInfo.setResult(false);
+                resultInfo.setMessage("订单号错误！");
+            }else if(!ticket.getResultCode().equals("0")){
+                resultInfo.setResult(false);
+                resultInfo.setMessage("取票失败！");
+            }else{
+                try {
+                    List<PrintService> printServices=printService.getAvailableDevicelist();
+                    if(printServices.size()==0){
+                        resultInfo.setResult(false);
+                        resultInfo.setMessage("没有可用的打印机");
+                    }else{
+                        PrintService printDevice=printServices.get(0);
+                        this.printMovieTiket(ticket.getResultData(),printDevice);
+                        resultInfo.setResult(true);
+                        Map<String,Object> value=new HashMap<>();
+                        value.put("queueCount",printService.getPrintDeviceQueueCount(printDevice));
+                        resultInfo.setValue(value);
+                    }
+                } catch (ParseException e) {
+                    resultInfo.setMessage("打印出错");
+                    resultInfo.setResult(false);
+                    e.printStackTrace();
+                } catch (PrintException e) {
+                    resultInfo.setMessage("打印出错");
+                    resultInfo.setResult(false);
+                    e.printStackTrace();
+                }
+            }
+        }else if(type==FilmService.GOODS){
+        }
+        return JSONObject.toJSONString(resultInfo);
+    }
+
+    @Override
+    public void printMovieTiket(OrderInfo orderInfo, PrintService printDevice) throws ParseException, PrintException {
+        int x=5;
+        int y=20;
+        int size=12;
+
+        int x1=79;
+        int y1=73;
+        int size1=8;
+
+        int x2=160;
+        int y2=25;
+
+
+        String[] startTimes=orderInfo.getStartTime().split(" ");
+        String starDate=startTimes[0];
+        String[] times=startTimes[1].split(":");
+        String time=times[0]+":"+times[1];
+
+        List<MovieTicket> ticketList=orderInfo.getTicketList();
+        for(MovieTicket ticket:ticketList){
+            List<Print> prints=new ArrayList<>();
+            Print print=new Print(orderInfo.getCinemaName(),x,y,Font.TRUETYPE_FONT,size);
+            prints.add(print);
+            print=new Print(orderInfo.getFilmName(),x,y+11,Font.TRUETYPE_FONT,size);
+            prints.add(print);
+            print=new Print(orderInfo.getHallName(),x,y+22,Font.TRUETYPE_FONT,size);
+            print.setType(1);
+            prints.add(print);
+            String seatRow=ticket.getSeatRow();
+            String seatCol=ticket.getSeatCol();
+            print=new Print(seatRow+"排"+seatCol+"号",x,y+33,Font.TRUETYPE_FONT,size);
+            prints.add(print);
+            print=new Print(TwoDimensionCodeUtil.qRCodeCommon(ticket.getTicketNo(),"7",9),x,y+40);
+            prints.add(print);
+
+                print=new Print(time,110,40,Font.TRUETYPE_FONT,size);
+                prints.add(print);
+                print=new Print(starDate,80,55,Font.TRUETYPE_FONT,size);
+                prints.add(print);
+            print=new Print("票价:"+ticket.getTicketPrice()+"元",x1,y1,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            print=new Print("服务费:"+ticket.getServiceCharge()+"元",x1,y1+10,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            print=new Print(ticket.getPrintTime()+"出票",x1,y1+20,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            print=new Print(ticket.getCpnName(),x1,y1+30,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            print=new Print(ticket.getTicketNo2(),x1,y1+40,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            print=new Print(orderInfo.getHallName(),x2,y2,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            print=new Print(seatRow+"排"+seatCol+"号",x2,y2+10,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+
+                print=new Print(time,x2,y2+20,Font.TRUETYPE_FONT,size1);
+                prints.add(print);
+                print=new Print(starDate,x2,y2+30,Font.TRUETYPE_FONT,size1);
+                prints.add(print);
+            print=new Print(orderInfo.getFilmName(),x2,y2+40,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            print=new Print(ticket.getTicketPrice()+"元",x2,y2+75,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            String ticketNo2=ticket.getTicketNo2();
+            print=new Print(ticketNo2.substring(0,ticketNo2.length()/2),x2,y2+85,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            print=new Print(ticketNo2.substring(ticketNo2.length()/2,ticketNo2.length()),x2,y2+95,Font.TRUETYPE_FONT,size1);
+            prints.add(print);
+            printService.print(prints,printDevice);
+        }
+
+    }
+
+    /**
+     * 将http接口返回的数据整理成适用于页面的数据
+     * @param filmPlan4Https http接口返回的数据的封装
+     * @return   Map<FilmData ,Map<String,List<FilmPlan4Http>>>类型的map
+     */
+    private Map<String,Map<String,List<FilmPlan4Http>>> processFilmPlan4Http(List<FilmPlan4Http> filmPlan4Https){
+            Map<String, Map<String, List<FilmPlan4Http>>> planMap = new HashMap<>();
+
+            for (FilmPlan4Http filmPlan4Http : filmPlan4Https) {
+                FilmData filmData = new FilmData(filmPlan4Http.getFilmNo(),filmPlan4Http.getFilmName());
+                if(planMap.containsKey(filmData)) continue;
+                Map<String, List<FilmPlan4Http>> map = new HashMap<>();
+
+                for (FilmPlan4Http plan4Http : filmPlan4Https) {
+                    if(plan4Http.getFilmNo().equals(filmData.getFilmNo())){
+                        String date = DateUtils.formatDate(plan4Http.getStartTime());
+                        map.put(date, new ArrayList<>());
+                    }
+                }
+                planMap.put(filmPlan4Http.getFilmNo(),map);
+            }
+
+            for (FilmPlan4Http filmPlan4Http : filmPlan4Https) {
+                String date = DateUtils.formatDate(filmPlan4Http.getStartTime());
+                String filmNo = filmPlan4Http.getFilmNo();
+                for (String filmNotemp : planMap.keySet()) {
+                        if(filmNo.equals(filmNotemp)){
+                            planMap.get(filmNotemp).get(date).add(filmPlan4Http);
+                        }
+                }
+            }
+        return planMap;
+    }
+
+
+
+
+}
+
+

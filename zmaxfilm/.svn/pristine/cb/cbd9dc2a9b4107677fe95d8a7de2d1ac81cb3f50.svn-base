@@ -1,0 +1,9 @@
+package com.zmaxfilm.model.http;
+
+/**
+ * 注册会员等级信息
+ * Created by jimmy on 2016/12/17.
+ */
+public class Registere {
+    private String _1;
+}

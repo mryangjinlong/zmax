@@ -1,0 +1,41 @@
+package com.zmaxfilm;
+
+
+import com.alibaba.fastjson.JSON;
+import com.zmaxfilm.model.Print;
+import com.zmaxfilm.service.FilmService;
+import com.zmaxfilm.service.PrintService;
+import com.zmaxfilm.service.ScanService;
+import com.zmaxfilm.service.impl.ScannerServiceImpl;
+import org.apache.log4j.Logger;
+
+import java.util.List;
+
+/**
+ * Created by Administrator on 2016/11/14.
+ */
+public class InterfaceForJavascript {
+    private static Logger logger = Logger.getLogger(InterfaceForJavascript.class);
+
+    private FilmService filmService = Factory.getFilmService();
+
+    public FilmService getFilmService() {
+        return filmService;
+    }
+
+    public String getCinemas(){
+        return JSON.toJSONString(filmService.getCinemas());
+    }
+    public String getPlan(String cinemaNo){
+        return JSON.toJSONString(filmService.getPlan(cinemaNo));
+    }
+
+    public void console(String log){
+        logger.debug(log);
+    }
+
+
+
+
+
+}

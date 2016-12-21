@@ -1,0 +1,25 @@
+package com.zmaxfilm.model.http;
+
+/**
+ * Created by jimmy on 2016/12/17.
+ */
+public class PriceConfig {
+    private Registere registere;
+    private MemberCard memberCard;
+
+    public Registere getRegistere() {
+        return registere;
+    }
+
+    public void setRegistere(Registere registere) {
+        this.registere = registere;
+    }
+
+    public MemberCard getMemberCard() {
+        return memberCard;
+    }
+
+    public void setMemberCard(MemberCard memberCard) {
+        this.memberCard = memberCard;
+    }
+}

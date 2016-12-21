@@ -1,0 +1,65 @@
+package com.zmaxfilm;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.zmaxfilm.frame.BaseFrame;
+import com.zmaxfilm.model.MovieTicket;
+import com.zmaxfilm.model.MovieTicketResultInfo;
+import com.zmaxfilm.model.OrderInfo;
+import com.zmaxfilm.model.Print;
+import com.zmaxfilm.service.FilmService;
+import com.zmaxfilm.service.PrintService;
+import com.zmaxfilm.util.TwoDimensionCodeUtil;
+
+import java.awt.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * Created by Administrator on 2016/11/5.
+ */
+public class Main extends BaseFrame {
+
+    public static void main(String[] args) throws Exception {
+//        String str="2016-12-16 00:01:02";
+//        SimpleDateFormat format=new SimpleDateFormat("hh:mm:ss");
+//        format.parse(str);
+        launch(args);
+//        PrintService printService=Factory.getPrintService(Constant.DEFAULT_IMPL);
+//        FilmService filmService=Factory.getFilmService();
+//        String str="{\n" +
+//                "    \"resultCode\": 0,\n" +
+//                "    \"resultData\": {\n" +
+//                "        \"orderNo\": \"815342939\",\n" +
+//                "        \"orderStatus\": 4,\n" +
+//                "        \"orderTime\": \"2016-12-15 09:23:00\",\n" +
+//                "        \"filmName\": \"摆渡人\",\n" +
+//                "        \"hallName\": \"ZMAX巨幕厅\",\n" +
+//                "        \"printType\": \"0\",\n" +
+//                "        \"ticketKindName\": \"团体票\",\n" +
+//                "        \"startTime\": \"2016-12-23 21:50:00\",\n" +
+//                "        \"cinemaNo\": \"35012401\",\n" +
+//                "        \"cinemaName\": \"中瑞国际影城(红星店)\",\n" +
+//                "        \"ticketList\": [\n" +
+//                "            {\n" +
+//                "                \"seatCol\": \"1\",\n" +
+//                "                \"seatRow\": \"1\",\n" +
+//                "                \"seatPieceName\": \"普通区\",\n" +
+//                "                \"ticketNo\": \"35012401h/ndcWb0IqkI/OTat3hpDJ1lMzXrJ6+TkUaT/DUJ+sUxybqLML0M3iYk/4RGZcFESQHgo5k48lR28r9YlCgRK26teiv/pM/oqiNGQVpOfROXIi1prEtsAtVX87m3EqvT+hjyWxqptdjRpYG7n6nbWpqkEC9xsvZYBpHFF+m6za0=\",\n" +
+//                "                \"cpnName\": \"自动机售票\",\n" +
+//                "                \"ticketNo2\": \"0000700050383458\",\n" +
+//                "                \"ticketPrice\": \"72.00\",\n" +
+//                "                \"serviceCharge\": \"0.00\"\n" +
+//                "            }\n" +
+//                "        ]\n" +
+//                "    }\n" +
+//                "}";
+//
+//        MovieTicketResultInfo ticket=
+//        JSON.parseObject(str,MovieTicketResultInfo.class);
+//        filmService.printMovieTiket(ticket.getResultData(),printService.getPrintDevice("POS80_2"));
+    }
+}

@@ -1,0 +1,41 @@
+package com.zmaxfilm.model;
+
+/**
+ * Created by jimmy on 2016/11/28.
+ * 设置状态
+ */
+public class DeviceStatus {
+    private final static int PRINTER_STATUS_WORK = 1;   //打印机状态正常
+    private final static int PRINTER_STATUS_FAULT = 0;  //打印机状态故障
+
+    private final static int SCANNER_STATUS_WORK = 1;   //扫描仪正常状态
+    private final static int SCANNER_STATUS_FAULT = 0;  //扫描仪故障状态
+
+    private String mac;
+    private int printer_status;
+    private int scanner_status;
+
+    @Override
+    public String toString() {
+        return "{" +
+                "printer_status:" + printer_status +
+                ", scanner_status:" + scanner_status +
+                "}";
+    }
+
+    public int getPrinter_status() {
+        return printer_status;
+    }
+
+    public void setPrinter_status(int printer_status) {
+        this.printer_status = printer_status;
+    }
+
+    public int getScanner_status() {
+        return scanner_status;
+    }
+
+    public void setScanner_status(int scanner_status) {
+        this.scanner_status = scanner_status;
+    }
+}
